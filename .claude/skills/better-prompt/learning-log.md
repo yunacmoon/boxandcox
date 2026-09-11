@@ -46,6 +46,14 @@
 **Gap closed:** the request was "make it look like this" against a full-page screenshot with a SaaS product's pricing/blog/testimonial sections that don't exist in Box&Cox's actual content — the real work was separating fora's *visual system* (dark palette, card elevation, split headers, bookend CTA) from its *content shape* (pricing tiers, blog posts) and porting only the former, not inventing fake pricing or blog content to hit visual parity.
 **Lesson:** "Make it look like this screenshot" is a system-extraction task, not a copy task — audit which parts of the reference are reusable visual grammar versus reference-specific content before touching code. Also: a scope-defining fork (does this restyle touch one section or the whole site?) is exactly the kind of thing worth the one clarifier even when everything else is unambiguous, because guessing wrong here means redoing the entire token system.
 
+## 2026-09-11 — Typography system + brand-blue palette from a color swatch image
+**Archetype:** build/code (a palette swatch screenshot + a written type spec)
+**Score:** unscored follow-up — the swatch image gave exact hex values (no ambiguity on color), and the type instruction was fully specified (Nanum Gothic for Korean, Playfair Display 200 uppercase for English, big-English-over-Korean per section). No clarifier needed.
+**Pick:** current session (Sonnet 5 · high).
+**What changed:** replaced the brass/gold accent system with the given palette (Vivid Blue #4737FF as the primary accent, Deep Blue #202030 as the card surface, Vivid Orange #F75C03 as the one CTA pop-color, near-black #0a0a10 base); gave every section a big serif English word (new `.section-heading-en`) with a Korean line beneath it (`.section-heading-ko`), including promoting Work Scope's card titles (Exhibition/Environment) from a side-by-side EN·KO pair to the same stacked pattern; added per-section faint radial-gradient washes (using the given palette) so the near-black canvas isn't flat — a different wash position per section rather than one repeated backdrop, matching "군데군데" (here and there).
+**A named constraint I flagged rather than silently working around:** Playfair Display has no 200 weight on Google Fonts — its lightest static cut is 400. Loaded 400 and said so explicitly, rather than either lying that it was 200 or silently swapping to a different font family the user didn't name.
+**Lesson:** When a request specifies an exact library asset (a font weight, a package version) that turns out not to exist, the right move is substituting the closest real option *and saying which constraint forced the substitution* — not swapping to something unrequested without a word, and not pretending the unavailable option was used.
+
 ## 2026-09-10 — 40-name list → markdown table
 **Archetype:** mechanical/bulk
 **Score:** 8.2 → 8.6 — already-sharp. Weakest dimension: Target ("this list" unresolved; no list attached to the message).

@@ -34,7 +34,8 @@ function renderHeroFeature(projects) {
 }
 
 function renderCta(cta) {
-  document.getElementById("ctaHeading").textContent = cta.heading;
+  document.getElementById("ctaHeadingEn").textContent = cta.headingEn;
+  document.getElementById("ctaHeadingKo").textContent = cta.headingKo;
 
   const link = document.getElementById("ctaCta");
   link.textContent = cta.ctaLabel;
@@ -68,8 +69,8 @@ function renderWorkScope(data) {
       (category) => `
         <article class="scope-card reveal">
           <div class="scope-card-head">
-            <h3>${escapeHtml(category.en)}</h3>
-            <span class="scope-ko">${escapeHtml(category.ko)}</span>
+            <h3 class="card-heading-en">${escapeHtml(category.en)}</h3>
+            <p class="card-heading-ko">${escapeHtml(category.ko)}</p>
           </div>
           <p>${escapeHtml(category.description)}</p>
           <div class="scope-meta">

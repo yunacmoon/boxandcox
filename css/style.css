@@ -1,16 +1,18 @@
 :root {
-  --color-bg: #0d0e13;
-  --color-bg-alt: #15161d;
-  --color-surface-2: #1f2029;
-  --color-ink: #f5f4f0;
-  --color-text: #f5f4f0;
-  --color-text-soft: #97969f;
+  --color-bg: #0a0a10;
+  --color-bg-alt: #202030;
+  --color-surface-2: #262838;
+  --color-ink: #ffffff;
+  --color-text: #ffffff;
+  --color-text-soft: #9998a8;
   --color-border: rgba(255, 255, 255, 0.08);
-  --color-border-strong: rgba(255, 255, 255, 0.14);
-  --color-accent: #c9a463;
-  --color-cta-bg: #f5f1e8;
-  --color-cta-text: #14141a;
-  --font-sans: "Inter", "Noto Sans KR", -apple-system, BlinkMacSystemFont, sans-serif;
+  --color-border-strong: rgba(255, 255, 255, 0.16);
+  --color-accent: #4737ff;
+  --color-accent-soft: #d1cdff;
+  --color-cta-bg: #f75c03;
+  --color-cta-text: #ffffff;
+  --font-sans: "Inter", "Nanum Gothic", -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-serif: "Playfair Display", "Nanum Gothic", serif;
 
   --container-width: 1120px;
   --space-1: 8px;
@@ -104,6 +106,42 @@ ul, ol, dl {
 
 .section-head {
   margin-bottom: var(--space-5);
+}
+
+/* Every section pairs a big serif English word with a Korean line beneath
+   it — the serif carries the display moment, Nanum Gothic carries meaning. */
+.section-heading-en {
+  font-family: var(--font-serif);
+  font-weight: 400; /* Playfair Display's lightest static cut; it has no 200 */
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  font-size: clamp(2.1rem, 4.4vw, 3.2rem);
+  line-height: 1.15;
+  color: var(--color-ink);
+}
+
+.section-heading-ko {
+  margin-top: var(--space-2);
+  font-family: var(--font-sans);
+  font-weight: 400;
+  font-size: 1.05rem;
+  color: var(--color-text-soft);
+}
+
+.card-heading-en {
+  font-family: var(--font-serif);
+  font-weight: 400;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  font-size: 1.6rem;
+  color: var(--color-ink);
+}
+
+.card-heading-ko {
+  margin-top: 4px;
+  font-family: var(--font-sans);
+  font-size: 0.9rem;
+  color: var(--color-text-soft);
 }
 
 /* A two-column head — eyebrow+heading on the left, supporting copy on the
@@ -283,10 +321,36 @@ button:focus-visible {
   }
 }
 
-/* Sections — one continuous dark canvas; cards carry the elevation instead
-   of the sections themselves. */
+/* Sections — one continuous near-black canvas, but not a flat one: each
+   section carries its own faint color wash so the black "군데군데" (here and
+   there) picks up a little of the brand's blue-violet gradient as you scroll,
+   rather than repeating one fixed backdrop. */
 section {
   padding: var(--space-6) 0;
+}
+
+.prologue {
+  background:
+    radial-gradient(circle at 12% 15%, color-mix(in srgb, var(--color-accent) 14%, transparent), transparent 42%),
+    var(--color-bg);
+}
+
+.work-scope {
+  background:
+    radial-gradient(circle at 88% 80%, color-mix(in srgb, var(--color-accent-soft) 12%, transparent), transparent 46%),
+    var(--color-bg);
+}
+
+.work-process {
+  background:
+    radial-gradient(circle at 18% 75%, color-mix(in srgb, var(--color-accent) 12%, transparent), transparent 44%),
+    var(--color-bg);
+}
+
+.projects {
+  background:
+    radial-gradient(circle at 82% 12%, color-mix(in srgb, var(--color-accent-soft) 10%, transparent), transparent 42%),
+    var(--color-bg);
 }
 
 /* Hero and the closing CTA band bookend the page with the same generative
@@ -306,7 +370,7 @@ section {
   background:
     radial-gradient(circle at 50% 10%, color-mix(in srgb, var(--color-accent) 40%, transparent), transparent 55%),
     radial-gradient(circle at 12% 90%, color-mix(in srgb, var(--color-accent) 18%, transparent), transparent 50%),
-    linear-gradient(180deg, #0d0e13 0%, #1a1c27 55%, #0d0e13 100%);
+    linear-gradient(180deg, #0a0a10 0%, #14141f 40%, #1c1a35 60%, #0a0a10 100%);
   z-index: -2;
 }
 
@@ -356,6 +420,10 @@ section {
 }
 
 .hero-heading {
+  font-family: var(--font-serif);
+  font-weight: 400;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
   font-size: clamp(2.4rem, 6vw, 4.2rem);
   color: var(--color-ink);
 }
@@ -462,9 +530,6 @@ section {
   text-align: center;
 }
 
-.cta-band-inner h2 {
-  white-space: pre-line;
-}
 
 /* Prologue */
 .prologue-inner h2 {
@@ -502,15 +567,7 @@ section {
 }
 
 .scope-card-head {
-  display: flex;
-  align-items: baseline;
-  gap: var(--space-2);
-  margin-bottom: var(--space-2);
-}
-
-.scope-ko {
-  font-size: 0.9rem;
-  color: var(--color-text-soft);
+  margin-bottom: var(--space-3);
 }
 
 .scope-meta {
