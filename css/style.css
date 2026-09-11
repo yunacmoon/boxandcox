@@ -1,14 +1,14 @@
 :root {
-  --color-bg: #0a0a10;
-  --color-bg-alt: #202030;
-  --color-surface-2: #262838;
+  --color-bg: #08080a;
+  --color-bg-alt: #1a1a1d;
+  --color-surface-2: #212124;
   --color-ink: #ffffff;
   --color-text: #ffffff;
-  --color-text-soft: #9998a8;
+  --color-text-soft: #9b9ba1;
   --color-border: rgba(255, 255, 255, 0.08);
   --color-border-strong: rgba(255, 255, 255, 0.16);
-  --color-accent: #4737ff;
-  --color-accent-soft: #d1cdff;
+  --color-accent: #b9bcc4;
+  --color-accent-soft: #e3e4e8;
   --color-cta-bg: #f75c03;
   --color-cta-text: #ffffff;
   --font-sans: "Inter", "Nanum Gothic", -apple-system, BlinkMacSystemFont, sans-serif;
@@ -375,9 +375,9 @@ section {
   position: absolute;
   inset: 0;
   background:
-    radial-gradient(circle at 50% 10%, color-mix(in srgb, var(--color-accent) 18%, transparent), transparent 55%),
-    radial-gradient(circle at 12% 90%, color-mix(in srgb, var(--color-accent) 8%, transparent), transparent 50%),
-    linear-gradient(180deg, #0a0a10 0%, #0e0e15 40%, #12111c 60%, #0a0a10 100%);
+    radial-gradient(circle at 50% 10%, color-mix(in srgb, var(--color-accent) 14%, transparent), transparent 55%),
+    radial-gradient(circle at 12% 90%, color-mix(in srgb, var(--color-accent) 6%, transparent), transparent 50%),
+    linear-gradient(180deg, #08080a 0%, #0c0c0e 40%, #101012 60%, #08080a 100%);
   z-index: -2;
 }
 
