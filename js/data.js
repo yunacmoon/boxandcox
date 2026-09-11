@@ -5,7 +5,7 @@
  */
 window.SITE_DATA = {
   cta: {
-    headingEn: "Let's Create Together",
+    headingEn: "Let's create together",
     headingKo: "전략적인 공간창출, 지금 함께 시작하세요.",
     ctaLabel: "프로젝트 보기",
     ctaHref: "#projects",
@@ -15,7 +15,7 @@ window.SITE_DATA = {
     reference: "BOX&COX_CRD_018.jpg",
     hero: {
       eyebrow: "SPACE COMMUNICATION STUDIO",
-      heading: "Creation of Space Value",
+      heading: "Creation of space value",
       sub:
         "지난 30여년간 아이덴티티 개발과 디자인 마케팅을 통해 기업의 가치를 극대화해온 스페이스 커뮤니케이션 스튜디오.",
       ctaLabel: "프로젝트 보기",

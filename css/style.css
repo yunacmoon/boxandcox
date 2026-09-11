@@ -31,6 +31,11 @@ html {
   scroll-behavior: smooth;
 }
 
+section,
+.hero {
+  scroll-margin-top: 88px;
+}
+
 body {
   margin: 0;
   font-family: var(--font-sans);
@@ -113,11 +118,12 @@ ul, ol, dl {
 .section-heading-en {
   font-family: var(--font-serif);
   font-weight: 400; /* Playfair Display's lightest static cut; it has no 200 */
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
+  letter-spacing: 0.01em;
   font-size: clamp(2.1rem, 4.4vw, 3.2rem);
   line-height: 1.15;
-  color: var(--color-ink);
+  --reveal-from: var(--color-text-soft);
+  --reveal-to: var(--color-ink);
+  color: var(--reveal-to);
 }
 
 .section-heading-ko {
@@ -131,10 +137,11 @@ ul, ol, dl {
 .card-heading-en {
   font-family: var(--font-serif);
   font-weight: 400;
-  text-transform: uppercase;
-  letter-spacing: 0.04em;
+  letter-spacing: 0.01em;
   font-size: 1.6rem;
-  color: var(--color-ink);
+  --reveal-from: var(--color-text-soft);
+  --reveal-to: var(--color-ink);
+  color: var(--reveal-to);
 }
 
 .card-heading-ko {
@@ -244,8 +251,8 @@ button:focus-visible {
   align-items: flex-end;
   justify-content: flex-start;
   background:
-    radial-gradient(circle at 18% 28%, color-mix(in srgb, var(--color-accent) 35%, transparent), transparent 46%),
-    radial-gradient(circle at 82% 74%, color-mix(in srgb, var(--color-accent) 18%, transparent), transparent 52%),
+    radial-gradient(circle at 18% 28%, color-mix(in srgb, var(--color-accent) 18%, transparent), transparent 46%),
+    radial-gradient(circle at 82% 74%, color-mix(in srgb, var(--color-accent) 9%, transparent), transparent 52%),
     linear-gradient(135deg, var(--color-surface-2), var(--color-bg-alt));
 }
 
@@ -267,7 +274,7 @@ button:focus-visible {
   background: conic-gradient(
     from 0deg,
     transparent 0deg,
-    color-mix(in srgb, var(--color-accent) 30%, transparent) 40deg,
+    color-mix(in srgb, var(--color-accent) 16%, transparent) 40deg,
     transparent 90deg
   );
   animation: media-sweep 14s linear infinite;
@@ -331,25 +338,25 @@ section {
 
 .prologue {
   background:
-    radial-gradient(circle at 12% 15%, color-mix(in srgb, var(--color-accent) 14%, transparent), transparent 42%),
+    radial-gradient(circle at 12% 15%, color-mix(in srgb, var(--color-accent) 6%, transparent), transparent 40%),
     var(--color-bg);
 }
 
 .work-scope {
   background:
-    radial-gradient(circle at 88% 80%, color-mix(in srgb, var(--color-accent-soft) 12%, transparent), transparent 46%),
+    radial-gradient(circle at 88% 80%, color-mix(in srgb, var(--color-accent-soft) 5%, transparent), transparent 44%),
     var(--color-bg);
 }
 
 .work-process {
   background:
-    radial-gradient(circle at 18% 75%, color-mix(in srgb, var(--color-accent) 12%, transparent), transparent 44%),
+    radial-gradient(circle at 18% 75%, color-mix(in srgb, var(--color-accent) 5%, transparent), transparent 42%),
     var(--color-bg);
 }
 
 .projects {
   background:
-    radial-gradient(circle at 82% 12%, color-mix(in srgb, var(--color-accent-soft) 10%, transparent), transparent 42%),
+    radial-gradient(circle at 82% 12%, color-mix(in srgb, var(--color-accent-soft) 4%, transparent), transparent 40%),
     var(--color-bg);
 }
 
@@ -368,9 +375,9 @@ section {
   position: absolute;
   inset: 0;
   background:
-    radial-gradient(circle at 50% 10%, color-mix(in srgb, var(--color-accent) 40%, transparent), transparent 55%),
-    radial-gradient(circle at 12% 90%, color-mix(in srgb, var(--color-accent) 18%, transparent), transparent 50%),
-    linear-gradient(180deg, #0a0a10 0%, #14141f 40%, #1c1a35 60%, #0a0a10 100%);
+    radial-gradient(circle at 50% 10%, color-mix(in srgb, var(--color-accent) 18%, transparent), transparent 55%),
+    radial-gradient(circle at 12% 90%, color-mix(in srgb, var(--color-accent) 8%, transparent), transparent 50%),
+    linear-gradient(180deg, #0a0a10 0%, #0e0e15 40%, #12111c 60%, #0a0a10 100%);
   z-index: -2;
 }
 
@@ -422,10 +429,12 @@ section {
 .hero-heading {
   font-family: var(--font-serif);
   font-weight: 400;
-  text-transform: uppercase;
-  letter-spacing: 0.03em;
-  font-size: clamp(2.4rem, 6vw, 4.2rem);
-  color: var(--color-ink);
+  letter-spacing: 0;
+  font-size: clamp(3.2rem, 9vw, 6.4rem);
+  line-height: 1.05;
+  --reveal-from: var(--color-text-soft);
+  --reveal-to: var(--color-ink);
+  color: var(--reveal-to);
 }
 
 .hero-sub {
@@ -652,18 +661,32 @@ section {
   font-size: 0.82rem;
 }
 
-/* Projects */
+/* Projects — cards overlap slightly like a fanned accordion, each one
+   settling over the tail of the one before it as it rises into view. */
 .project-list {
   display: flex;
   flex-direction: column;
-  gap: var(--space-2);
 }
 
 .project-card {
+  position: relative;
   background: var(--color-bg-alt);
   border: 1px solid var(--color-border);
   border-radius: 16px;
   overflow: hidden;
+  margin-top: -28px;
+}
+
+.project-card:first-child {
+  margin-top: 0;
+}
+
+.project-card.reveal-anim {
+  transform: translateY(40px);
+}
+
+.project-card.reveal-anim.is-visible {
+  transform: translateY(0);
 }
 
 .project-toggle {
@@ -784,22 +807,29 @@ section {
   color: var(--color-ink);
 }
 
-/* Reveal animation (progressive enhancement: visible by default, JS opts elements in) */
+/* Reveal animation (progressive enhancement: visible by default, JS opts elements in).
+   Elements that declare --reveal-from/--reveal-to (headings) also fade their own
+   text color in — e.g. dim gray brightening to full white as the block scrolls
+   into view — instead of only fading opacity. Elements that don't declare those
+   custom properties are unaffected (the color rule falls back to "inherit"). */
 .reveal-anim {
   opacity: 0;
   transform: translateY(16px);
-  transition: opacity 0.6s ease, transform 0.6s ease;
+  color: var(--reveal-from, inherit);
+  transition: opacity 0.9s ease, transform 0.9s ease, color 1.1s ease;
 }
 
 .reveal-anim.is-visible {
   opacity: 1;
   transform: translateY(0);
+  color: var(--reveal-to, inherit);
 }
 
 @media (prefers-reduced-motion: reduce) {
   .reveal-anim {
     opacity: 1;
     transform: none;
+    color: var(--reveal-to, inherit);
     transition: none;
   }
 }
