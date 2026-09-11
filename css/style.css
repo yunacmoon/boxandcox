@@ -184,14 +184,14 @@ ul, ol, dl {
 }
 
 .logo {
-  font-size: 1.2rem;
-  font-weight: 700;
-  letter-spacing: -0.01em;
-  color: var(--color-ink);
+  display: inline-flex;
+  align-items: center;
 }
 
-.logo-accent {
-  color: var(--color-accent);
+.logo-mark {
+  height: 28px;
+  width: auto;
+  filter: brightness(0) invert(1);
 }
 
 .site-nav {
