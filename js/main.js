@@ -90,7 +90,8 @@ function renderProjects(projects) {
             <span class="project-toggle-icon" aria-hidden="true"></span>
           </button>
           <div class="project-panel" id="project-panel-${index}" hidden>
-            <div class="media-frame" data-reference="${escapeHtml(project.reference)}">
+            <div class="media-frame reveal-anim" data-reference="${escapeHtml(project.reference)}">
+              <span class="media-curtain" aria-hidden="true"></span>
               <span class="media-label">${escapeHtml(project.reference)}</span>
             </div>
             <dl class="project-facts">
@@ -126,6 +127,14 @@ function renderProjects(projects) {
       const isOpen = button.getAttribute("aria-expanded") === "true";
       button.setAttribute("aria-expanded", String(!isOpen));
       panel.hidden = isOpen;
+
+      if (!isOpen) {
+        const media = panel.querySelector(".media-frame");
+        // Trigger the wipe reveal fresh each time the panel opens.
+        media.classList.remove("is-visible");
+        void media.offsetWidth; // restart the CSS transition
+        requestAnimationFrame(() => media.classList.add("is-visible"));
+      }
     });
   });
 }

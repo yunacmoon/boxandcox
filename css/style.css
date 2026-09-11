@@ -177,21 +177,61 @@ ul, ol, dl {
   background: var(--color-ink);
 }
 
-/* Media placeholder (stand-in for BOX&COX_CRD_*.jpg reference images) */
+/* Media placeholder (stand-in for BOX&COX_CRD_*.jpg reference images) —
+   a generative "cool/futuristic" visual: grid overlay + slow conic glow sweep,
+   revealed with a clip-path wipe rather than a plain fade. */
 .media-frame {
   position: relative;
   aspect-ratio: 16 / 7;
   border-radius: 4px;
   margin: var(--space-4) 0;
-  background: linear-gradient(135deg, var(--color-bg-alt), var(--color-border));
-  border: 1px dashed var(--color-border);
+  overflow: hidden;
+  isolation: isolate;
   display: flex;
   align-items: flex-end;
   justify-content: flex-start;
-  overflow: hidden;
+  background:
+    radial-gradient(circle at 18% 28%, color-mix(in srgb, var(--color-accent) 40%, transparent), transparent 46%),
+    radial-gradient(circle at 82% 74%, color-mix(in srgb, var(--color-accent) 22%, transparent), transparent 52%),
+    linear-gradient(135deg, var(--color-bg-alt), var(--color-border));
+}
+
+.media-frame::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(color-mix(in srgb, var(--color-ink) 8%, transparent) 1px, transparent 1px),
+    linear-gradient(90deg, color-mix(in srgb, var(--color-ink) 8%, transparent) 1px, transparent 1px);
+  background-size: 32px 32px;
+  mix-blend-mode: overlay;
+  pointer-events: none;
+}
+
+.media-frame::after {
+  content: "";
+  position: absolute;
+  inset: -30%;
+  background: conic-gradient(
+    from 0deg,
+    transparent 0deg,
+    color-mix(in srgb, var(--color-accent) 35%, transparent) 40deg,
+    transparent 90deg
+  );
+  animation: media-sweep 14s linear infinite;
+  pointer-events: none;
+  z-index: -1;
+}
+
+@keyframes media-sweep {
+  to {
+    transform: rotate(360deg);
+  }
 }
 
 .media-label {
+  position: relative;
+  z-index: 2;
   font-size: 0.75rem;
   font-family: monospace;
   color: var(--color-text-soft);
@@ -199,6 +239,34 @@ ul, ol, dl {
   padding: 4px 10px;
   margin: var(--space-2);
   border-radius: 999px;
+}
+
+/* The wipe-reveal curtain — a separate overlay, never the observed element
+   itself. Clipping/hiding the observed target directly would zero out its
+   own IntersectionObserver bounding rect and it could never be seen as
+   "visible", so the wipe instead animates this child curtain sliding away. */
+.media-curtain {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  background: var(--color-bg-alt);
+  transform: scaleX(0);
+  transform-origin: left center;
+}
+
+.media-frame.reveal-anim .media-curtain {
+  transform: scaleX(1);
+  transition: transform 1.1s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.media-frame.reveal-anim.is-visible .media-curtain {
+  transform: scaleX(0);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .media-frame::after {
+    animation: none;
+  }
 }
 
 /* Sections spacing */
