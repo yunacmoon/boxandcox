@@ -1,11 +1,15 @@
 :root {
-  --color-bg: #ffffff;
-  --color-bg-alt: #f4f3f0;
-  --color-ink: #14141a;
-  --color-text: #14141a;
-  --color-text-soft: #5c5c62;
-  --color-border: #e3e1db;
-  --color-accent: #a37a3c;
+  --color-bg: #0d0e13;
+  --color-bg-alt: #15161d;
+  --color-surface-2: #1f2029;
+  --color-ink: #f5f4f0;
+  --color-text: #f5f4f0;
+  --color-text-soft: #97969f;
+  --color-border: rgba(255, 255, 255, 0.08);
+  --color-border-strong: rgba(255, 255, 255, 0.14);
+  --color-accent: #c9a463;
+  --color-cta-bg: #f5f1e8;
+  --color-cta-text: #14141a;
   --font-sans: "Inter", "Noto Sans KR", -apple-system, BlinkMacSystemFont, sans-serif;
 
   --container-width: 1120px;
@@ -15,29 +19,6 @@
   --space-4: 40px;
   --space-5: 64px;
   --space-6: 96px;
-
-  /* The hero commits to one fixed dark look regardless of light/dark mode —
-     it is not part of the adaptive --color-* system above. */
-  --hero-bg-1: #12141b;
-  --hero-bg-2: #1b1f2a;
-  --hero-ink: #f5f4f0;
-  --hero-text-soft: rgba(245, 244, 240, 0.7);
-  --hero-pill-bg: rgba(255, 255, 255, 0.08);
-  --hero-pill-border: rgba(255, 255, 255, 0.18);
-  --hero-cta-bg: #f5f1e8;
-  --hero-cta-text: #14141a;
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --color-bg: #121214;
-    --color-bg-alt: #1a1a1d;
-    --color-ink: #f2f1ee;
-    --color-text: #f2f1ee;
-    --color-text-soft: #a7a6a2;
-    --color-border: #2c2c2f;
-    --color-accent: #c9a463;
-  }
 }
 
 * {
@@ -70,6 +51,7 @@ h1, h2, h3, h4 {
   margin: 0;
   letter-spacing: -0.01em;
   color: var(--color-ink);
+  text-wrap: balance;
 }
 
 h1 {
@@ -116,31 +98,37 @@ ul, ol, dl {
 }
 
 .section-intro {
-  max-width: 720px;
+  max-width: 560px;
   margin-top: var(--space-2);
 }
 
 .section-head {
-  margin-bottom: var(--space-4);
+  margin-bottom: var(--space-5);
 }
 
-/* Header */
+/* A two-column head — eyebrow+heading on the left, supporting copy on the
+   right — used where a section benefits from more editorial weight. */
+.section-head--split {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-5);
+  align-items: end;
+}
+
+.section-head--split .section-intro {
+  margin-top: 0;
+  max-width: 460px;
+}
+
+/* Header — a single translucent-dark surface; the whole site shares one
+   fixed dark theme now, so the header never needs to swap looks. */
 .site-header {
   position: sticky;
   top: 0;
   z-index: 50;
-  background: color-mix(in srgb, var(--color-bg) 90%, transparent);
-  backdrop-filter: blur(10px);
+  background: color-mix(in srgb, var(--color-bg) 75%, transparent);
+  backdrop-filter: blur(12px);
   border-bottom: 1px solid var(--color-border);
-  transition: background 0.3s ease, border-color 0.3s ease;
-}
-
-/* While the dark full-bleed hero is behind it, the header merges into it
-   instead of showing the page's own (light) header surface. */
-.site-header.on-hero {
-  background: transparent;
-  backdrop-filter: none;
-  border-bottom-color: transparent;
 }
 
 .header-inner {
@@ -155,15 +143,10 @@ ul, ol, dl {
   font-weight: 700;
   letter-spacing: -0.01em;
   color: var(--color-ink);
-  transition: color 0.3s ease;
 }
 
 .logo-accent {
   color: var(--color-accent);
-}
-
-.site-header.on-hero .logo {
-  color: var(--hero-ink);
 }
 
 .site-nav {
@@ -178,16 +161,9 @@ ul, ol, dl {
   transition: color 0.2s ease;
 }
 
-.site-nav a:hover {
+.site-nav a:hover,
+.site-nav a:focus-visible {
   color: var(--color-ink);
-}
-
-.site-header.on-hero .site-nav:not(.is-open) a {
-  color: var(--hero-text-soft);
-}
-
-.site-header.on-hero .site-nav:not(.is-open) a:hover {
-  color: var(--hero-ink);
 }
 
 .nav-toggle {
@@ -208,11 +184,12 @@ ul, ol, dl {
   height: 2px;
   width: 100%;
   background: var(--color-ink);
-  transition: background 0.3s ease;
 }
 
-.site-header.on-hero .nav-toggle span {
-  background: var(--hero-ink);
+a:focus-visible,
+button:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 2px;
 }
 
 /* Media placeholder (stand-in for BOX&COX_CRD_*.jpg reference images) —
@@ -221,7 +198,7 @@ ul, ol, dl {
 .media-frame {
   position: relative;
   aspect-ratio: 16 / 7;
-  border-radius: 4px;
+  border-radius: 12px;
   margin: var(--space-4) 0;
   overflow: hidden;
   isolation: isolate;
@@ -229,9 +206,9 @@ ul, ol, dl {
   align-items: flex-end;
   justify-content: flex-start;
   background:
-    radial-gradient(circle at 18% 28%, color-mix(in srgb, var(--color-accent) 40%, transparent), transparent 46%),
-    radial-gradient(circle at 82% 74%, color-mix(in srgb, var(--color-accent) 22%, transparent), transparent 52%),
-    linear-gradient(135deg, var(--color-bg-alt), var(--color-border));
+    radial-gradient(circle at 18% 28%, color-mix(in srgb, var(--color-accent) 35%, transparent), transparent 46%),
+    radial-gradient(circle at 82% 74%, color-mix(in srgb, var(--color-accent) 18%, transparent), transparent 52%),
+    linear-gradient(135deg, var(--color-surface-2), var(--color-bg-alt));
 }
 
 .media-frame::before {
@@ -239,10 +216,9 @@ ul, ol, dl {
   position: absolute;
   inset: 0;
   background-image:
-    linear-gradient(color-mix(in srgb, var(--color-ink) 8%, transparent) 1px, transparent 1px),
-    linear-gradient(90deg, color-mix(in srgb, var(--color-ink) 8%, transparent) 1px, transparent 1px);
+    linear-gradient(color-mix(in srgb, var(--color-ink) 6%, transparent) 1px, transparent 1px),
+    linear-gradient(90deg, color-mix(in srgb, var(--color-ink) 6%, transparent) 1px, transparent 1px);
   background-size: 32px 32px;
-  mix-blend-mode: overlay;
   pointer-events: none;
 }
 
@@ -253,7 +229,7 @@ ul, ol, dl {
   background: conic-gradient(
     from 0deg,
     transparent 0deg,
-    color-mix(in srgb, var(--color-accent) 35%, transparent) 40deg,
+    color-mix(in srgb, var(--color-accent) 30%, transparent) 40deg,
     transparent 90deg
   );
   animation: media-sweep 14s linear infinite;
@@ -273,7 +249,7 @@ ul, ol, dl {
   font-size: 0.75rem;
   font-family: monospace;
   color: var(--color-text-soft);
-  background: color-mix(in srgb, var(--color-bg) 80%, transparent);
+  background: color-mix(in srgb, var(--color-bg) 70%, transparent);
   padding: 4px 10px;
   margin: var(--space-2);
   border-radius: 999px;
@@ -307,49 +283,35 @@ ul, ol, dl {
   }
 }
 
-/* Sections spacing */
+/* Sections — one continuous dark canvas; cards carry the elevation instead
+   of the sections themselves. */
 section {
   padding: var(--space-6) 0;
 }
 
-.work-scope,
-.projects {
-  background: var(--color-bg);
-}
-
-.prologue,
-.work-process {
-  background: var(--color-bg-alt);
-}
-
-/* Hero — a fixed dark, full-bleed opener (see --hero-* tokens). Unlike the
-   rest of the site it does not adapt to light/dark mode: it is one
-   deliberate visual moment, not a themed surface. */
-.hero {
+/* Hero and the closing CTA band bookend the page with the same generative
+   dark backdrop (grid + glow), the way a full-bleed photo bookends fora.so. */
+.hero,
+.cta-band {
   position: relative;
   isolation: isolate;
   overflow: hidden;
-  /* Pull the hero up under the sticky header (which still reserves its own
-     72px of flow) so the header can sit transparently over the hero's own
-     background instead of over the page's background. */
-  margin-top: -72px;
-  padding-top: calc(72px + var(--space-6));
-  padding-bottom: var(--space-6);
-  background: var(--hero-bg-1);
 }
 
-.hero::before {
+.hero::before,
+.cta-band::before {
   content: "";
   position: absolute;
   inset: 0;
   background:
-    radial-gradient(circle at 50% 10%, color-mix(in srgb, var(--color-accent) 45%, transparent), transparent 55%),
-    radial-gradient(circle at 12% 90%, color-mix(in srgb, var(--color-accent) 20%, transparent), transparent 50%),
-    linear-gradient(180deg, var(--hero-bg-1) 0%, var(--hero-bg-2) 55%, var(--hero-bg-1) 100%);
+    radial-gradient(circle at 50% 10%, color-mix(in srgb, var(--color-accent) 40%, transparent), transparent 55%),
+    radial-gradient(circle at 12% 90%, color-mix(in srgb, var(--color-accent) 18%, transparent), transparent 50%),
+    linear-gradient(180deg, #0d0e13 0%, #1a1c27 55%, #0d0e13 100%);
   z-index: -2;
 }
 
-.hero::after {
+.hero::after,
+.cta-band::after {
   content: "";
   position: absolute;
   inset: 0;
@@ -360,6 +322,14 @@ section {
   mask-image: linear-gradient(180deg, transparent, black 25%, black 75%, transparent);
   -webkit-mask-image: linear-gradient(180deg, transparent, black 25%, black 75%, transparent);
   z-index: -1;
+}
+
+.hero {
+  /* Pull the hero up under the sticky header (which still reserves its own
+     72px of flow) so the header sits over the hero's own background. */
+  margin-top: -72px;
+  padding-top: calc(72px + var(--space-6));
+  padding-bottom: var(--space-6);
 }
 
 .hero-inner {
@@ -377,23 +347,22 @@ section {
   display: inline-flex;
   padding: 6px 16px;
   border-radius: 999px;
-  background: var(--hero-pill-bg);
-  border: 1px solid var(--hero-pill-border);
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid var(--color-border-strong);
   font-size: 0.75rem;
   font-weight: 600;
   letter-spacing: 0.12em;
-  color: var(--hero-text-soft);
+  color: var(--color-text-soft);
 }
 
 .hero-heading {
   font-size: clamp(2.4rem, 6vw, 4.2rem);
-  color: var(--hero-ink);
-  text-wrap: balance;
+  color: var(--color-ink);
 }
 
 .hero-sub {
   max-width: 520px;
-  color: var(--hero-text-soft);
+  color: var(--color-text-soft);
   font-size: 1.05rem;
 }
 
@@ -406,8 +375,8 @@ section {
   border-radius: 999px;
   font-weight: 600;
   font-size: 0.95rem;
-  background: var(--hero-cta-bg);
-  color: var(--hero-cta-text);
+  background: var(--color-cta-bg);
+  color: var(--color-cta-text);
   transition: transform 0.15s ease;
 }
 
@@ -422,12 +391,12 @@ section {
   z-index: 2;
   max-width: 720px;
   margin: var(--space-5) auto calc(-1 * var(--space-6));
-  border-radius: 20px;
+  border-radius: 24px;
   overflow: hidden;
-  background: color-mix(in srgb, var(--hero-bg-1) 75%, transparent);
+  background: color-mix(in srgb, var(--color-bg-alt) 90%, transparent);
   backdrop-filter: blur(16px);
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  box-shadow: 0 40px 80px -30px rgba(0, 0, 0, 0.5);
+  border: 1px solid var(--color-border-strong);
+  box-shadow: 0 40px 80px -30px rgba(0, 0, 0, 0.6);
 }
 
 .hero-feature .media-frame {
@@ -448,25 +417,25 @@ section {
 .hero-feature-label {
   font-size: 0.72rem;
   letter-spacing: 0.1em;
-  color: var(--hero-text-soft);
+  color: var(--color-text-soft);
   margin-bottom: 4px;
 }
 
 .hero-feature-title {
-  color: var(--hero-ink);
+  color: var(--color-ink);
   font-size: 1.15rem;
 }
 
 .hero-feature-meta {
-  color: var(--hero-text-soft);
+  color: var(--color-text-soft);
   font-size: 0.85rem;
 }
 
 .hero-feature-cta {
   padding: 10px 20px;
   border-radius: 999px;
-  border: 1px solid rgba(255, 255, 255, 0.25);
-  color: var(--hero-ink);
+  border: 1px solid var(--color-border-strong);
+  color: var(--color-ink);
   font-size: 0.85rem;
   font-weight: 600;
   white-space: nowrap;
@@ -474,7 +443,27 @@ section {
 }
 
 .hero-feature-cta:hover {
-  background: rgba(255, 255, 255, 0.08);
+  background: rgba(255, 255, 255, 0.06);
+}
+
+/* Closing CTA band — a compact echo of the hero, bookending the page. */
+.cta-band {
+  padding: var(--space-6) 0;
+}
+
+.cta-band-inner {
+  position: relative;
+  max-width: 640px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-3);
+  text-align: center;
+}
+
+.cta-band-inner h2 {
+  white-space: pre-line;
 }
 
 /* Prologue */
@@ -506,9 +495,10 @@ section {
 }
 
 .scope-card {
+  background: var(--color-bg-alt);
   border: 1px solid var(--color-border);
-  border-radius: 12px;
-  padding: var(--space-4);
+  border-radius: 20px;
+  padding: var(--space-5);
 }
 
 .scope-card-head {
@@ -526,26 +516,37 @@ section {
 .scope-meta {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: var(--space-3);
-  margin-top: var(--space-3);
-  padding-top: var(--space-3);
+  gap: var(--space-4);
+  margin-top: var(--space-4);
+  padding-top: var(--space-4);
   border-top: 1px solid var(--color-border);
 }
 
+/* A quiet dotted checklist rather than a wall of pill chips — reads calmer
+   at 6-7 items per column. */
 .tag-list {
   list-style: none;
   display: flex;
-  flex-wrap: wrap;
-  gap: 6px;
+  flex-direction: column;
+  gap: 10px;
 }
 
 .tag-list li {
-  font-size: 0.8rem;
-  padding: 4px 10px;
-  border-radius: 999px;
-  background: var(--color-bg-alt);
-  color: var(--color-text);
-  border: 1px solid var(--color-border);
+  position: relative;
+  padding-left: 14px;
+  font-size: 0.85rem;
+  color: var(--color-text-soft);
+}
+
+.tag-list li::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0.6em;
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background: var(--color-accent);
 }
 
 /* Work Process */
@@ -602,8 +603,9 @@ section {
 }
 
 .project-card {
+  background: var(--color-bg-alt);
   border: 1px solid var(--color-border);
-  border-radius: 12px;
+  border-radius: 16px;
   overflow: hidden;
 }
 
@@ -614,11 +616,12 @@ section {
   justify-content: space-between;
   gap: var(--space-3);
   padding: var(--space-3) var(--space-4);
-  background: var(--color-bg);
+  background: none;
   border: none;
   cursor: pointer;
   text-align: left;
   font-family: inherit;
+  color: inherit;
 }
 
 .project-toggle-head {
@@ -757,6 +760,11 @@ section {
 }
 
 @media (max-width: 860px) {
+  .section-head--split {
+    grid-template-columns: 1fr;
+    gap: var(--space-2);
+  }
+
   .scope-list {
     grid-template-columns: 1fr;
   }
@@ -776,7 +784,7 @@ section {
     top: 72px;
     left: 0;
     right: 0;
-    background: var(--color-bg);
+    background: var(--color-bg-alt);
     border-bottom: 1px solid var(--color-border);
     flex-direction: column;
     padding: var(--space-2) var(--space-3);

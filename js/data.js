@@ -4,6 +4,12 @@
  * ported to React.
  */
 window.SITE_DATA = {
+  cta: {
+    heading: "전략적인 공간창출,\n지금 함께 시작하세요.",
+    ctaLabel: "프로젝트 보기",
+    ctaHref: "#projects",
+  },
+
   prologue: {
     reference: "BOX&COX_CRD_018.jpg",
     hero: {

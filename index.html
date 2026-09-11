@@ -11,7 +11,7 @@
   <link rel="stylesheet" href="css/style.css" />
 </head>
 <body>
-  <header class="site-header on-hero">
+  <header class="site-header">
     <div class="container header-inner">
       <a href="#top" class="logo">Box<span class="logo-accent">&amp;</span>Cox</a>
       <button class="nav-toggle" id="navToggle" aria-label="메뉴 열기" aria-expanded="false">
@@ -54,9 +54,11 @@
     <!-- 2. Work Scope -->
     <section id="work-scope" class="work-scope">
       <div class="container">
-        <div class="section-head reveal">
-          <p class="eyebrow">WORK SCOPE</p>
-          <h2>사업 영역</h2>
+        <div class="section-head section-head--split reveal">
+          <div>
+            <p class="eyebrow">WORK SCOPE</p>
+            <h2>사업 영역</h2>
+          </div>
           <p id="workScopeIntro" class="section-intro"></p>
         </div>
         <div class="media-frame reveal" data-reference="BOX&amp;COX_CRD_014.jpg">
@@ -70,9 +72,11 @@
     <!-- 3. Work Process -->
     <section id="work-process" class="work-process">
       <div class="container">
-        <div class="section-head reveal">
-          <p class="eyebrow">WORK PROCESS</p>
-          <h2>업무 프로세스</h2>
+        <div class="section-head section-head--split reveal">
+          <div>
+            <p class="eyebrow">WORK PROCESS</p>
+            <h2>업무 프로세스</h2>
+          </div>
           <p id="workProcessIntro" class="section-intro"></p>
         </div>
         <div class="media-frame reveal" data-reference="BOX&amp;COX_CRD_013.jpg">
@@ -92,6 +96,15 @@
           <h2>주요 프로젝트 레퍼런스</h2>
         </div>
         <div id="projectList" class="project-list"></div>
+      </div>
+    </section>
+
+    <!-- 5. Closing CTA -->
+    <section class="cta-band">
+      <div class="container cta-band-inner">
+        <p class="eyebrow reveal">CONTACT</p>
+        <h2 class="reveal" id="ctaHeading"></h2>
+        <a href="#projects" class="hero-cta reveal" id="ctaCta"></a>
       </div>
     </section>
   </main>

@@ -33,6 +33,14 @@ function renderHeroFeature(projects) {
   `;
 }
 
+function renderCta(cta) {
+  document.getElementById("ctaHeading").textContent = cta.heading;
+
+  const link = document.getElementById("ctaCta");
+  link.textContent = cta.ctaLabel;
+  link.href = cta.ctaHref;
+}
+
 function renderPrologue(data) {
   const container = document.getElementById("prologueBlocks");
   container.innerHTML = data.blocks
@@ -196,25 +204,6 @@ function initRevealAnimations() {
   });
 }
 
-function initHeroHeader() {
-  const header = document.querySelector(".site-header");
-  const hero = document.querySelector(".hero");
-
-  if (!header || !hero || !("IntersectionObserver" in window)) {
-    return;
-  }
-
-  const headerHeight = header.offsetHeight;
-  const observer = new IntersectionObserver(
-    ([entry]) => {
-      header.classList.toggle("on-hero", entry.isIntersecting);
-    },
-    { rootMargin: `-${headerHeight}px 0px 0px 0px`, threshold: 0 }
-  );
-
-  observer.observe(hero);
-}
-
 function initNav() {
   const navToggle = document.getElementById("navToggle");
   const siteNav = document.getElementById("siteNav");
@@ -242,9 +231,8 @@ document.addEventListener("DOMContentLoaded", () => {
   renderWorkScope(data.workScope);
   renderWorkProcess(data.workProcess);
   renderProjects(data.projects);
+  renderCta(data.cta);
 
-  // Reveal animations and the hero/header link are wired up last, once all
-  // dynamic content exists.
+  // Reveal animations are wired up last, once all dynamic content exists.
   initRevealAnimations();
-  initHeroHeader();
 });
