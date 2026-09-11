@@ -11,7 +11,7 @@
   <link rel="stylesheet" href="css/style.css" />
 </head>
 <body>
-  <header class="site-header">
+  <header class="site-header on-hero">
     <div class="container header-inner">
       <a href="#top" class="logo">Box<span class="logo-accent">&amp;</span>Cox</a>
       <button class="nav-toggle" id="navToggle" aria-label="메뉴 열기" aria-expanded="false">
@@ -27,11 +27,22 @@
   </header>
 
   <main id="top">
-    <!-- 1. Prologue -->
-    <section id="prologue" class="prologue">
+    <!-- 1. Hero -->
+    <section id="prologue" class="hero">
+      <div class="container hero-inner">
+        <span class="hero-pill reveal" id="heroEyebrow"></span>
+        <h1 class="hero-heading reveal" id="heroHeading"></h1>
+        <p class="hero-sub reveal" id="heroSub"></p>
+        <a href="#projects" class="hero-cta reveal" id="heroCta"></a>
+      </div>
+      <div class="hero-feature reveal" id="heroFeature"></div>
+    </section>
+
+    <!-- 1b. Prologue detail -->
+    <section class="prologue">
       <div class="container prologue-inner">
         <p class="eyebrow reveal">PROLOGUE</p>
-        <h1 class="reveal">기업 철학 및 소개</h1>
+        <h2 class="reveal">기업 철학 및 소개</h2>
         <div class="media-frame reveal" data-reference="BOX&amp;COX_CRD_018.jpg">
           <span class="media-curtain" aria-hidden="true"></span>
           <span class="media-label">BOX&amp;COX_CRD_018.jpg</span>

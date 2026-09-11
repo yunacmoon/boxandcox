@@ -4,6 +4,35 @@ function escapeHtml(str) {
   return div.innerHTML;
 }
 
+function renderHero(hero) {
+  document.getElementById("heroEyebrow").textContent = hero.eyebrow;
+  document.getElementById("heroHeading").textContent = hero.heading;
+  document.getElementById("heroSub").textContent = hero.sub;
+
+  const cta = document.getElementById("heroCta");
+  cta.textContent = hero.ctaLabel;
+  cta.href = hero.ctaHref;
+}
+
+function renderHeroFeature(projects) {
+  const project = projects[0];
+  const el = document.getElementById("heroFeature");
+  el.innerHTML = `
+    <div class="media-frame reveal" data-reference="${escapeHtml(project.reference)}">
+      <span class="media-curtain" aria-hidden="true"></span>
+      <span class="media-label">${escapeHtml(project.reference)}</span>
+    </div>
+    <div class="hero-feature-body">
+      <div>
+        <p class="hero-feature-label">FEATURED PROJECT</p>
+        <h3 class="hero-feature-title">${escapeHtml(project.title)}</h3>
+        <p class="hero-feature-meta">${escapeHtml(project.client)} · ${escapeHtml(project.year)}</p>
+      </div>
+      <a href="#projects" class="hero-feature-cta">자세히 보기</a>
+    </div>
+  `;
+}
+
 function renderPrologue(data) {
   const container = document.getElementById("prologueBlocks");
   container.innerHTML = data.blocks
@@ -167,6 +196,25 @@ function initRevealAnimations() {
   });
 }
 
+function initHeroHeader() {
+  const header = document.querySelector(".site-header");
+  const hero = document.querySelector(".hero");
+
+  if (!header || !hero || !("IntersectionObserver" in window)) {
+    return;
+  }
+
+  const headerHeight = header.offsetHeight;
+  const observer = new IntersectionObserver(
+    ([entry]) => {
+      header.classList.toggle("on-hero", entry.isIntersecting);
+    },
+    { rootMargin: `-${headerHeight}px 0px 0px 0px`, threshold: 0 }
+  );
+
+  observer.observe(hero);
+}
+
 function initNav() {
   const navToggle = document.getElementById("navToggle");
   const siteNav = document.getElementById("siteNav");
@@ -188,11 +236,15 @@ document.addEventListener("DOMContentLoaded", () => {
   const data = window.SITE_DATA;
 
   initNav();
+  renderHero(data.prologue.hero);
+  renderHeroFeature(data.projects);
   renderPrologue(data.prologue);
   renderWorkScope(data.workScope);
   renderWorkProcess(data.workProcess);
   renderProjects(data.projects);
 
-  // Reveal animations are wired up last, once all dynamic content exists.
+  // Reveal animations and the hero/header link are wired up last, once all
+  // dynamic content exists.
   initRevealAnimations();
+  initHeroHeader();
 });

@@ -6,6 +6,14 @@
 window.SITE_DATA = {
   prologue: {
     reference: "BOX&COX_CRD_018.jpg",
+    hero: {
+      eyebrow: "SPACE COMMUNICATION STUDIO",
+      heading: "Creation of Space Value.",
+      sub:
+        "지난 30여년간 아이덴티티 개발과 디자인 마케팅을 통해 기업의 가치를 극대화해온 스페이스 커뮤니케이션 스튜디오.",
+      ctaLabel: "프로젝트 보기",
+      ctaHref: "#projects",
+    },
     blocks: [
       {
         tagline: "Creation of Space Value!",

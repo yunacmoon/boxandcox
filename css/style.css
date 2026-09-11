@@ -15,6 +15,17 @@
   --space-4: 40px;
   --space-5: 64px;
   --space-6: 96px;
+
+  /* The hero commits to one fixed dark look regardless of light/dark mode —
+     it is not part of the adaptive --color-* system above. */
+  --hero-bg-1: #12141b;
+  --hero-bg-2: #1b1f2a;
+  --hero-ink: #f5f4f0;
+  --hero-text-soft: rgba(245, 244, 240, 0.7);
+  --hero-pill-bg: rgba(255, 255, 255, 0.08);
+  --hero-pill-border: rgba(255, 255, 255, 0.18);
+  --hero-cta-bg: #f5f1e8;
+  --hero-cta-text: #14141a;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -121,6 +132,15 @@ ul, ol, dl {
   background: color-mix(in srgb, var(--color-bg) 90%, transparent);
   backdrop-filter: blur(10px);
   border-bottom: 1px solid var(--color-border);
+  transition: background 0.3s ease, border-color 0.3s ease;
+}
+
+/* While the dark full-bleed hero is behind it, the header merges into it
+   instead of showing the page's own (light) header surface. */
+.site-header.on-hero {
+  background: transparent;
+  backdrop-filter: none;
+  border-bottom-color: transparent;
 }
 
 .header-inner {
@@ -135,10 +155,15 @@ ul, ol, dl {
   font-weight: 700;
   letter-spacing: -0.01em;
   color: var(--color-ink);
+  transition: color 0.3s ease;
 }
 
 .logo-accent {
   color: var(--color-accent);
+}
+
+.site-header.on-hero .logo {
+  color: var(--hero-ink);
 }
 
 .site-nav {
@@ -155,6 +180,14 @@ ul, ol, dl {
 
 .site-nav a:hover {
   color: var(--color-ink);
+}
+
+.site-header.on-hero .site-nav:not(.is-open) a {
+  color: var(--hero-text-soft);
+}
+
+.site-header.on-hero .site-nav:not(.is-open) a:hover {
+  color: var(--hero-ink);
 }
 
 .nav-toggle {
@@ -175,11 +208,16 @@ ul, ol, dl {
   height: 2px;
   width: 100%;
   background: var(--color-ink);
+  transition: background 0.3s ease;
+}
+
+.site-header.on-hero .nav-toggle span {
+  background: var(--hero-ink);
 }
 
 /* Media placeholder (stand-in for BOX&COX_CRD_*.jpg reference images) —
    a generative "cool/futuristic" visual: grid overlay + slow conic glow sweep,
-   revealed with a clip-path wipe rather than a plain fade. */
+   revealed by a curtain wipe (see .media-curtain below). */
 .media-frame {
   position: relative;
   aspect-ratio: 16 / 7;
@@ -284,8 +322,163 @@ section {
   background: var(--color-bg-alt);
 }
 
+/* Hero — a fixed dark, full-bleed opener (see --hero-* tokens). Unlike the
+   rest of the site it does not adapt to light/dark mode: it is one
+   deliberate visual moment, not a themed surface. */
+.hero {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  /* Pull the hero up under the sticky header (which still reserves its own
+     72px of flow) so the header can sit transparently over the hero's own
+     background instead of over the page's background. */
+  margin-top: -72px;
+  padding-top: calc(72px + var(--space-6));
+  padding-bottom: var(--space-6);
+  background: var(--hero-bg-1);
+}
+
+.hero::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(circle at 50% 10%, color-mix(in srgb, var(--color-accent) 45%, transparent), transparent 55%),
+    radial-gradient(circle at 12% 90%, color-mix(in srgb, var(--color-accent) 20%, transparent), transparent 50%),
+    linear-gradient(180deg, var(--hero-bg-1) 0%, var(--hero-bg-2) 55%, var(--hero-bg-1) 100%);
+  z-index: -2;
+}
+
+.hero::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(255, 255, 255, 0.05) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.05) 1px, transparent 1px);
+  background-size: 48px 48px;
+  mask-image: linear-gradient(180deg, transparent, black 25%, black 75%, transparent);
+  -webkit-mask-image: linear-gradient(180deg, transparent, black 25%, black 75%, transparent);
+  z-index: -1;
+}
+
+.hero-inner {
+  position: relative;
+  max-width: 720px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-3);
+  text-align: center;
+}
+
+.hero-pill {
+  display: inline-flex;
+  padding: 6px 16px;
+  border-radius: 999px;
+  background: var(--hero-pill-bg);
+  border: 1px solid var(--hero-pill-border);
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  color: var(--hero-text-soft);
+}
+
+.hero-heading {
+  font-size: clamp(2.4rem, 6vw, 4.2rem);
+  color: var(--hero-ink);
+  text-wrap: balance;
+}
+
+.hero-sub {
+  max-width: 520px;
+  color: var(--hero-text-soft);
+  font-size: 1.05rem;
+}
+
+.hero-cta {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: var(--space-1);
+  padding: 14px 28px;
+  border-radius: 999px;
+  font-weight: 600;
+  font-size: 0.95rem;
+  background: var(--hero-cta-bg);
+  color: var(--hero-cta-text);
+  transition: transform 0.15s ease;
+}
+
+.hero-cta:hover {
+  transform: translateY(-2px);
+}
+
+/* The floating project card — this site's answer to a product-UI mockup:
+   it overlaps the hero's bottom edge and settles into the section below. */
+.hero-feature {
+  position: relative;
+  z-index: 2;
+  max-width: 720px;
+  margin: var(--space-5) auto calc(-1 * var(--space-6));
+  border-radius: 20px;
+  overflow: hidden;
+  background: color-mix(in srgb, var(--hero-bg-1) 75%, transparent);
+  backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  box-shadow: 0 40px 80px -30px rgba(0, 0, 0, 0.5);
+}
+
+.hero-feature .media-frame {
+  margin: 0;
+  border-radius: 0;
+  aspect-ratio: 16 / 8;
+}
+
+.hero-feature-body {
+  padding: var(--space-4);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+  flex-wrap: wrap;
+}
+
+.hero-feature-label {
+  font-size: 0.72rem;
+  letter-spacing: 0.1em;
+  color: var(--hero-text-soft);
+  margin-bottom: 4px;
+}
+
+.hero-feature-title {
+  color: var(--hero-ink);
+  font-size: 1.15rem;
+}
+
+.hero-feature-meta {
+  color: var(--hero-text-soft);
+  font-size: 0.85rem;
+}
+
+.hero-feature-cta {
+  padding: 10px 20px;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  color: var(--hero-ink);
+  font-size: 0.85rem;
+  font-weight: 600;
+  white-space: nowrap;
+  transition: background 0.2s ease;
+}
+
+.hero-feature-cta:hover {
+  background: rgba(255, 255, 255, 0.08);
+}
+
 /* Prologue */
-.prologue-inner h1 {
+.prologue-inner h2 {
   max-width: 640px;
 }
 
@@ -615,5 +808,10 @@ section {
     flex-direction: column;
     gap: var(--space-1);
     text-align: center;
+  }
+
+  .hero-feature-body {
+    flex-direction: column;
+    align-items: flex-start;
   }
 }
