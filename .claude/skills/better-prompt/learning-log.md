@@ -13,6 +13,13 @@
 **Gap closed:** Raw was a voice-dictated list of symptoms (Firebase, "vibe the BCG.com", "science studios") without naming the actual technical ask. Rewrite named the real problem (Firebase project is on a personal Gmail account, not BCG-owned — same pattern as the open Anthropic-API-key ticket) and the real constraint (Vibe hosting is static-only, so IT's database has to support secure client-side access, not a server-side call) — neither was stated in the raw prompt, both came from project memory/history.
 **Lesson:** When dictating a request for a technical artifact about an existing system, the constraint that makes the ask non-generic (here: static hosting → needs client-side-safe DB) is usually the thing left unsaid. Naming it up front saves a reverse-engineering pass.
 
+## 2026-09-11 — Deploy Box&Cox site + sync Artifact preview
+**Archetype:** build/code
+**Score:** 4.2 → 8.6 · weakest dimension **Criteria (3)**
+**Pick:** current session (Sonnet 5 · high) — bounded git/GitHub task, no model switch or subagent needed.
+**Gap closed:** Raw didn't say what "아티팩트 수정" meant or which GitHub Pages method to use. Resolved without a clarifier because the prior turn had already offered "branch-deploy (recommended)" vs "Actions workflow" and the reply ("그냥 해") read as picking the recommended default, not reopening the choice. Also checked tool access before promising a live link: no MCP tool exposes the repo Settings → Pages toggle, so "deploy and give link" became exact manual steps + the predicted URL rather than a claimed-live link.
+**Lesson:** A terse follow-up to an already-offered choice is an implicit pick of the recommended option, not a fresh ambiguity — re-asking here would have been friction, not care. Separately: before promising an action's *result* (a live link), verify the action is actually reachable with available tools; if not, the honest output names the gap and gives the closest deliverable (steps + predicted URL), not an optimistic claim.
+
 ## 2026-09-10 — 40-name list → markdown table
 **Archetype:** mechanical/bulk
 **Score:** 8.2 → 8.6 — already-sharp. Weakest dimension: Target ("this list" unresolved; no list attached to the message).
