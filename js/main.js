@@ -253,6 +253,29 @@ function initRevealAnimations() {
   });
 }
 
+function initHeroVideoCycle() {
+  const video = document.getElementById("heroVideo");
+  if (!video) return;
+
+  const sources = [
+    "assets/hero-video-2.mp4",
+    "assets/hero-video-1.mp4",
+    "assets/hero-video-3.mp4",
+  ];
+  let index = 0;
+
+  video.addEventListener("ended", () => {
+    index = (index + 1) % sources.length;
+    video.style.opacity = 0;
+    setTimeout(() => {
+      video.src = sources[index];
+      video.load();
+      video.play().catch(() => {});
+      video.style.opacity = 1;
+    }, 400);
+  });
+}
+
 function initGrainCanvases() {
   const canvases = document.querySelectorAll(".grain-canvas");
   if (!canvases.length) return;
@@ -313,6 +336,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const data = window.SITE_DATA;
 
   initNav();
+  initHeroVideoCycle();
   initGrainCanvases();
   renderHero(data.prologue.hero);
   renderPrologue(data.prologue);
