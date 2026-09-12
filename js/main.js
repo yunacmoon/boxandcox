@@ -253,6 +253,45 @@ function initRevealAnimations() {
   });
 }
 
+function initGrainCanvases() {
+  const canvases = document.querySelectorAll(".grain-canvas");
+  if (!canvases.length) return;
+
+  const prefersReducedMotion = window.matchMedia(
+    "(prefers-reduced-motion: reduce)"
+  ).matches;
+
+  const GRID_W = 200;
+  const GRID_H = 110;
+  const DOT_CHANCE = 0.18;
+
+  const contexts = Array.from(canvases).map((canvas) => {
+    canvas.width = GRID_W;
+    canvas.height = GRID_H;
+    const ctx = canvas.getContext("2d");
+    return { ctx, imageData: ctx.createImageData(GRID_W, GRID_H) };
+  });
+
+  function draw() {
+    contexts.forEach(({ ctx, imageData }) => {
+      const buf = imageData.data;
+      for (let i = 0; i < buf.length; i += 4) {
+        const on = Math.random() < DOT_CHANCE ? 255 : 0;
+        buf[i] = on;
+        buf[i + 1] = on;
+        buf[i + 2] = on;
+        buf[i + 3] = 255;
+      }
+      ctx.putImageData(imageData, 0, 0);
+    });
+  }
+
+  draw();
+  if (!prefersReducedMotion) {
+    setInterval(draw, 90);
+  }
+}
+
 function initNav() {
   const navToggle = document.getElementById("navToggle");
   const siteNav = document.getElementById("siteNav");
@@ -274,6 +313,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const data = window.SITE_DATA;
 
   initNav();
+  initGrainCanvases();
   renderHero(data.prologue.hero);
   renderPrologue(data.prologue);
   renderClients(data.clients);
