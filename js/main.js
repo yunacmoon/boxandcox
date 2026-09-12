@@ -286,8 +286,8 @@ function initGrainCanvases() {
 
   // Fine, dense grid -- each canvas pixel is stretched to a tiny square by
   // the CSS `image-rendering: pixelated` on .grain-canvas.
-  const GRID_W = 480;
-  const GRID_H = 270;
+  const GRID_W = 960;
+  const GRID_H = 540;
   const DOT_CHANCE = 0.16;
   // How long one crossfade between two random frames takes -- long + eased
   // so it reads as a slow shimmering wave rather than a hard flicker.
