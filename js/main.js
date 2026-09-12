@@ -284,35 +284,83 @@ function initGrainCanvases() {
     "(prefers-reduced-motion: reduce)"
   ).matches;
 
-  const GRID_W = 200;
-  const GRID_H = 110;
-  const DOT_CHANCE = 0.18;
+  // Fine, dense grid -- each canvas pixel is stretched to a tiny square by
+  // the CSS `image-rendering: pixelated` on .grain-canvas.
+  const GRID_W = 480;
+  const GRID_H = 270;
+  const DOT_CHANCE = 0.16;
+  // How long one crossfade between two random frames takes -- long + eased
+  // so it reads as a slow shimmering wave rather than a hard flicker.
+  const WAVE_DURATION = 1100;
 
-  const contexts = Array.from(canvases).map((canvas) => {
+  function randomFrame() {
+    const arr = new Uint8ClampedArray(GRID_W * GRID_H * 4);
+    for (let i = 0; i < arr.length; i += 4) {
+      const on = Math.random() < DOT_CHANCE ? 255 : 0;
+      arr[i] = on;
+      arr[i + 1] = on;
+      arr[i + 2] = on;
+      arr[i + 3] = 255;
+    }
+    return arr;
+  }
+
+  function easeInOutSine(t) {
+    return 0.5 - 0.5 * Math.cos(Math.PI * t);
+  }
+
+  const instances = Array.from(canvases).map((canvas) => {
     canvas.width = GRID_W;
     canvas.height = GRID_H;
     const ctx = canvas.getContext("2d");
-    return { ctx, imageData: ctx.createImageData(GRID_W, GRID_H) };
+    return {
+      ctx,
+      imageData: ctx.createImageData(GRID_W, GRID_H),
+      from: randomFrame(),
+      to: randomFrame(),
+      // Stagger each canvas's cycle so multiple grain layers on the page
+      // don't pulse in lockstep.
+      start: Math.random() * WAVE_DURATION,
+    };
   });
 
-  function draw() {
-    contexts.forEach(({ ctx, imageData }) => {
-      const buf = imageData.data;
+  instances.forEach(({ ctx, imageData, from }) => {
+    imageData.data.set(from);
+    ctx.putImageData(imageData, 0, 0);
+  });
+
+  if (prefersReducedMotion) return;
+
+  function tick(now) {
+    instances.forEach((inst) => {
+      const elapsed = now - inst.start;
+      if (elapsed < 0) return;
+
+      let t = elapsed / WAVE_DURATION;
+      if (t >= 1) {
+        inst.from = inst.to;
+        inst.to = randomFrame();
+        inst.start = now;
+        t = 0;
+      }
+
+      const eased = easeInOutSine(t);
+      const buf = inst.imageData.data;
+      const from = inst.from;
+      const to = inst.to;
       for (let i = 0; i < buf.length; i += 4) {
-        const on = Math.random() < DOT_CHANCE ? 255 : 0;
-        buf[i] = on;
-        buf[i + 1] = on;
-        buf[i + 2] = on;
+        const v = from[i] + (to[i] - from[i]) * eased;
+        buf[i] = v;
+        buf[i + 1] = v;
+        buf[i + 2] = v;
         buf[i + 3] = 255;
       }
-      ctx.putImageData(imageData, 0, 0);
+      inst.ctx.putImageData(inst.imageData, 0, 0);
     });
+    requestAnimationFrame(tick);
   }
 
-  draw();
-  if (!prefersReducedMotion) {
-    setInterval(draw, 90);
-  }
+  requestAnimationFrame(tick);
 }
 
 function initNav() {
