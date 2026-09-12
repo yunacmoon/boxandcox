@@ -14,25 +14,6 @@ function renderHero(hero) {
   cta.href = hero.ctaHref;
 }
 
-function renderHeroFeature(projects) {
-  const project = projects[0];
-  const el = document.getElementById("heroFeature");
-  el.innerHTML = `
-    <div class="media-frame reveal" data-reference="${escapeHtml(project.reference)}">
-      <span class="media-curtain" aria-hidden="true"></span>
-      <span class="media-label">${escapeHtml(project.reference)}</span>
-    </div>
-    <div class="hero-feature-body">
-      <div>
-        <p class="hero-feature-label">FEATURED PROJECT</p>
-        <h3 class="hero-feature-title">${escapeHtml(project.title)}</h3>
-        <p class="hero-feature-meta">${escapeHtml(project.client)} · ${escapeHtml(project.year)}</p>
-      </div>
-      <a href="#projects" class="hero-feature-cta">자세히 보기</a>
-    </div>
-  `;
-}
-
 function renderCta(cta) {
   document.getElementById("ctaHeadingEn").textContent = cta.headingEn;
   document.getElementById("ctaHeadingKo").textContent = cta.headingKo;
@@ -227,7 +208,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
   initNav();
   renderHero(data.prologue.hero);
-  renderHeroFeature(data.projects);
   renderPrologue(data.prologue);
   renderWorkScope(data.workScope);
   renderWorkProcess(data.workProcess);

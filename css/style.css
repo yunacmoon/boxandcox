@@ -200,8 +200,9 @@ ul, ol, dl {
 }
 
 .site-nav a {
-  font-size: 0.9rem;
-  font-weight: 500;
+  font-family: var(--font-serif);
+  font-size: 0.95rem;
+  font-weight: 400;
   color: var(--color-text-soft);
   transition: color 0.2s ease;
 }
@@ -397,10 +398,14 @@ section {
 
 .hero {
   /* Pull the hero up under the sticky header (which still reserves its own
-     72px of flow) so the header sits over the hero's own background. */
+     72px of flow) so the header sits over the hero's own background. A
+     column flex layout lets the centered copy take the remaining space
+     above the full-width logo mark, so the two never overlap. */
   margin-top: -72px;
-  padding-top: calc(72px + var(--space-6));
-  padding-bottom: var(--space-6);
+  min-height: 100vh;
+  padding-top: 72px;
+  display: flex;
+  flex-direction: column;
 }
 
 /* Full-bleed cover video, sitting above the gradient (::before) and below the
@@ -419,13 +424,16 @@ section {
 
 .hero-inner {
   position: relative;
+  flex: 1;
   max-width: 720px;
   margin: 0 auto;
   display: flex;
   flex-direction: column;
   align-items: center;
+  justify-content: center;
   gap: var(--space-3);
   text-align: center;
+  padding: var(--space-5) var(--space-3);
 }
 
 .hero-pill {
@@ -476,66 +484,21 @@ section {
   transform: translateY(-2px);
 }
 
-/* The floating project card — this site's answer to a product-UI mockup:
-   it overlaps the hero's bottom edge and settles into the section below. */
-.hero-feature {
+/* A full-width wordmark bookending the hero's bottom edge, over the video —
+   sized by its own aspect ratio as a normal flex item so it never overlaps
+   the centered copy above it. */
+.hero-logo-mark {
   position: relative;
-  z-index: 2;
-  max-width: 720px;
-  margin: var(--space-5) auto calc(-1 * var(--space-6));
-  border-radius: 24px;
-  overflow: hidden;
-  background: color-mix(in srgb, var(--color-bg-alt) 90%, transparent);
-  backdrop-filter: blur(16px);
-  border: 1px solid var(--color-border-strong);
-  box-shadow: 0 40px 80px -30px rgba(0, 0, 0, 0.6);
+  line-height: 0;
+  pointer-events: none;
 }
 
-.hero-feature .media-frame {
-  margin: 0;
-  border-radius: 0;
-  aspect-ratio: 16 / 8;
-}
-
-.hero-feature-body {
-  padding: var(--space-4);
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: var(--space-3);
-  flex-wrap: wrap;
-}
-
-.hero-feature-label {
-  font-size: 0.72rem;
-  letter-spacing: 0.1em;
-  color: var(--color-text-soft);
-  margin-bottom: 4px;
-}
-
-.hero-feature-title {
-  color: var(--color-ink);
-  font-size: 1.15rem;
-}
-
-.hero-feature-meta {
-  color: var(--color-text-soft);
-  font-size: 0.85rem;
-}
-
-.hero-feature-cta {
-  padding: 10px 20px;
-  border-radius: 999px;
-  border: 1px solid var(--color-border-strong);
-  color: var(--color-ink);
-  font-size: 0.85rem;
-  font-weight: 600;
-  white-space: nowrap;
-  transition: background 0.2s ease;
-}
-
-.hero-feature-cta:hover {
-  background: rgba(255, 255, 255, 0.06);
+.hero-logo-mark img {
+  display: block;
+  width: 100%;
+  height: auto;
+  filter: brightness(0) invert(1);
+  opacity: 0.92;
 }
 
 /* Closing CTA band — a compact echo of the hero, bookending the page. */
