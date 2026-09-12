@@ -97,8 +97,8 @@ function renderWorkProcess(data) {
   const steps = document.getElementById("processSteps");
   steps.innerHTML = data.steps
     .map(
-      (step) => `
-        <li class="process-step reveal">
+      (step, index) => `
+        <li class="process-step reveal${index === 0 ? " is-active" : ""}">
           <span class="process-number">${escapeHtml(step.step)}</span>
           <div class="process-body">
             <h3>${escapeHtml(step.title)}</h3>
@@ -108,6 +108,53 @@ function renderWorkProcess(data) {
       `
     )
     .join("");
+}
+
+function initProcessCarousel() {
+  const container = document.getElementById("processSteps");
+  if (!container) return;
+
+  const steps = Array.from(container.querySelectorAll(".process-step"));
+  if (steps.length < 2) return;
+
+  const prefersReducedMotion = window.matchMedia(
+    "(prefers-reduced-motion: reduce)"
+  ).matches;
+  if (prefersReducedMotion) return;
+
+  let current = steps.findIndex((step) => step.classList.contains("is-active"));
+  if (current === -1) current = 0;
+  let timer = null;
+
+  function activate(index) {
+    steps[current].classList.remove("is-active");
+    current = index;
+    steps[current].classList.add("is-active");
+  }
+
+  function start() {
+    timer = setInterval(() => {
+      activate((current + 1) % steps.length);
+    }, 2600);
+  }
+
+  function stop() {
+    clearInterval(timer);
+  }
+
+  steps.forEach((step, index) => {
+    step.addEventListener("click", () => {
+      if (index === current) return;
+      stop();
+      activate(index);
+      start();
+    });
+  });
+
+  container.addEventListener("mouseenter", stop);
+  container.addEventListener("mouseleave", start);
+
+  start();
 }
 
 function renderProjects(projects) {
@@ -238,4 +285,5 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // Reveal animations are wired up last, once all dynamic content exists.
   initRevealAnimations();
+  initProcessCarousel();
 });

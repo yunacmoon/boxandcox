@@ -676,43 +676,75 @@ section {
   margin-bottom: var(--space-3);
 }
 
+/* Auto-playing stepper: one step is "active" (full number + title +
+   description) while the rest sit small on the side; initProcessCarousel()
+   in main.js cycles .is-active on a timer, pausing on hover/click. */
 .process-steps {
   list-style: none;
-  display: grid;
-  grid-template-columns: repeat(7, 1fr);
+  display: flex;
+  align-items: flex-start;
   gap: var(--space-2);
-  counter-reset: step;
 }
 
 .process-step {
   position: relative;
+  flex: 1 1 0%;
   padding-top: var(--space-4);
-  border-top: 2px solid var(--color-accent);
+  border-top: 2px solid var(--color-border);
+  cursor: pointer;
+  transition: flex-grow 0.6s ease, border-color 0.4s ease;
+}
+
+.process-step.is-active {
+  flex-grow: 3.5;
+  border-top-color: var(--color-accent);
 }
 
 .process-number {
   position: absolute;
-  top: -14px;
+  top: -15px;
   left: 0;
   font-size: 0.75rem;
   font-weight: 700;
   color: var(--color-bg);
   background: var(--color-accent);
-  width: 26px;
-  height: 26px;
+  width: 28px;
+  height: 28px;
   border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
+  transition: transform 0.4s ease;
+}
+
+.process-step.is-active .process-number {
+  transform: scale(1.15);
 }
 
 .process-body h3 {
   font-size: 0.95rem;
   margin-bottom: 6px;
+  color: var(--color-text-soft);
+  transition: font-size 0.4s ease, color 0.4s ease;
+}
+
+.process-step.is-active .process-body h3 {
+  font-size: 1.3rem;
+  color: var(--color-ink);
 }
 
 .process-body p {
   font-size: 0.82rem;
+  max-height: 0;
+  margin: 0;
+  opacity: 0;
+  overflow: hidden;
+  transition: max-height 0.5s ease, opacity 0.3s ease;
+}
+
+.process-step.is-active .process-body p {
+  max-height: 200px;
+  opacity: 1;
 }
 
 /* Projects — cards overlap slightly like a fanned accordion, each one
@@ -893,8 +925,16 @@ section {
 /* Responsive */
 @media (max-width: 960px) {
   .process-steps {
-    grid-template-columns: repeat(4, 1fr);
-    row-gap: var(--space-4);
+    flex-wrap: wrap;
+  }
+
+  .process-step {
+    flex-basis: 21%;
+  }
+
+  .process-step.is-active {
+    flex-basis: 100%;
+    flex-grow: 0;
   }
 
   .project-facts {
@@ -953,7 +993,16 @@ section {
   }
 
   .process-steps {
-    grid-template-columns: repeat(2, 1fr);
+    flex-direction: column;
+  }
+
+  .process-step {
+    flex-basis: auto;
+    padding-top: var(--space-2);
+  }
+
+  .process-step.is-active {
+    flex-basis: auto;
   }
 
   .project-toggle {
