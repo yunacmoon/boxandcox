@@ -489,8 +489,7 @@ section {
    the centered copy above it. */
 .hero-logo-mark {
   position: relative;
-  width: 96vw;
-  margin: 0 auto;
+  width: 100%;
   line-height: 0;
   pointer-events: none;
 }
