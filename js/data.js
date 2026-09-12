@@ -36,6 +36,22 @@ window.SITE_DATA = {
           "자체전문인력과 국내외 전문협력업체들과의 유기적 네트워크를 구축하여 ISS(Integrated Space design Solution)서비스를 기본으로 클라이언트의 성공을 극대화하기 위한 사업을 전개하고 있습니다.",
       },
     ],
+    stat: {
+      number: "30+",
+      labelKo: "년간 이어온 스페이스 커뮤니케이션",
+    },
+  },
+
+  clients: [
+    "삼성물산",
+    "현대석유화학",
+    "기아자동차",
+    "한국야쿠르트",
+  ],
+
+  punch: {
+    en: "Leader of space communication",
+    ko: "환경디자인 업계의 중추적 역할을 수행합니다.",
   },
 
   workScope: {

@@ -35,6 +35,26 @@ function renderPrologue(data) {
       `
     )
     .join("");
+
+  if (data.stat) {
+    const stat = document.getElementById("prologueStat");
+    stat.innerHTML = `
+      <span class="prologue-stat-number">${escapeHtml(data.stat.number)}</span>
+      <span class="prologue-stat-label">${escapeHtml(data.stat.labelKo)}</span>
+    `;
+  }
+}
+
+function renderClients(clients) {
+  const list = document.getElementById("clientList");
+  list.innerHTML = clients
+    .map((name) => `<li class="reveal">${escapeHtml(name)}</li>`)
+    .join("");
+}
+
+function renderPunch(punch) {
+  document.getElementById("punchTextEn").textContent = punch.en;
+  document.getElementById("punchTextKo").textContent = punch.ko;
 }
 
 function tagList(items) {
@@ -209,6 +229,8 @@ document.addEventListener("DOMContentLoaded", () => {
   initNav();
   renderHero(data.prologue.hero);
   renderPrologue(data.prologue);
+  renderClients(data.clients);
+  renderPunch(data.punch);
   renderWorkScope(data.workScope);
   renderWorkProcess(data.workProcess);
   renderProjects(data.projects);

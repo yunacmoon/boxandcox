@@ -489,6 +489,8 @@ section {
    the centered copy above it. */
 .hero-logo-mark {
   position: relative;
+  width: 96vw;
+  margin: 0 auto;
   line-height: 0;
   pointer-events: none;
 }
@@ -523,10 +525,34 @@ section {
   max-width: 640px;
 }
 
+.prologue-split {
+  display: grid;
+  grid-template-columns: 220px 1fr;
+  gap: var(--space-5);
+}
+
+.prologue-stat {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+}
+
+.prologue-stat-number {
+  font-family: var(--font-serif);
+  font-size: clamp(3rem, 6vw, 4.5rem);
+  line-height: 1;
+  color: var(--color-ink);
+}
+
+.prologue-stat-label {
+  font-size: 0.85rem;
+  color: var(--color-text-soft);
+  max-width: 180px;
+}
+
 .prologue-blocks {
   display: grid;
   gap: var(--space-4);
-  margin-top: var(--space-4);
 }
 
 .prologue-block .tagline {
@@ -537,6 +563,57 @@ section {
 
 .prologue-block p {
   max-width: 760px;
+}
+
+/* Clients band — real, named clients from the project history, treated as a
+   bold text wordmark row rather than fabricated logo marks. */
+.clients-band {
+  padding: var(--space-5) 0;
+  border-top: 1px solid var(--color-border);
+  border-bottom: 1px solid var(--color-border);
+}
+
+.client-list {
+  list-style: none;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: var(--space-3);
+  margin-top: var(--space-4);
+}
+
+.client-list li {
+  text-align: center;
+  padding: var(--space-2) 0;
+  font-family: var(--font-serif);
+  font-size: clamp(1rem, 1.6vw, 1.3rem);
+  color: var(--color-text-soft);
+  border-left: 1px solid var(--color-border);
+}
+
+.client-list li:first-child {
+  border-left: none;
+}
+
+/* Punch statement — a single line set edge-to-edge across the full browser
+   width, breaking out of .container the same way the hero logo mark does. */
+.punch-band {
+  padding: var(--space-6) var(--space-2);
+  text-align: center;
+}
+
+.punch-text-en {
+  margin: 0;
+  font-family: var(--font-serif);
+  font-weight: 400;
+  line-height: 1.05;
+  font-size: clamp(2.4rem, 8vw, 6.5rem);
+  color: var(--color-ink);
+}
+
+.punch-text-ko {
+  margin: var(--space-2) 0 0;
+  font-size: 1rem;
+  color: var(--color-text-soft);
 }
 
 /* Work Scope */
@@ -689,8 +766,10 @@ section {
 }
 
 .project-title {
-  font-weight: 600;
-  font-size: 1.05rem;
+  font-family: var(--font-serif);
+  font-weight: 400;
+  font-size: clamp(1.5rem, 3.2vw, 2.4rem);
+  line-height: 1.15;
   color: var(--color-ink);
 }
 
@@ -836,6 +915,19 @@ section {
 
   .scope-meta {
     grid-template-columns: 1fr;
+  }
+
+  .prologue-split {
+    grid-template-columns: 1fr;
+    gap: var(--space-3);
+  }
+
+  .client-list {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .client-list li:nth-child(2n + 1) {
+    border-left: none;
   }
 }
 
