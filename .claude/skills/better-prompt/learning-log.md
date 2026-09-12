@@ -1,5 +1,12 @@
 # Learnings
 
+## 2026-09-12 — Hero video compress+apply, gradient fade, animated grid noise
+**Archetype:** build/code (visual implementation on an existing site)
+**Score:** 5.6 → 8.8 · weakest dimension **Target (4)** — "세개 비디오 깃에 저장된거" referenced files that a repo check showed do not actually exist on the branch (git fetch confirmed, no video files anywhere in history)
+**Pick:** Sonnet 5 · high — this session's actual model; well matched to iterative CSS/JS visual work verified live via Playwright screenshots rather than guessed blind.
+**Gap closed:** Two real gaps, not just wording. (1) Target pointed at files that weren't findable — verified via `git fetch`/`find` before doing anything with them, rather than assuming the upload succeeded. (2) Criteria had an internal contradiction: the stated gradient stops (60% opacity at top, 0% at bottom) produce the *opposite* of the stated visual goal ("video vivid at top, fades out toward bottom") — implementing the stops literally would have shown clear video at the bottom and dimmed video at the top. Resolved by trusting the plain-language goal sentence (unambiguous) over the directional labels (easy to flip by mistake when typing), applying 0%→60% top-to-bottom instead, and flagging the swap explicitly so a wrong guess costs one sentence to correct, not a redo.
+**Lesson:** When a prompt gives both a numeric spec and a plain-language description of the intended outcome, and they contradict, don't silently pick one — implement the outcome (it's the actual acceptance test) and name the swap out loud. Also: "saved in git" is a claim, not a fact — verify with the actual tool (`git fetch`/`ls`) before building on top of it, especially for large binaries (video) where a silent push failure — GitHub blocks files over 100MB without Git LFS — is the single most likely explanation for "I uploaded it but it's not there."
+
 ## 2026-09-10 — Model pick for tagging 5000 support tickets by theme
 **Archetype:** quick-question (model selection) about a mechanical/bulk job
 **Score:** 5.2 → 8.8 · weakest dimension **Criteria (2)**
