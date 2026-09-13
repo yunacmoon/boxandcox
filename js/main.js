@@ -326,7 +326,7 @@ function initGrainCanvases() {
 function fitWordSlide(el) {
   const container = el.parentElement;
   const maxFontSize = container.clientHeight * 0.62;
-  const targetWidth = container.clientWidth * 0.92;
+  const targetWidth = container.clientWidth * 0.97;
 
   el.style.fontSize = "100px";
   const measuredWidth = el.scrollWidth || 1;
@@ -369,7 +369,14 @@ function initHeroWordSlider() {
     )}</span><span class="hero-word-italic">${escapeHtml(
       word.italic
     )}</span></span>`;
-    fitWordSlide(el.querySelector(".hero-slide-word"));
+    const wordEl = el.querySelector(".hero-slide-word");
+    fitWordSlide(wordEl);
+    // Playfair Display loads async (font-display: swap); the width measured
+    // against a fallback font before it's ready can be off, so refit once
+    // the real webfont is actually active.
+    if (document.fonts && document.fonts.ready) {
+      document.fonts.ready.then(() => fitWordSlide(wordEl));
+    }
   }
 
   let index = 0;

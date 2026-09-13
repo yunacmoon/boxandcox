@@ -537,8 +537,8 @@ section {
   font-family: var(--font-serif);
   font-weight: 400;
   letter-spacing: 0;
-  font-size: clamp(3.2rem, 9vw, 6.4rem);
-  line-height: 1.05;
+  font-size: clamp(1.6rem, 4vw, 2.6rem);
+  line-height: 1.15;
   --reveal-from: var(--color-text-soft);
   --reveal-to: var(--color-ink);
   color: var(--reveal-to);
@@ -624,8 +624,10 @@ section {
    fills, whatever the phrase's length. The clamp() here is only a fallback
    before that JS measurement runs. */
 .hero-slide-word {
-  width: 100%;
-  text-align: center;
+  /* Shrink-to-fit content, centered by the flex parent (.hero-slide) --
+     NOT width:100%, or its scrollWidth (used by fitWordSlide to measure
+     the phrase's natural width) would just report the container's width
+     instead of the actual text width, breaking the fit-to-width sizing. */
   white-space: nowrap;
   font-family: var(--font-serif);
   color: var(--color-ink);
