@@ -177,6 +177,7 @@ function renderProjects(projects) {
           </button>
           <div class="project-panel" id="project-panel-${index}" hidden>
             <div class="media-frame reveal-anim" data-reference="${escapeHtml(project.reference)}">
+              <img class="media-photo" src="${escapeHtml(project.photo)}" alt="" loading="lazy" />
               <span class="media-curtain" aria-hidden="true"></span>
               <span class="media-label">${escapeHtml(project.reference)}</span>
             </div>

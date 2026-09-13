@@ -289,6 +289,17 @@ button:focus-visible {
   }
 }
 
+/* The actual placeholder photo, layered above the generative grid/glow so
+   it fully occludes them once loaded; the curtain still wipes above it. */
+.media-photo {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
 .media-label {
   position: relative;
   z-index: 2;
