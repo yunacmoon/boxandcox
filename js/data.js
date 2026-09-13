@@ -43,10 +43,10 @@ window.SITE_DATA = {
   },
 
   clients: [
-    "삼성물산",
-    "현대석유화학",
-    "기아자동차",
-    "한국야쿠르트",
+    { name: "삼성물산", photo: "assets/placeholders/ph-lv-wave.jpg" },
+    { name: "현대석유화학", photo: "assets/placeholders/ph-office-wall.jpg" },
+    { name: "기아자동차", photo: "assets/placeholders/ph-reception.jpg" },
+    { name: "한국야쿠르트", photo: "assets/placeholders/ph-velora-signage.jpg" },
   ],
 
   punch: {

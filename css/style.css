@@ -753,9 +753,9 @@ section {
   max-width: 760px;
 }
 
-/* Clients band — real, named clients from the project history, treated as
-   rounded text-wordmark tiles rather than fabricated logo marks, drifting
-   past in a slow, seamless horizontal marquee. */
+/* Clients band — real, named clients from the project history, shown as
+   rounded portrait tiles (placeholder photos -- no client logo assets
+   exist) drifting past in a slow, seamless horizontal marquee. */
 .clients-band {
   padding: var(--space-5) 0;
   border-top: 1px solid var(--color-border);
@@ -803,18 +803,34 @@ section {
 }
 
 .client-tile {
+  position: relative;
   flex-shrink: 0;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  padding: var(--space-3) var(--space-5);
-  border-radius: 16px;
+  width: clamp(160px, 20vw, 220px);
+  aspect-ratio: 3 / 4;
+  border-radius: 20px;
+  overflow: hidden;
   border: 1px solid var(--color-border-strong);
   background: var(--color-surface-2);
+}
+
+.client-tile img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.client-tile-name {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  padding: var(--space-3) var(--space-3) var(--space-2);
+  background: linear-gradient(to top, rgba(0, 0, 0, 0.8), transparent);
   font-family: var(--font-serif);
-  font-size: clamp(1rem, 1.6vw, 1.3rem);
-  color: var(--color-text-soft);
-  white-space: nowrap;
+  font-size: 0.95rem;
+  color: var(--color-ink);
 }
 
 @keyframes client-marquee-scroll {

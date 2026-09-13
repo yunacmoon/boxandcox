@@ -48,12 +48,19 @@ function renderPrologue(data) {
 function renderClients(clients) {
   const track = document.getElementById("clientTrack");
   const tiles = clients
-    .map((name) => `<span class="client-tile">${escapeHtml(name)}</span>`)
+    .map(
+      (client) => `
+        <span class="client-tile">
+          <img src="${escapeHtml(client.photo)}" alt="" loading="lazy" />
+          <span class="client-tile-name">${escapeHtml(client.name)}</span>
+        </span>
+      `
+    )
     .join("");
 
   // Two identical sets back to back -- see the -50% loop in
   // .client-track's animation. The second copy just repeats the same
-  // names for the visual loop, so it's hidden from assistive tech.
+  // tiles for the visual loop, so it's hidden from assistive tech.
   track.innerHTML = `
     <div class="client-tile-set">${tiles}</div>
     <div class="client-tile-set" aria-hidden="true">${tiles}</div>
