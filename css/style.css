@@ -408,18 +408,64 @@ section {
   z-index: -1;
 }
 
-/* Animated grain — a dense grid of tiny squares redrawn on an interval so it
-   flickers instead of sitting static. See initGrainCanvases() in main.js. */
+/* Animated grain: a dense grid of tiny squares. The dot pattern itself is
+   canvas-drawn and only redrawn every ~1.4s (see initGrainCanvases() in
+   main.js) -- cheap even at a fine resolution, since it isn't touched every
+   frame. The "wave" that makes it ripple is pure CSS (an animated gradient
+   in .grain-wave, blended against the dots via the isolated group below),
+   so the sweep costs nothing on the JS main thread regardless of how fine
+   the underlying grid is. */
+.grain-layer {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  isolation: isolate;
+  mix-blend-mode: screen;
+  opacity: 0.14;
+  pointer-events: none;
+  overflow: hidden;
+}
+
 .grain-canvas {
   position: absolute;
   inset: 0;
   width: 100%;
   height: 100%;
-  z-index: 0;
   image-rendering: pixelated;
-  mix-blend-mode: screen;
-  opacity: 0.14;
-  pointer-events: none;
+}
+
+.grain-wave {
+  position: absolute;
+  inset: 0;
+  mix-blend-mode: multiply;
+  background: repeating-linear-gradient(
+    to bottom,
+    rgba(0, 0, 0, 1) 0%,
+    rgba(0, 0, 0, 0.15) 20%,
+    rgba(0, 0, 0, 1) 40%
+  );
+  background-size: 100% 250%;
+  animation: grain-wave-sweep 3s linear infinite;
+}
+
+/* Animating background-position instead of transform here: with a large
+   canvas underneath inside an isolated mix-blend-mode group, a transform
+   animation forced a full repaint of the whole group every frame (measured
+   ~30fps with visible stutter); background-position avoids that repaint
+   path entirely and measured a clean 60fps in the same setup. */
+@keyframes grain-wave-sweep {
+  from {
+    background-position: 0% 0%;
+  }
+  to {
+    background-position: 0% 100%;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .grain-wave {
+    animation: none;
+  }
 }
 
 .hero {

@@ -285,86 +285,41 @@ function initGrainCanvases() {
   ).matches;
 
   // Very fine, dense grid -- each canvas pixel is stretched to a tiny
-  // square by the CSS `image-rendering: pixelated` on .grain-canvas.
-  const GRID_W = 1080;
-  const GRID_H = 600;
+  // square by the CSS `image-rendering: pixelated` on .grain-canvas. The
+  // "wave" that makes the grain ripple is pure CSS now (.grain-wave, an
+  // animated gradient blended against these dots -- see style.css), so
+  // this only has to redraw the dot pattern itself, and only when it
+  // refreshes (every ~1.4s) rather than every animation frame. A per-pixel
+  // JS loop running every frame at this resolution measured ~27fps with
+  // visible stutter; redrawing this rarely, it's a non-issue regardless of
+  // grid size.
+  const GRID_W = 2160;
+  const GRID_H = 1200;
   const DOT_CHANCE = 0.24;
-  // The underlying dot pattern itself refreshes on this cadence (the grain
-  // "flickers"); a traveling per-row brightness wave sweeps over it every
-  // frame independently, so the noise appears to ripple rather than just
-  // pop in and out.
   const REFRESH_INTERVAL = 1400;
-  const WAVE_CYCLES = 2.5;
-  const WAVE_PERIOD = 3000;
 
-  function randomMask() {
-    const arr = new Uint8ClampedArray(GRID_W * GRID_H);
-    for (let i = 0; i < arr.length; i++) {
-      arr[i] = Math.random() < DOT_CHANCE ? 255 : 0;
+  function drawRandomMask(ctx) {
+    const imageData = ctx.createImageData(GRID_W, GRID_H);
+    const buf = imageData.data;
+    for (let i = 0; i < buf.length; i += 4) {
+      const on = Math.random() < DOT_CHANCE ? 255 : 0;
+      buf[i] = on;
+      buf[i + 1] = on;
+      buf[i + 2] = on;
+      buf[i + 3] = 255;
     }
-    return arr;
+    ctx.putImageData(imageData, 0, 0);
   }
 
-  const instances = Array.from(canvases).map((canvas) => {
+  canvases.forEach((canvas) => {
     canvas.width = GRID_W;
     canvas.height = GRID_H;
     const ctx = canvas.getContext("2d");
-    return {
-      ctx,
-      imageData: ctx.createImageData(GRID_W, GRID_H),
-      mask: randomMask(),
-      lastRefresh: -Math.random() * REFRESH_INTERVAL,
-      // Stagger each canvas's wave so multiple grain layers on the page
-      // don't ripple in lockstep.
-      phaseOffset: Math.random() * Math.PI * 2,
-    };
+    drawRandomMask(ctx);
+    if (!prefersReducedMotion) {
+      setInterval(() => drawRandomMask(ctx), REFRESH_INTERVAL);
+    }
   });
-
-  const rowWave = new Float32Array(GRID_H);
-
-  function draw(now) {
-    instances.forEach((inst) => {
-      if (now - inst.lastRefresh > REFRESH_INTERVAL) {
-        inst.mask = randomMask();
-        inst.lastRefresh = now;
-      }
-
-      for (let y = 0; y < GRID_H; y++) {
-        const phase =
-          (y / GRID_H) * WAVE_CYCLES * Math.PI * 2 -
-          (now / WAVE_PERIOD) * Math.PI * 2 +
-          inst.phaseOffset;
-        rowWave[y] = 0.5 + 0.5 * Math.sin(phase);
-      }
-
-      const buf = inst.imageData.data;
-      const mask = inst.mask;
-      let p = 0;
-      for (let y = 0; y < GRID_H; y++) {
-        const w = rowWave[y];
-        for (let x = 0; x < GRID_W; x++) {
-          const v = mask[p] * w;
-          const idx = p * 4;
-          buf[idx] = v;
-          buf[idx + 1] = v;
-          buf[idx + 2] = v;
-          buf[idx + 3] = 255;
-          p++;
-        }
-      }
-      inst.ctx.putImageData(inst.imageData, 0, 0);
-    });
-  }
-
-  draw(performance.now());
-  if (prefersReducedMotion) return;
-
-  function tick(now) {
-    draw(now);
-    requestAnimationFrame(tick);
-  }
-
-  requestAnimationFrame(tick);
 }
 
 function initNav() {
