@@ -14,33 +14,41 @@
   <svg width="0" height="0" style="position: absolute" aria-hidden="true">
     <defs>
       <filter id="heroLogoGlass" x="-40%" y="-60%" width="180%" height="220%" color-interpolation-filters="sRGB">
-        <!-- Translucent glass body: the source alpha is kept but dimmed, so
-             the blurred backdrop (see .hero-logo-mark) still reads through
-             the letterforms instead of the logo sitting fully opaque on top. -->
+        <!-- Translucent glass body: dimmed further than before so the
+             blurred backdrop (see .hero-logo-mark) reads through more
+             clearly -- the letters should look like glass, not a printed
+             logo with a faint tint. -->
         <feComponentTransfer in="SourceGraphic" result="frostedFill">
-          <feFuncA type="linear" slope="0.45" intercept="0" />
+          <feFuncA type="linear" slope="0.3" intercept="0" />
         </feComponentTransfer>
 
-        <!-- Bevel / rim highlight: a blurred alpha bump-map lit from the
-             upper-left. This is the standard SVG substitute for a stroked
-             path outline when the source is raster (no vector path to put
-             a stroke gradient on), and is physically closer to a real
-             glass edge catching light than a flat stroke would be. -->
-        <feGaussianBlur in="SourceAlpha" stdDeviation="12" result="bumpMap" />
-        <feSpecularLighting in="bumpMap" surfaceScale="5" specularConstant="1.2" specularExponent="12" lighting-color="#ffffff" result="specRaw">
-          <feDistantLight azimuth="135" elevation="55" />
+        <!-- A hairline keyline instead of a full-surface bevel: erode the
+             alpha shape by 1px and subtract it from the original to get a
+             ~1px ring right at the letter edges, then light that ring
+             (not the whole fill) so the highlight reads as a thin bright
+             line hugging the top-left edge rather than a raised, convex
+             surface. Small surfaceScale + a tight specularExponent keep
+             the glint itself flat rather than bulging. -->
+        <feMorphology in="SourceAlpha" operator="erode" radius="1" result="erodedAlpha" />
+        <feComposite in="SourceAlpha" in2="erodedAlpha" operator="out" result="edgeRing" />
+
+        <feGaussianBlur in="SourceAlpha" stdDeviation="2.5" result="bumpMap" />
+        <feSpecularLighting in="bumpMap" surfaceScale="1" specularConstant="0.9" specularExponent="28" lighting-color="#ffffff" result="specRaw">
+          <feDistantLight azimuth="135" elevation="45" />
         </feSpecularLighting>
-        <feComposite in="specRaw" in2="SourceAlpha" operator="in" result="specClipped" />
+        <feComposite in="specRaw" in2="edgeRing" operator="in" result="specClipped" />
 
         <!-- Two-layer drop shadow, built from the alpha silhouette (not
-             SourceGraphic) so the shadow pass never re-opaques the letters. -->
-        <feGaussianBlur in="SourceAlpha" stdDeviation="8" result="shadowBlurNear" />
-        <feOffset in="shadowBlurNear" dx="0" dy="6" result="shadowOffsetNear" />
-        <feColorMatrix in="shadowOffsetNear" type="matrix" values="0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 0.35 0" result="shadowNear" />
+             SourceGraphic) so the shadow pass never re-opaques the letters.
+             Softened along with everything else so the whole mark reads
+             flatter overall, not just the highlight. -->
+        <feGaussianBlur in="SourceAlpha" stdDeviation="6" result="shadowBlurNear" />
+        <feOffset in="shadowBlurNear" dx="0" dy="4" result="shadowOffsetNear" />
+        <feColorMatrix in="shadowOffsetNear" type="matrix" values="0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 0.22 0" result="shadowNear" />
 
-        <feGaussianBlur in="SourceAlpha" stdDeviation="16" result="shadowBlurFar" />
-        <feOffset in="shadowBlurFar" dx="0" dy="12" result="shadowOffsetFar" />
-        <feColorMatrix in="shadowOffsetFar" type="matrix" values="0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 0.25 0" result="shadowFar" />
+        <feGaussianBlur in="SourceAlpha" stdDeviation="12" result="shadowBlurFar" />
+        <feOffset in="shadowBlurFar" dx="0" dy="8" result="shadowOffsetFar" />
+        <feColorMatrix in="shadowOffsetFar" type="matrix" values="0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 0.14 0" result="shadowFar" />
 
         <feMerge>
           <feMergeNode in="shadowFar" />
