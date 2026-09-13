@@ -753,33 +753,83 @@ section {
   max-width: 760px;
 }
 
-/* Clients band — real, named clients from the project history, treated as a
-   bold text wordmark row rather than fabricated logo marks. */
+/* Clients band — real, named clients from the project history, treated as
+   rounded text-wordmark tiles rather than fabricated logo marks, drifting
+   past in a slow, seamless horizontal marquee. */
 .clients-band {
   padding: var(--space-5) 0;
   border-top: 1px solid var(--color-border);
   border-bottom: 1px solid var(--color-border);
 }
 
-.client-list {
-  list-style: none;
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: var(--space-3);
+.client-marquee {
   margin-top: var(--space-4);
+  overflow: hidden;
+  /* Fade the strip's own edges so tiles don't hard-cut at the viewport
+     edge as they scroll through. */
+  -webkit-mask-image: linear-gradient(
+    90deg,
+    transparent,
+    #000 8%,
+    #000 92%,
+    transparent
+  );
+  mask-image: linear-gradient(
+    90deg,
+    transparent,
+    #000 8%,
+    #000 92%,
+    transparent
+  );
 }
 
-.client-list li {
-  text-align: center;
-  padding: var(--space-2) 0;
+/* Two identical tile sets placed back to back; animating the track exactly
+   -50% (one set's width) loops it seamlessly with no visible reset. */
+.client-track {
+  display: flex;
+  width: max-content;
+  animation: client-marquee-scroll 34s linear infinite;
+}
+
+.client-marquee:hover .client-track {
+  animation-play-state: paused;
+}
+
+.client-tile-set {
+  display: flex;
+  flex-shrink: 0;
+  gap: var(--space-3);
+  padding-right: var(--space-3);
+}
+
+.client-tile {
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-3) var(--space-5);
+  border-radius: 16px;
+  border: 1px solid var(--color-border-strong);
+  background: var(--color-surface-2);
   font-family: var(--font-serif);
   font-size: clamp(1rem, 1.6vw, 1.3rem);
   color: var(--color-text-soft);
-  border-left: 1px solid var(--color-border);
+  white-space: nowrap;
 }
 
-.client-list li:first-child {
-  border-left: none;
+@keyframes client-marquee-scroll {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .client-track {
+    animation: none;
+  }
 }
 
 /* Punch statement — a single line set edge-to-edge across the full browser
@@ -1148,14 +1198,6 @@ section {
   .prologue-split {
     grid-template-columns: 1fr;
     gap: var(--space-3);
-  }
-
-  .client-list {
-    grid-template-columns: repeat(2, 1fr);
-  }
-
-  .client-list li:nth-child(2n + 1) {
-    border-left: none;
   }
 }
 

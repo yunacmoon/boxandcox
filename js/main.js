@@ -46,10 +46,18 @@ function renderPrologue(data) {
 }
 
 function renderClients(clients) {
-  const list = document.getElementById("clientList");
-  list.innerHTML = clients
-    .map((name) => `<li class="reveal">${escapeHtml(name)}</li>`)
+  const track = document.getElementById("clientTrack");
+  const tiles = clients
+    .map((name) => `<span class="client-tile">${escapeHtml(name)}</span>`)
     .join("");
+
+  // Two identical sets back to back -- see the -50% loop in
+  // .client-track's animation. The second copy just repeats the same
+  // names for the visual loop, so it's hidden from assistive tech.
+  track.innerHTML = `
+    <div class="client-tile-set">${tiles}</div>
+    <div class="client-tile-set" aria-hidden="true">${tiles}</div>
+  `;
 }
 
 function renderPunch(punch) {
