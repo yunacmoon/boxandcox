@@ -11,6 +11,47 @@
   <link rel="stylesheet" href="css/style.css" />
 </head>
 <body>
+  <svg width="0" height="0" style="position: absolute" aria-hidden="true">
+    <defs>
+      <filter id="heroLogoGlass" x="-40%" y="-60%" width="180%" height="220%" color-interpolation-filters="sRGB">
+        <!-- Translucent glass body: the source alpha is kept but dimmed, so
+             the blurred backdrop (see .hero-logo-mark) still reads through
+             the letterforms instead of the logo sitting fully opaque on top. -->
+        <feComponentTransfer in="SourceGraphic" result="frostedFill">
+          <feFuncA type="linear" slope="0.45" intercept="0" />
+        </feComponentTransfer>
+
+        <!-- Bevel / rim highlight: a blurred alpha bump-map lit from the
+             upper-left. This is the standard SVG substitute for a stroked
+             path outline when the source is raster (no vector path to put
+             a stroke gradient on), and is physically closer to a real
+             glass edge catching light than a flat stroke would be. -->
+        <feGaussianBlur in="SourceAlpha" stdDeviation="12" result="bumpMap" />
+        <feSpecularLighting in="bumpMap" surfaceScale="5" specularConstant="1.2" specularExponent="12" lighting-color="#ffffff" result="specRaw">
+          <feDistantLight azimuth="135" elevation="55" />
+        </feSpecularLighting>
+        <feComposite in="specRaw" in2="SourceAlpha" operator="in" result="specClipped" />
+
+        <!-- Two-layer drop shadow, built from the alpha silhouette (not
+             SourceGraphic) so the shadow pass never re-opaques the letters. -->
+        <feGaussianBlur in="SourceAlpha" stdDeviation="8" result="shadowBlurNear" />
+        <feOffset in="shadowBlurNear" dx="0" dy="6" result="shadowOffsetNear" />
+        <feColorMatrix in="shadowOffsetNear" type="matrix" values="0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 0.35 0" result="shadowNear" />
+
+        <feGaussianBlur in="SourceAlpha" stdDeviation="16" result="shadowBlurFar" />
+        <feOffset in="shadowBlurFar" dx="0" dy="12" result="shadowOffsetFar" />
+        <feColorMatrix in="shadowOffsetFar" type="matrix" values="0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 0.25 0" result="shadowFar" />
+
+        <feMerge>
+          <feMergeNode in="shadowFar" />
+          <feMergeNode in="shadowNear" />
+          <feMergeNode in="frostedFill" />
+          <feMergeNode in="specClipped" />
+        </feMerge>
+      </filter>
+    </defs>
+  </svg>
+
   <header class="site-header">
     <div class="container header-inner">
       <a href="#top" class="logo">
@@ -47,7 +88,9 @@
         <p class="hero-sub reveal" id="heroSub"></p>
         <a href="#projects" class="hero-cta reveal" id="heroCta"></a>
       </div>
-      <div class="hero-logo-mark reveal" aria-hidden="true"></div>
+      <div class="hero-logo-mark reveal" aria-hidden="true">
+        <img class="hero-logo-glass" src="assets/logo.png" alt="" />
+      </div>
     </section>
 
     <!-- 1b. Prologue detail -->
