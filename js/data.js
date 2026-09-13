@@ -153,7 +153,7 @@ window.SITE_DATA = {
     {
       title: "수원월드컵경기장",
       reference: "BOX&COX_CRD_002.jpg",
-      photo: "assets/placeholders/ph-expo-wall.jpg",
+      photo: "assets/placeholders/ph-velora-signage.jpg",
       client: "삼성물산",
       year: "2001",
       location: "경기도 수원시",
@@ -167,7 +167,7 @@ window.SITE_DATA = {
     {
       title: "현대석유화학 대산 컴플렉스",
       reference: "BOX&COX_CRD_004.jpg",
-      photo: "assets/placeholders/ph-reception.jpg",
+      photo: "assets/placeholders/ph-lv-wave.jpg",
       client: "현대석유화학",
       year: "1998",
       location: "충청남도 서산",
@@ -181,7 +181,7 @@ window.SITE_DATA = {
     {
       title: "기아자동차 환경조형물",
       reference: "BOX&COX_CRD_007.jpg",
-      photo: "assets/placeholders/ph-lv-wave.jpg",
+      photo: "assets/placeholders/ph-expo-wall.jpg",
       client: "기아자동차",
       year: "1991, 1992",
       location: "충청남도 아산군, 경기도 기흥",
@@ -192,7 +192,7 @@ window.SITE_DATA = {
     {
       title: '한국야쿠르트홍보관 "VISION HALL"',
       reference: "BOX&COX_CRD_008.jpg",
-      photo: "assets/placeholders/ph-velora-signage.jpg",
+      photo: "assets/placeholders/ph-reception.jpg",
       client: "한국야쿠르트",
       year: "1997",
       location: "서울시 서초구 잠원동",
@@ -206,7 +206,7 @@ window.SITE_DATA = {
     {
       title: "현대석유화학 / 북경 PETROCHEM EXPO",
       reference: "BOX&COX_CRD_009.jpg",
-      photo: "assets/placeholders/ph-expo-wall.jpg",
+      photo: "assets/placeholders/ph-office-wall.jpg",
       client: "현대석유화학",
       year: "1998",
       location: "중국 북경",
