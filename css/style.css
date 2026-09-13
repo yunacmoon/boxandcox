@@ -513,40 +513,65 @@ section {
 
 /* A full-width wordmark bookending the hero's bottom edge, over the video --
    sized by its own aspect ratio as a normal flex item so it never overlaps
-   the centered copy above it. Rendered as a frosted-glass cutout rather
-   than a flat white silhouette: the logo PNG is used as a mask (its alpha
-   channel decides what's visible), and what shows through the letter
-   shapes is a blurred, tinted view of the video/gradient/grain behind it --
-   an etched-glass panel, not a solid logo image. */
+   the centered copy above it. Plain solid white mark, same as the original
+   header logo treatment. */
 .hero-logo-mark {
   position: relative;
   width: 100%;
-  aspect-ratio: 2143 / 600;
+  line-height: 0;
   pointer-events: none;
+}
+
+.hero-logo-mark img {
+  display: block;
+  width: 100%;
+  height: auto;
+  filter: brightness(0) invert(1);
+  opacity: 0.92;
+}
+
+/* A faint shadow band that sweeps across the logo every ~2.8s. Masked to
+   the logo's own alpha shape so the shadow only ever appears inside the
+   letterforms, not as a rectangle floating over the transparent space
+   around them. */
+.hero-logo-sweep {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
   -webkit-mask-image: url("../assets/logo.png");
   mask-image: url("../assets/logo.png");
   -webkit-mask-size: 100% 100%;
   mask-size: 100% 100%;
   -webkit-mask-repeat: no-repeat;
   mask-repeat: no-repeat;
-  -webkit-mask-position: center;
-  mask-position: center;
-  background: rgba(255, 255, 255, 0.1);
-  backdrop-filter: blur(18px) saturate(180%) contrast(115%) brightness(1.3);
-  -webkit-backdrop-filter: blur(18px) saturate(180%) contrast(115%) brightness(1.3);
 }
 
-/* Glass "material" layer: same logo image, laid over the cutout above, run
-   through an SVG filter (see the <filter id="heroLogoGlass"> in index.html)
-   that replaces its pixels with a translucent frosted fill, a specular
-   bevel highlight lit from the upper-left, and a two-layer drop shadow --
-   giving the pane visible depth instead of a flat gray smear. */
-.hero-logo-glass {
+.hero-logo-sweep::before {
+  content: "";
   position: absolute;
-  inset: 0;
-  width: 100%;
+  top: 0;
+  left: -30%;
+  width: 30%;
   height: 100%;
-  filter: url(#heroLogoGlass);
+  background: linear-gradient(100deg, transparent, rgba(0, 0, 0, 0.4), transparent);
+  animation: logo-shadow-sweep 2.8s ease-in-out infinite;
+}
+
+@keyframes logo-shadow-sweep {
+  0% {
+    left: -30%;
+  }
+  55%,
+  100% {
+    left: 100%;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero-logo-sweep::before {
+    animation: none;
+    display: none;
+  }
 }
 
 /* Closing CTA band — a compact echo of the hero, bookending the page. */
