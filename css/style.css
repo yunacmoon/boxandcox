@@ -557,23 +557,81 @@ section {
   transform: translateY(-2px);
 }
 
-/* A full-width wordmark bookending the hero's bottom edge, over the video --
-   sized by its own aspect ratio as a normal flex item so it never overlaps
-   the centered copy above it. Plain solid white mark, same as the original
-   header logo treatment. */
+/* A full-width slider bookending the hero's bottom edge, over the video --
+   cycling between the wordmark and short brand phrases. Fixed to the logo's
+   own aspect ratio (2143x600) so the box never overlaps the centered copy
+   above it, whichever slide is showing. */
 .hero-logo-mark {
   position: relative;
   width: 100%;
-  line-height: 0;
+  aspect-ratio: 2143 / 600;
+  overflow: hidden;
   pointer-events: none;
 }
 
-.hero-logo-mark img {
+/* Two slides live in the DOM at once -- current and next -- and get their
+   content swapped after each transition instead of the track growing
+   forever. See initHeroWordSlider() in main.js. */
+.hero-slide {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transform: translateX(0);
+  transition: transform 0.9s cubic-bezier(0.65, 0, 0.35, 1);
+}
+
+.hero-slide-next {
+  transform: translateX(100%);
+}
+
+.hero-logo-mark.is-sliding .hero-slide-current {
+  transform: translateX(-100%);
+}
+
+.hero-logo-mark.is-sliding .hero-slide-next {
+  transform: translateX(0);
+}
+
+/* Snaps both slides back to their resting transform with no transition, so
+   the content swap after each cycle doesn't play the slide in reverse. */
+.hero-logo-mark.is-resetting .hero-slide {
+  transition: none;
+}
+
+.hero-slide-logo-img {
   display: block;
   width: 100%;
   height: auto;
   filter: brightness(0) invert(1);
   opacity: 0.92;
+}
+
+/* Brand phrase slide -- mixes serif regular + italic, and is sized in JS
+   (initHeroWordSlider's fitWordSlide) to fill the same width the logo
+   fills, whatever the phrase's length. The clamp() here is only a fallback
+   before that JS measurement runs. */
+.hero-slide-word {
+  width: 100%;
+  text-align: center;
+  white-space: nowrap;
+  font-family: var(--font-serif);
+  color: var(--color-ink);
+  opacity: 0.92;
+  font-size: clamp(2.2rem, 8vw, 6rem);
+  line-height: 1;
+}
+
+.hero-word-regular {
+  font-weight: 400;
+  font-style: normal;
+}
+
+.hero-word-italic {
+  font-weight: 400;
+  font-style: italic;
+  margin-left: 0.3em;
 }
 
 /* A faint shadow band that sweeps across the logo every ~2.8s. Masked to

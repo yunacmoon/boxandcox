@@ -322,6 +322,86 @@ function initGrainCanvases() {
   });
 }
 
+function fitWordSlide(el) {
+  const container = el.parentElement;
+  const maxFontSize = container.clientHeight * 0.62;
+  const targetWidth = container.clientWidth * 0.92;
+
+  el.style.fontSize = "100px";
+  const measuredWidth = el.scrollWidth || 1;
+  const fontSize = Math.min(
+    maxFontSize,
+    Math.max(24, (targetWidth / measuredWidth) * 100)
+  );
+  el.style.fontSize = `${fontSize}px`;
+}
+
+function initHeroWordSlider() {
+  const slider = document.getElementById("heroLogoMark");
+  const currentEl = document.getElementById("heroSlideCurrent");
+  const nextEl = document.getElementById("heroSlideNext");
+  if (!slider || !currentEl || !nextEl) return;
+
+  const prefersReducedMotion = window.matchMedia(
+    "(prefers-reduced-motion: reduce)"
+  ).matches;
+  if (prefersReducedMotion) return;
+
+  const words = [
+    { regular: "Spatial", italic: "Stories" },
+    { regular: "Immersive", italic: "Form" },
+    { regular: "Beyond", italic: "Space" },
+  ];
+
+  const LOGO_MARKUP =
+    '<img class="hero-slide-logo-img" src="assets/logo.png" alt="Box&amp;Cox" /><span class="hero-logo-sweep"></span>';
+
+  // Sequence: logo, word, logo, word, logo, word -- then repeats.
+  function renderSlide(el, index) {
+    if (index % 2 === 0) {
+      el.innerHTML = LOGO_MARKUP;
+      return;
+    }
+    const word = words[((index - 1) / 2) % words.length];
+    el.innerHTML = `<span class="hero-slide-word"><span class="hero-word-regular">${escapeHtml(
+      word.regular
+    )}</span><span class="hero-word-italic">${escapeHtml(
+      word.italic
+    )}</span></span>`;
+    fitWordSlide(el.querySelector(".hero-slide-word"));
+  }
+
+  let index = 0;
+  const DWELL_MS = 5000;
+  const TRANSITION_MS = 900;
+
+  function tick() {
+    setTimeout(() => {
+      const nextIndex = index + 1;
+      renderSlide(nextEl, nextIndex);
+      slider.classList.add("is-sliding");
+
+      setTimeout(() => {
+        slider.classList.add("is-resetting");
+        slider.classList.remove("is-sliding");
+        currentEl.innerHTML = nextEl.innerHTML;
+        nextEl.innerHTML = "";
+        void slider.offsetWidth; // force reflow before re-enabling transitions
+        slider.classList.remove("is-resetting");
+        index = nextIndex;
+        tick();
+      }, TRANSITION_MS);
+    }, DWELL_MS);
+  }
+
+  window.addEventListener("resize", () => {
+    const wordEl = currentEl.querySelector(".hero-slide-word");
+    if (wordEl) fitWordSlide(wordEl);
+  });
+
+  tick();
+}
+
 function initNav() {
   const navToggle = document.getElementById("navToggle");
   const siteNav = document.getElementById("siteNav");
@@ -344,6 +424,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   initNav();
   initHeroVideoCycle();
+  initHeroWordSlider();
   initGrainCanvases();
   renderHero(data.prologue.hero);
   renderPrologue(data.prologue);
