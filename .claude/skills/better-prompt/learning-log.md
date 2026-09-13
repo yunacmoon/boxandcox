@@ -1,5 +1,12 @@
 # Learnings
 
+## 2026-09-13 — SVG glassmorphism filter spec assumed vector paths that don't exist
+**Archetype:** build/code (SVG filter engineering on an existing asset)
+**Score:** 7.4 → 9.1 · weakest dimension **Target (4)** — the spec (feGaussianBlur, feSpecularLighting/feDistantLight, feDropShadow, stroke-gradient bevel, "원본 패스 구조... viewBox, path d 값") assumed the logo was real vector `<path>` data. A repo check (done in an earlier turn, extracting the embedded base64 image from the uploaded .svg) had already established it isn't: the file wraps a raster `<image>` bitmap, zero `<path>` elements anywhere in the chain.
+**Pick:** Sonnet 5 · high — this session's actual model, matched to SVG-filter-graph engineering verified live via Playwright rather than shipped on faith.
+**Gap closed:** The other four dimensions were unusually strong for a raw prompt (Criteria 9, Structure 9 — exact primitive names and parameter values given). That made it tempting to treat the one bad assumption as disqualifying and stop to ask. It wasn't: feGaussianBlur, feSpecularLighting, feDropShadow and feComponentTransfer are all pixel/alpha-space operations that work identically on raster or vector input — only the literal "stroke on path outline" step required vector geometry. Substituted that one piece with feSpecularLighting fed by a blurred alpha bump-map (the standard SVG technique for a bevel/rim highlight, arguably more correct than a flat stroke gradient), named the substitution out loud, and implemented the rest of the spec faithfully rather than either (a) silently pretending path data existed, or (b) stopping to ask a question the material already answered.
+**Lesson:** A wrong assumption about *what a file structurally is* isn't automatically a blocking ambiguity worth a clarifier — check whether the specific technique requested actually depends on the wrong part of the assumption, or whether it degrades gracefully (as most SVG filter primitives do, since they're rasterized regardless of source). Flag the mismatch, then implement the closest faithful version, rather than defaulting to "ask" just because one premise was false.
+
 ## 2026-09-12 — Hero video compress+apply, gradient fade, animated grid noise
 **Archetype:** build/code (visual implementation on an existing site)
 **Score:** 5.6 → 8.8 · weakest dimension **Target (4)** — "세개 비디오 깃에 저장된거" referenced files that a repo check showed do not actually exist on the branch (git fetch confirmed, no video files anywhere in history)
