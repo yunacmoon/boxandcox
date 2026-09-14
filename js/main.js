@@ -177,10 +177,7 @@ function renderProjects(projects) {
   list.innerHTML = projects
     .map(
       (project, index) => `
-        <article class="project-card reveal" style="z-index: ${projects.length - index}">
-          <div class="project-card-image" aria-hidden="true">
-            <img src="${escapeHtml(project.photo)}" alt="" loading="lazy" />
-          </div>
+        <article class="project-card reveal" style="z-index: ${index + 1}">
           <button
             class="project-toggle"
             type="button"
@@ -193,6 +190,9 @@ function renderProjects(projects) {
             </span>
             <span class="project-toggle-icon" aria-hidden="true"></span>
           </button>
+          <div class="project-card-image" aria-hidden="true">
+            <img src="${escapeHtml(project.photo)}" alt="" loading="lazy" />
+          </div>
           <div class="project-panel" id="project-panel-${index}" hidden>
             <div class="media-frame reveal-anim" data-reference="${escapeHtml(project.reference)}">
               <img class="media-photo" src="${escapeHtml(project.photo)}" alt="" loading="lazy" />
@@ -229,9 +229,15 @@ function renderProjects(projects) {
       const panel = document.getElementById(
         button.getAttribute("aria-controls")
       );
+      const card = button.closest(".project-card");
       const isOpen = button.getAttribute("aria-expanded") === "true";
       button.setAttribute("aria-expanded", String(!isOpen));
       panel.hidden = isOpen;
+      // Every card after this one sits stacked on top of it (see the
+      // fanned z-index in the template above); dropping its own overlap
+      // with the very next card is what un-stacks the whole tail of the
+      // list below it and brings this card fully into view.
+      card.classList.toggle("is-expanded", !isOpen);
 
       if (!isOpen) {
         const media = panel.querySelector(".media-frame");

@@ -1071,13 +1071,15 @@ section {
   flex-direction: column;
 }
 
-/* Cards stack like a fanned deck of photos: each is pulled way up over the
-   one after it (see margin-top below), and an explicit descending z-index
-   (set inline per card in main.js) keeps earlier cards in front rather than
-   relying on DOM order, so only each card's own image peeks out above the
-   next card's toggle row -- not the other way around. The box-shadow is
-   what sells the "resting on top of a physical stack" read: it falls onto
-   exactly the sliver of the next card that's peeking out. */
+/* Cards stack like a fanned deck of photos, each one physically on top of
+   the one before it: an explicit ascending z-index (set inline per card in
+   main.js -- later cards would already paint on top by default, but this
+   makes it unambiguous) puts the first card at the very bottom of the pile
+   and each later card in front of it. Each card's own toggle row (title)
+   is the first thing in the card, so it's never the part that gets covered
+   -- only the decorative image below it is, leaving just its top edge
+   peeking out above the next card. The box-shadow is cast upward, onto
+   that peeking sliver of the card behind, to sell the physical-stack read. */
 .project-card {
   position: relative;
   background: var(--color-bg-alt);
@@ -1085,15 +1087,24 @@ section {
   border-radius: 16px;
   overflow: hidden;
   margin-top: -195px;
-  box-shadow: 0 20px 30px -8px rgba(0, 0, 0, 0.8);
+  box-shadow: 0 -20px 30px -8px rgba(0, 0, 0, 0.8);
+  transition: margin-top 0.5s ease;
 }
 
 .project-card:first-child {
   margin-top: 0;
 }
 
+/* Clicking a card's toggle drops the very next card back to a normal gap
+   instead of overlapping it -- since every card after it is stacked in
+   front (see above), that's what un-stacks the whole rest of the list and
+   brings this card's image fully into view instead of a peeking sliver. */
+.project-card.is-expanded + .project-card {
+  margin-top: var(--space-3);
+}
+
 .project-card-image {
-  margin: var(--space-3) var(--space-3) 0;
+  margin: 0 var(--space-3) var(--space-3);
   height: 220px;
   border-radius: 14px;
   overflow: hidden;
@@ -1123,6 +1134,12 @@ section {
 
 .project-card.reveal-anim.is-visible {
   transform: translateY(0);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .project-card {
+    transition: none;
+  }
 }
 
 .project-toggle {
