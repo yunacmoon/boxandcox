@@ -262,11 +262,13 @@ function renderProjects(projects) {
           <div class="project-card-image">
             ${projectGallery(project)}
           </div>
-          <div class="project-panel" id="project-panel-${index}" hidden>
-            <dl class="project-facts">
-              ${projectFacts(project)}
-            </dl>
-            ${project.description ? `<p class="project-desc">${escapeHtml(project.description)}</p>` : ""}
+          <div class="project-panel" id="project-panel-${index}" aria-hidden="true" inert>
+            <div class="project-panel-inner">
+              <dl class="project-facts">
+                ${projectFacts(project)}
+              </dl>
+              ${project.description ? `<p class="project-desc">${escapeHtml(project.description)}</p>` : ""}
+            </div>
           </div>
         </article>
       `
@@ -294,15 +296,32 @@ function renderProjects(projects) {
       }
     };
 
+    // Expanded height is width * ratio (ratio comes from CSS so the
+    // mobile breakpoint can change it); an explicit px value on both ends
+    // is what lets the height transition run.
+    const fitSlider = () => {
+      if (!card.classList.contains("is-expanded")) return;
+      const ratio = parseFloat(getComputedStyle(slider).getPropertyValue("--slider-ratio")) || 0.5625;
+      slider.style.height = `${Math.round(slider.clientWidth * ratio)}px`;
+    };
+    window.addEventListener("resize", fitSlider);
+
     const setOpen = (open) => {
       button.setAttribute("aria-expanded", String(open));
-      panel.hidden = !open;
+      panel.setAttribute("aria-hidden", String(!open));
+      if (open) panel.removeAttribute("inert");
+      else panel.setAttribute("inert", "");
       // Every card after this one sits stacked on top of it (see the
       // fanned z-index in the template above); dropping its own overlap
       // with the very next card is what un-stacks the whole tail of the
       // list below it and brings this card fully into view.
       card.classList.toggle("is-expanded", open);
-      if (!open) goTo(0); // collapse back to the cover photo
+      if (open) {
+        fitSlider();
+      } else {
+        slider.style.height = ""; // back to the collapsed band in CSS
+        goTo(0); // collapse back to the cover photo
+      }
     };
 
     button.addEventListener("click", () => {

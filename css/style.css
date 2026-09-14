@@ -1166,10 +1166,12 @@ section {
    the card is collapsed only the cover shows, cropped to a fixed-height
    band that peeks out from under the next card in the deck. */
 .project-slider {
+  --slider-ratio: 0.5625; /* 9 / 16 -- read by main.js to animate the height */
   position: relative;
   height: 220px;
   cursor: pointer;
   outline: none;
+  transition: height 0.55s cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 .project-slider-track {
@@ -1189,9 +1191,9 @@ section {
 
 /* Expanded: the same slider opens up to a full frame and the arrows and
    counter appear. The band-to-frame growth is what "reveals" the photo. */
+/* The expanded height itself is set inline by main.js (width * ratio) so
+   the band-to-frame growth can animate; CSS only flips the cursor. */
 .project-card.is-expanded .project-slider {
-  height: auto;
-  aspect-ratio: 16 / 9;
   cursor: default;
 }
 
@@ -1274,8 +1276,8 @@ section {
     height: 140px;
   }
 
-  .project-card.is-expanded .project-slider {
-    aspect-ratio: 4 / 3;
+  .project-slider {
+    --slider-ratio: 0.75; /* 3 / 4 */
   }
 
   .project-slider-label {
@@ -1296,7 +1298,11 @@ section {
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .project-card {
+  .project-card,
+  .project-slider,
+  .project-slider-track,
+  .project-panel,
+  .project-panel-inner {
     transition: none;
   }
 }
@@ -1378,8 +1384,33 @@ section {
   opacity: 0;
 }
 
+/* The panel animates open with the 0fr -> 1fr grid-row trick: the outer
+   element is always in the flow, its single row grows from nothing, and
+   the inner wrapper (overflow hidden) is what actually gets clipped. */
 .project-panel {
-  padding: 0 var(--space-4) var(--space-4);
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows 0.55s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.project-panel-inner {
+  min-height: 0;
+  overflow: hidden;
+  padding: 0 var(--space-4);
+  opacity: 0;
+  transform: translateY(-6px);
+  transition: opacity 0.4s ease, transform 0.45s ease, padding 0.55s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.project-card.is-expanded .project-panel {
+  grid-template-rows: 1fr;
+}
+
+.project-card.is-expanded .project-panel-inner {
+  padding-bottom: var(--space-4);
+  opacity: 1;
+  transform: none;
+  transition-delay: 0.12s, 0.12s, 0s;
 }
 
 
@@ -1606,8 +1637,12 @@ section {
     padding: var(--space-2) var(--space-3);
   }
 
-  .project-panel {
-    padding: 0 var(--space-3) var(--space-3);
+  .project-panel-inner {
+    padding: 0 var(--space-3);
+  }
+
+  .project-card.is-expanded .project-panel-inner {
+    padding-bottom: var(--space-3);
   }
 
   .project-facts {
