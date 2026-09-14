@@ -207,27 +207,40 @@ function projectMeta(project) {
   return [project.client, project.year].filter(Boolean).join(" · ") || project.scope;
 }
 
-// The collapsed card already shows the cover photo, so the opened panel
-// leads with the second photo (when there is one) and the gallery takes
-// the rest -- no photo appears twice in the same card.
-function panelPhoto(project) {
-  return (project.photos && project.photos[0]) || project.photo;
-}
-
 function projectGallery(project) {
-  const rest = (project.photos || []).slice(1);
-  if (!rest.length) return "";
+  const photos = [project.photo].concat(project.photos || []);
+  const slides = photos
+    .map(
+      (src, i) =>
+        `<img src="${escapeHtml(src)}" alt="" loading="${i === 0 ? "eager" : "lazy"}" draggable="false" />`
+    )
+    .join("");
+  const nav =
+    photos.length > 1
+      ? `
+        <button class="project-slider-btn project-slider-prev" type="button" aria-label="이전 이미지" disabled>
+          <span class="project-slider-arrow" aria-hidden="true">&larr;</span>
+          <span class="project-slider-label">Previous</span>
+        </button>
+        <button class="project-slider-btn project-slider-next" type="button" aria-label="다음 이미지">
+          <span class="project-slider-label">Next</span>
+          <span class="project-slider-arrow" aria-hidden="true">&rarr;</span>
+        </button>
+        <span class="project-slider-count" aria-live="polite">01 / ${String(photos.length).padStart(2, "0")}</span>
+      `
+      : "";
   return `
-    <div class="project-gallery">
-      ${rest
-        .map(
-          (src) => `<img src="${escapeHtml(src)}" alt="" loading="lazy" />`
-        )
-        .join("")}
+    <div class="project-slider" data-count="${photos.length}" data-index="0">
+      <div class="project-slider-track">${slides}</div>
+      ${nav}
     </div>
   `;
 }
 
+// One card = a title row + a photo slider + the facts panel. Collapsed,
+// the slider is a cropped cover strip peeking out of the deck; expanded,
+// the same slider grows to its full frame and the arrows let you step
+// through the rest of that project's photos in place -- no thumbnails.
 function renderProjects(projects) {
   const list = document.getElementById("projectList");
   list.innerHTML = projects
@@ -246,49 +259,76 @@ function renderProjects(projects) {
             </span>
             <span class="project-toggle-icon" aria-hidden="true"></span>
           </button>
-          <div class="project-card-image" aria-hidden="true">
-            <img src="${escapeHtml(project.photo)}" alt="" loading="lazy" />
+          <div class="project-card-image">
+            ${projectGallery(project)}
           </div>
           <div class="project-panel" id="project-panel-${index}" hidden>
-            <div class="media-frame reveal-anim" data-reference="${escapeHtml(project.reference)}">
-              <img class="media-photo" src="${escapeHtml(panelPhoto(project))}" alt="" loading="lazy" />
-              <span class="media-curtain" aria-hidden="true"></span>
-              <span class="media-label">${escapeHtml(project.reference)}</span>
-            </div>
             <dl class="project-facts">
               ${projectFacts(project)}
             </dl>
             ${project.description ? `<p class="project-desc">${escapeHtml(project.description)}</p>` : ""}
-            ${projectGallery(project)}
           </div>
         </article>
       `
     )
     .join("");
 
-  list.querySelectorAll(".project-toggle").forEach((button) => {
-    button.addEventListener("click", () => {
-      const panel = document.getElementById(
-        button.getAttribute("aria-controls")
-      );
-      const card = button.closest(".project-card");
-      const isOpen = button.getAttribute("aria-expanded") === "true";
-      button.setAttribute("aria-expanded", String(!isOpen));
-      panel.hidden = isOpen;
+  list.querySelectorAll(".project-card").forEach((card) => {
+    const button = card.querySelector(".project-toggle");
+    const panel = document.getElementById(button.getAttribute("aria-controls"));
+    const slider = card.querySelector(".project-slider");
+    const track = slider.querySelector(".project-slider-track");
+    const prev = slider.querySelector(".project-slider-prev");
+    const next = slider.querySelector(".project-slider-next");
+    const count = slider.querySelector(".project-slider-count");
+    const total = Number(slider.dataset.count);
+
+    const goTo = (i) => {
+      const clamped = Math.max(0, Math.min(total - 1, i));
+      slider.dataset.index = String(clamped);
+      track.style.transform = `translateX(-${clamped * 100}%)`;
+      if (prev) prev.disabled = clamped === 0;
+      if (next) next.disabled = clamped === total - 1;
+      if (count) {
+        count.textContent = `${String(clamped + 1).padStart(2, "0")} / ${String(total).padStart(2, "0")}`;
+      }
+    };
+
+    const setOpen = (open) => {
+      button.setAttribute("aria-expanded", String(open));
+      panel.hidden = !open;
       // Every card after this one sits stacked on top of it (see the
       // fanned z-index in the template above); dropping its own overlap
       // with the very next card is what un-stacks the whole tail of the
       // list below it and brings this card fully into view.
-      card.classList.toggle("is-expanded", !isOpen);
+      card.classList.toggle("is-expanded", open);
+      if (!open) goTo(0); // collapse back to the cover photo
+    };
 
-      if (!isOpen) {
-        const media = panel.querySelector(".media-frame");
-        // Trigger the wipe reveal fresh each time the panel opens.
-        media.classList.remove("is-visible");
-        void media.offsetWidth; // restart the CSS transition
-        requestAnimationFrame(() => media.classList.add("is-visible"));
-      }
+    button.addEventListener("click", () => {
+      setOpen(button.getAttribute("aria-expanded") !== "true");
     });
+
+    // Clicking the peeking cover strip opens the card; once open, the
+    // image itself is inert and the arrows do the navigating.
+    track.addEventListener("click", () => {
+      if (!card.classList.contains("is-expanded")) setOpen(true);
+    });
+
+    if (prev) {
+      prev.addEventListener("click", (e) => {
+        e.stopPropagation();
+        goTo(Number(slider.dataset.index) - 1);
+      });
+      next.addEventListener("click", (e) => {
+        e.stopPropagation();
+        goTo(Number(slider.dataset.index) + 1);
+      });
+      slider.addEventListener("keydown", (e) => {
+        if (e.key === "ArrowLeft") goTo(Number(slider.dataset.index) - 1);
+        if (e.key === "ArrowRight") goTo(Number(slider.dataset.index) + 1);
+      });
+    }
   });
 }
 
@@ -479,6 +519,17 @@ function initHeroWordSlider() {
 function initNav() {
   const navToggle = document.getElementById("navToggle");
   const siteNav = document.getElementById("siteNav");
+
+  // On the home page the logo scrolls back to the top instead of
+  // reloading the page (contact.html keeps a plain link to index.html).
+  const logoHome = document.getElementById("logoHome");
+  if (logoHome) {
+    logoHome.addEventListener("click", (e) => {
+      e.preventDefault();
+      window.scrollTo({ top: 0, behavior: "smooth" });
+      history.replaceState(null, "", window.location.pathname);
+    });
+  }
 
   function closeNav() {
     siteNav.classList.remove("is-open");

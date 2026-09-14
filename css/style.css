@@ -1157,17 +1157,112 @@ section {
 
 .project-card-image {
   margin: 0 var(--space-3) var(--space-3);
-  height: 220px;
   border-radius: 14px;
   overflow: hidden;
   background: var(--color-surface-2);
 }
 
-.project-card-image img {
+/* The slider is a strip of full-width slides moved with translateX. While
+   the card is collapsed only the cover shows, cropped to a fixed-height
+   band that peeks out from under the next card in the deck. */
+.project-slider {
+  position: relative;
+  height: 220px;
+  cursor: pointer;
+  outline: none;
+}
+
+.project-slider-track {
+  display: flex;
+  height: 100%;
+  transition: transform 0.55s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.project-slider-track img {
   display: block;
+  flex: 0 0 100%;
   width: 100%;
   height: 100%;
   object-fit: cover;
+  user-select: none;
+}
+
+/* Expanded: the same slider opens up to a full frame and the arrows and
+   counter appear. The band-to-frame growth is what "reveals" the photo. */
+.project-card.is-expanded .project-slider {
+  height: auto;
+  aspect-ratio: 16 / 9;
+  cursor: default;
+}
+
+.project-slider-btn,
+.project-slider-count {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.25s ease, background-color 0.2s ease, transform 0.2s ease;
+}
+
+.project-card.is-expanded .project-slider-btn,
+.project-card.is-expanded .project-slider-count {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.project-slider-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 16px;
+  border: 1px solid rgba(255, 255, 255, 0.35);
+  border-radius: 999px;
+  background: rgba(8, 8, 10, 0.55);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  color: var(--color-ink);
+  font-family: var(--font-sans);
+  font-size: 0.78rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  cursor: pointer;
+}
+
+.project-slider-prev { left: var(--space-3); }
+.project-slider-next { right: var(--space-3); }
+
+.project-slider-arrow {
+  font-family: var(--font-serif);
+  font-size: 1.15rem;
+  line-height: 1;
+}
+
+.project-slider-btn:hover:not(:disabled),
+.project-slider-btn:focus-visible {
+  background: var(--color-ink);
+  color: var(--color-bg);
+  border-color: var(--color-ink);
+}
+
+.project-card.is-expanded .project-slider-btn:disabled {
+  opacity: 0.3;
+  cursor: default;
+}
+
+.project-slider-count {
+  top: auto;
+  right: var(--space-3);
+  bottom: var(--space-3);
+  transform: none;
+  padding: 4px 10px;
+  border-radius: 999px;
+  background: rgba(8, 8, 10, 0.6);
+  font-family: monospace;
+  font-size: 0.75rem;
+  letter-spacing: 0.08em;
+  color: var(--color-ink);
 }
 
 @media (max-width: 640px) {
@@ -1175,8 +1270,20 @@ section {
     margin-top: -120px;
   }
 
-  .project-card-image {
+  .project-slider {
     height: 140px;
+  }
+
+  .project-card.is-expanded .project-slider {
+    aspect-ratio: 4 / 3;
+  }
+
+  .project-slider-label {
+    display: none;
+  }
+
+  .project-slider-btn {
+    padding: 10px 12px;
   }
 }
 
@@ -1275,10 +1382,6 @@ section {
   padding: 0 var(--space-4) var(--space-4);
 }
 
-.project-panel .media-frame {
-  margin: 0 0 var(--space-3);
-  aspect-ratio: 16 / 9;
-}
 
 .project-facts {
   display: grid;
@@ -1305,29 +1408,6 @@ section {
   font-size: 0.95rem;
 }
 
-/* Extra photos for a project, shown under the description as a small
-   grid so the panel reads as a case study rather than a single image. */
-.project-gallery {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: var(--space-2);
-  margin-top: var(--space-3);
-}
-
-.project-gallery img {
-  display: block;
-  width: 100%;
-  aspect-ratio: 4 / 3;
-  object-fit: cover;
-  border-radius: 10px;
-  background: var(--color-surface-2);
-  border: 1px solid var(--color-border);
-}
-
-@media (max-width: 640px) {
-  .project-gallery {
-    grid-template-columns: repeat(2, 1fr);
-  }
 }
 
 /* Footer */
