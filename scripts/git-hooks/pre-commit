@@ -1,0 +1,41 @@
+#!/usr/bin/env bash
+# Blocks committing new or large files under assets/ unless explicitly
+# allowed. Intent: quick/mobile sessions should only reshuffle which
+# existing asset is referenced where (data.js, html, css edits) -- adding
+# real new asset files is a deliberate desktop decision.
+#
+# Enable once per machine:
+#   git config core.hooksPath scripts/git-hooks
+#
+# Deliberately adding/updating a real asset from this machine:
+#   ALLOW_ASSET_COMMIT=1 git commit -m "..."
+
+set -euo pipefail
+
+if [ "${ALLOW_ASSET_COMMIT:-0}" = "1" ]; then
+  exit 0
+fi
+
+MAX_BYTES=$((300 * 1024)) # 300KB -- big enough for a small optimized photo, not a raw export
+violations=""
+
+while IFS= read -r -d '' file; do
+  case "$file" in
+    assets/*) ;;
+    *) continue ;;
+  esac
+
+  size=$(git cat-file -s ":$file" 2>/dev/null || stat -f%z "$file" 2>/dev/null || stat -c%s "$file" 2>/dev/null || echo 0)
+  if [ "$size" -gt "$MAX_BYTES" ]; then
+    violations="$violations\n  $file ($((size / 1024))KB)"
+  fi
+done < <(git diff --cached --name-only --diff-filter=ACM -z -- assets/)
+
+if [ -n "$violations" ]; then
+  echo "pre-commit: refusing to commit new/updated asset file(s) over 300KB:" >&2
+  echo -e "$violations" >&2
+  echo "" >&2
+  echo "If this is a deliberate asset addition (not a quick mobile edit)," >&2
+  echo "re-run with: ALLOW_ASSET_COMMIT=1 git commit -m \"...\"" >&2
+  exit 1
+fi
