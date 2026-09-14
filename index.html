@@ -13,7 +13,7 @@
 <body>
   <header class="site-header">
     <div class="container header-inner">
-      <a href="#top" class="logo">
+      <a href="index.html" class="logo" aria-label="Box&amp;Cox 홈으로">
         <img src="assets/logo.png" alt="Box&amp;Cox" class="logo-mark" />
       </a>
       <button class="nav-toggle" id="navToggle" aria-label="메뉴 열기" aria-expanded="false">
@@ -24,6 +24,7 @@
         <a href="#work-scope">Work Scope</a>
         <a href="#work-process">Work Process</a>
         <a href="#projects">Projects</a>
+        <a href="contact.html" class="site-nav-contact">Contact Us</a>
       </nav>
     </div>
   </header>
@@ -77,14 +78,15 @@
       </div>
     </section>
 
-    <!-- 1c. Clients -->
-    <section class="clients-band">
+    <!-- 1c. Projects (moved up from the bottom) -->
+    <section id="projects" class="projects">
       <div class="container">
-        <p class="eyebrow reveal">CLIENTS</p>
-        <h2 class="section-heading-en reveal">Selected clients</h2>
-      </div>
-      <div class="client-marquee reveal" aria-label="Selected clients">
-        <div class="client-track" id="clientTrack"></div>
+        <div class="section-head">
+          <p class="eyebrow reveal">PROJECTS</p>
+          <h2 class="section-heading-en reveal">Selected works</h2>
+          <p class="section-heading-ko reveal">주요 프로젝트 레퍼런스</p>
+        </div>
+        <div id="projectList" class="project-list"></div>
       </div>
     </section>
 
@@ -115,7 +117,7 @@
     </section>
 
     <!-- 3. Work Process -->
-    <section id="work-process" class="work-process">
+    <section id="work-process" class="work-process work-process--hero">
       <div class="container">
         <div class="section-head section-head--split">
           <div>
@@ -125,25 +127,19 @@
           </div>
           <p id="workProcessIntro" class="section-intro reveal"></p>
         </div>
-        <div class="media-frame reveal" data-reference="BOX&amp;COX_CRD_013.jpg">
-          <img class="media-photo" src="assets/placeholders/ph-office-wall.jpg" alt="" loading="lazy" />
-          <span class="media-curtain" aria-hidden="true"></span>
-          <span class="media-label">BOX&amp;COX_CRD_013.jpg</span>
-        </div>
         <p class="process-label reveal" id="processLabel"></p>
         <ol id="processSteps" class="process-steps"></ol>
       </div>
     </section>
 
-    <!-- 4. Projects -->
-    <section id="projects" class="projects">
+    <!-- 4. Clients (moved to just above the closing CTA) -->
+    <section class="clients-band">
       <div class="container">
-        <div class="section-head">
-          <p class="eyebrow reveal">PROJECTS</p>
-          <h2 class="section-heading-en reveal">Selected works</h2>
-          <p class="section-heading-ko reveal">주요 프로젝트 레퍼런스</p>
-        </div>
-        <div id="projectList" class="project-list"></div>
+        <p class="eyebrow reveal">CLIENTS</p>
+        <h2 class="section-heading-en reveal">Selected clients</h2>
+      </div>
+      <div class="client-marquee reveal" aria-label="Selected clients">
+        <div class="client-track" id="clientTrack"></div>
       </div>
     </section>
 

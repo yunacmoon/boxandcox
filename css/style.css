@@ -43,6 +43,14 @@ body {
   background: var(--color-bg);
   line-height: 1.7;
   -webkit-font-smoothing: antialiased;
+  transition: opacity 0.26s ease;
+}
+
+/* Applied by initPageTransitions() just before navigating to another page,
+   so moving to/from Contact Us reads as a page transition rather than an
+   instant jump. */
+body.is-leaving {
+  opacity: 0;
 }
 
 .container {
@@ -171,9 +179,12 @@ ul, ol, dl {
   position: sticky;
   top: 0;
   z-index: 50;
+  width: 96%;
+  margin: 0 auto;
   background: color-mix(in srgb, var(--color-bg) 75%, transparent);
   backdrop-filter: blur(12px);
   border-bottom: 1px solid var(--color-border);
+  border-radius: 0 0 20px 20px;
 }
 
 .header-inner {
@@ -988,18 +999,62 @@ section {
   color: var(--color-ink);
 }
 
+/* A fixed reserved height (not max-height: 0 -> N collapsing) on every step's
+   description, active or not -- so the row's total height never changes as
+   the carousel cycles. Letting this collapse/expand per step used to make
+   every block below the carousel shift up and down on each tick, since
+   different steps' description text renders to different heights. */
 .process-body p {
   font-size: 0.82rem;
-  max-height: 0;
+  height: 3.4em;
   margin: 0;
   opacity: 0;
   overflow: hidden;
-  transition: max-height 0.5s ease, opacity 0.3s ease;
+  transition: opacity 0.3s ease;
 }
 
 .process-step.is-active .process-body p {
-  max-height: 200px;
   opacity: 1;
+}
+
+/* Work Process, hero-sized: the reference image is gone, so the step
+   carousel itself is the section's whole visual weight -- much taller
+   padding, and every number/title/description scaled well past the
+   compact version used elsewhere. */
+.work-process--hero {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+}
+
+.work-process--hero .process-steps {
+  margin-top: var(--space-6);
+  gap: var(--space-3);
+}
+
+.work-process--hero .process-step {
+  padding-top: var(--space-6);
+}
+
+.work-process--hero .process-number {
+  width: 48px;
+  height: 48px;
+  top: -24px;
+  font-size: 1.05rem;
+}
+
+.work-process--hero .process-body h3 {
+  font-size: 1.1rem;
+}
+
+.work-process--hero .process-step.is-active .process-body h3 {
+  font-size: clamp(1.8rem, 3.4vw, 2.8rem);
+  margin-bottom: var(--space-2);
+}
+
+.work-process--hero .process-body p {
+  font-size: 1.05rem;
+  height: 4.6em;
 }
 
 /* Projects — cards overlap slightly like a fanned accordion, each one
@@ -1048,6 +1103,8 @@ section {
 .project-toggle-head {
   display: flex;
   flex-direction: column;
+  flex: 1 1 auto;
+  min-width: 0;
   gap: 4px;
 }
 
@@ -1062,6 +1119,30 @@ section {
 .project-meta {
   font-size: 0.85rem;
   color: var(--color-text-soft);
+}
+
+/* A small always-visible peek of the project photo inside the collapsed
+   row itself, so the list hints at its imagery before a card is opened. */
+.project-toggle-thumb {
+  flex-shrink: 0;
+  width: 64px;
+  height: 64px;
+  border-radius: 10px;
+  overflow: hidden;
+  background: var(--color-surface-2);
+}
+
+.project-toggle-thumb img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+@media (max-width: 640px) {
+  .project-toggle-thumb {
+    width: 48px;
+    height: 48px;
+  }
 }
 
 .project-toggle-icon {
@@ -1174,6 +1255,68 @@ section {
     transform: none;
     color: var(--reveal-to, inherit);
     transition: none;
+  }
+}
+
+/* Contact page */
+.contact-hero {
+  padding: var(--space-6) 0 var(--space-4);
+}
+
+.contact-locations {
+  padding-bottom: var(--space-6);
+}
+
+.contact-location-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--space-3);
+}
+
+.contact-location-card {
+  background: var(--color-bg-alt);
+  border: 1px solid var(--color-border);
+  border-radius: 20px;
+  padding: var(--space-5);
+}
+
+.contact-location-heading-en {
+  font-family: var(--font-serif);
+  font-weight: 400;
+  font-size: 1.6rem;
+  color: var(--color-ink);
+}
+
+.contact-location-heading-ko {
+  color: var(--color-text-soft);
+  margin-top: 2px;
+  margin-bottom: var(--space-3);
+}
+
+.contact-location-facts {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  margin: 0;
+  padding-top: var(--space-3);
+  border-top: 1px solid var(--color-border);
+}
+
+.contact-location-facts dt {
+  font-size: 0.75rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--color-text-soft);
+}
+
+.contact-location-facts dd {
+  margin: 2px 0 0;
+  color: var(--color-ink);
+}
+
+@media (max-width: 860px) {
+  .contact-location-grid {
+    grid-template-columns: 1fr;
   }
 }
 

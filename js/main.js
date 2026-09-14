@@ -188,6 +188,9 @@ function renderProjects(projects) {
               <span class="project-title">${escapeHtml(project.title)}</span>
               <span class="project-meta">${escapeHtml(project.client)} · ${escapeHtml(project.year)}</span>
             </span>
+            <span class="project-toggle-thumb" aria-hidden="true">
+              <img src="${escapeHtml(project.photo)}" alt="" loading="lazy" />
+            </span>
             <span class="project-toggle-icon" aria-hidden="true"></span>
           </button>
           <div class="project-panel" id="project-panel-${index}" hidden>
@@ -442,13 +445,58 @@ function initNav() {
   });
 }
 
+// Cross-page navigation (the logo, "Contact Us", and any link back from
+// contact.html into an index.html section) fades the page out first instead
+// of jumping straight to the next document, so it reads as a page
+// transition rather than a scroll.
+function initPageTransitions() {
+  const prefersReducedMotion = window.matchMedia(
+    "(prefers-reduced-motion: reduce)"
+  ).matches;
+  if (prefersReducedMotion) return;
+
+  document.querySelectorAll("a[href]").forEach((link) => {
+    if (link.target === "_blank") return;
+    const href = link.getAttribute("href");
+    if (!href || href.startsWith("#")) return;
+
+    let url;
+    try {
+      url = new URL(href, window.location.href);
+    } catch (e) {
+      return;
+    }
+    if (url.origin !== window.location.origin) return;
+    if (url.pathname === window.location.pathname && !url.hash) return;
+
+    link.addEventListener("click", (event) => {
+      event.preventDefault();
+      document.body.classList.add("is-leaving");
+      setTimeout(() => {
+        window.location.href = url.href;
+      }, 260);
+    });
+  });
+}
+
 document.addEventListener("DOMContentLoaded", () => {
   const data = window.SITE_DATA;
 
   initNav();
+  initPageTransitions();
+  initGrainCanvases();
+
+  // Pages without SITE_DATA (e.g. contact.html) have no dynamic content to
+  // wait on, so their .reveal elements can be wired up immediately. The
+  // rest of this pipeline renders the homepage's own sections and would
+  // error against elements that only exist on index.html.
+  if (!data) {
+    initRevealAnimations();
+    return;
+  }
+
   initHeroVideoCycle();
   initHeroWordSlider();
-  initGrainCanvases();
   renderHero(data.prologue.hero);
   renderPrologue(data.prologue);
   renderClients(data.clients);
