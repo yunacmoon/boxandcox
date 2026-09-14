@@ -177,7 +177,10 @@ function renderProjects(projects) {
   list.innerHTML = projects
     .map(
       (project, index) => `
-        <article class="project-card reveal">
+        <article class="project-card reveal" style="z-index: ${projects.length - index}">
+          <div class="project-card-image" aria-hidden="true">
+            <img src="${escapeHtml(project.photo)}" alt="" loading="lazy" />
+          </div>
           <button
             class="project-toggle"
             type="button"
@@ -187,9 +190,6 @@ function renderProjects(projects) {
             <span class="project-toggle-head">
               <span class="project-title" role="heading" aria-level="3">${escapeHtml(project.title)}</span>
               <span class="project-meta">${escapeHtml(project.client)} · ${escapeHtml(project.year)}</span>
-            </span>
-            <span class="project-toggle-thumb" aria-hidden="true">
-              <img src="${escapeHtml(project.photo)}" alt="" loading="lazy" />
             </span>
             <span class="project-toggle-icon" aria-hidden="true"></span>
           </button>

@@ -1071,17 +1071,50 @@ section {
   flex-direction: column;
 }
 
+/* Cards stack like a fanned deck of photos: each is pulled way up over the
+   one after it (see margin-top below), and an explicit descending z-index
+   (set inline per card in main.js) keeps earlier cards in front rather than
+   relying on DOM order, so only each card's own image peeks out above the
+   next card's toggle row -- not the other way around. The box-shadow is
+   what sells the "resting on top of a physical stack" read: it falls onto
+   exactly the sliver of the next card that's peeking out. */
 .project-card {
   position: relative;
   background: var(--color-bg-alt);
   border: 1px solid var(--color-border);
   border-radius: 16px;
   overflow: hidden;
-  margin-top: -28px;
+  margin-top: -195px;
+  box-shadow: 0 20px 30px -8px rgba(0, 0, 0, 0.8);
 }
 
 .project-card:first-child {
   margin-top: 0;
+}
+
+.project-card-image {
+  margin: var(--space-3) var(--space-3) 0;
+  height: 220px;
+  border-radius: 14px;
+  overflow: hidden;
+  background: var(--color-surface-2);
+}
+
+.project-card-image img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+@media (max-width: 640px) {
+  .project-card {
+    margin-top: -120px;
+  }
+
+  .project-card-image {
+    height: 140px;
+  }
 }
 
 .project-card.reveal-anim {
@@ -1133,30 +1166,6 @@ section {
 .project-meta {
   font-size: 0.85rem;
   color: var(--color-text-soft);
-}
-
-/* A small always-visible peek of the project photo inside the collapsed
-   row itself, so the list hints at its imagery before a card is opened. */
-.project-toggle-thumb {
-  flex-shrink: 0;
-  width: 64px;
-  height: 64px;
-  border-radius: 10px;
-  overflow: hidden;
-  background: var(--color-surface-2);
-}
-
-.project-toggle-thumb img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
-
-@media (max-width: 640px) {
-  .project-toggle-thumb {
-    width: 48px;
-    height: 48px;
-  }
 }
 
 .project-toggle-icon {
