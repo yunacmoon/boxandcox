@@ -1,2 +1,6 @@
 .DS_Store
 **/.DS_Store
+
+# Original client-provided photos live in the repo folder for convenience only;
+# web-sized copies used by the site are in assets/projects/.
+assets/03_Photos/

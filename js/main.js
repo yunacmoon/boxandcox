@@ -58,9 +58,16 @@ function renderClients(clients) {
     )
     .join("");
 
-  // Two identical sets back to back -- see the -50% loop in
-  // .client-track's animation. The second copy just repeats the same
-  // tiles for the visual loop, so it's hidden from assistive tech.
+  // A short list (the "big three") is shown as a static row; a longer
+  // list falls back to the looping marquee, which needs two identical
+  // sets back to back (see the -50% loop in .client-track's animation).
+  // The second copy is purely visual, so it's hidden from assistive tech.
+  if (clients.length <= 4) {
+    track.closest(".client-marquee").classList.add("client-marquee--static");
+    track.innerHTML = `<div class="client-tile-set">${tiles}</div>`;
+    return;
+  }
+
   track.innerHTML = `
     <div class="client-tile-set">${tiles}</div>
     <div class="client-tile-set" aria-hidden="true">${tiles}</div>
@@ -172,6 +179,55 @@ function initProcessCarousel() {
   start();
 }
 
+// Only facts that actually have a value are rendered -- photo-only
+// projects don't carry a confirmed year or location yet.
+function projectFacts(project) {
+  const facts = [
+    ["Client", project.client],
+    ["Year Completed", project.year],
+    ["Location", project.location],
+    ["Scope of Service", project.scope],
+  ];
+  return facts
+    .filter(([, value]) => value)
+    .map(
+      ([label, value]) => `
+        <div>
+          <dt>${escapeHtml(label)}</dt>
+          <dd>${escapeHtml(value)}</dd>
+        </div>
+      `
+    )
+    .join("");
+}
+
+// The one-line summary under the card title: "client · year" when both
+// exist, otherwise whichever of client / scope is available.
+function projectMeta(project) {
+  return [project.client, project.year].filter(Boolean).join(" · ") || project.scope;
+}
+
+// The collapsed card already shows the cover photo, so the opened panel
+// leads with the second photo (when there is one) and the gallery takes
+// the rest -- no photo appears twice in the same card.
+function panelPhoto(project) {
+  return (project.photos && project.photos[0]) || project.photo;
+}
+
+function projectGallery(project) {
+  const rest = (project.photos || []).slice(1);
+  if (!rest.length) return "";
+  return `
+    <div class="project-gallery">
+      ${rest
+        .map(
+          (src) => `<img src="${escapeHtml(src)}" alt="" loading="lazy" />`
+        )
+        .join("")}
+    </div>
+  `;
+}
+
 function renderProjects(projects) {
   const list = document.getElementById("projectList");
   list.innerHTML = projects
@@ -186,7 +242,7 @@ function renderProjects(projects) {
           >
             <span class="project-toggle-head">
               <span class="project-title" role="heading" aria-level="3">${escapeHtml(project.title)}</span>
-              <span class="project-meta">${escapeHtml(project.client)} · ${escapeHtml(project.year)}</span>
+              <span class="project-meta">${escapeHtml(projectMeta(project))}</span>
             </span>
             <span class="project-toggle-icon" aria-hidden="true"></span>
           </button>
@@ -195,29 +251,15 @@ function renderProjects(projects) {
           </div>
           <div class="project-panel" id="project-panel-${index}" hidden>
             <div class="media-frame reveal-anim" data-reference="${escapeHtml(project.reference)}">
-              <img class="media-photo" src="${escapeHtml(project.photo)}" alt="" loading="lazy" />
+              <img class="media-photo" src="${escapeHtml(panelPhoto(project))}" alt="" loading="lazy" />
               <span class="media-curtain" aria-hidden="true"></span>
               <span class="media-label">${escapeHtml(project.reference)}</span>
             </div>
             <dl class="project-facts">
-              <div>
-                <dt>Client</dt>
-                <dd>${escapeHtml(project.client)}</dd>
-              </div>
-              <div>
-                <dt>Year Completed</dt>
-                <dd>${escapeHtml(project.year)}</dd>
-              </div>
-              <div>
-                <dt>Location</dt>
-                <dd>${escapeHtml(project.location)}</dd>
-              </div>
-              <div>
-                <dt>Scope of Service</dt>
-                <dd>${escapeHtml(project.scope)}</dd>
-              </div>
+              ${projectFacts(project)}
             </dl>
             ${project.description ? `<p class="project-desc">${escapeHtml(project.description)}</p>` : ""}
+            ${projectGallery(project)}
           </div>
         </article>
       `
