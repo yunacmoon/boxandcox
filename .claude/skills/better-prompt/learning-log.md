@@ -1,5 +1,12 @@
 # Learnings
 
+## 2026-09-14 — Session handoff: package project context as a skill
+**Archetype:** build/code (writing a structured knowledge-transfer file)
+**Score:** 5.4 → — · weakest dimension **Criteria (4)** — "스킬로 전부 정리해" named the format (a skill) but not filename, location, or what "전부" needed to cover in concrete terms.
+**Pick:** Executed directly in-session -- accurately synthesizing this conversation's full history is exactly what the loaded context window is for; no delegation gains anything here.
+**Gap closed:** The raw ask could have produced a thin bullet list. The actual gap was scope: a real handoff document needs the *reasoning*, not just the current state -- e.g. the project card stack went through 3 designs (small thumbnail -> descending z-index -> corrected to ascending z-index) and a future session needs to know that history exists so it doesn't re-litigate a decision that was already explicitly corrected once. Also included the things a fresh session would silently get wrong without being told: which placeholder images carry a Stocksy watermark, that contact-page fields are deliberately unfilled (not a bug), and that a cloud session has zero filesystem access to the user's actual Mac.
+**Lesson:** A "summarize this for a new session" ask is under-scoped almost by definition -- the raw prompt can't enumerate what it doesn't know it needs. Default to over-including *why* decisions were made and *what's deliberately left undone*, not just *what exists* -- state alone lets a fresh session repeat solved problems.
+
 ## 2026-09-14 — Homepage restructure + Contact Us page (7-part bundled request)
 **Archetype:** build/code (multi-section layout restructure across an existing site)
 **Score:** 5.6 → — · weakest dimension **Criteria (4)** — "히어로로", "살짝 보이도록" describe a feel with no measurable target, and two sub-asks touched things that can't be guessed: a genuinely novel card-overlap interaction pattern, and real-world business contact info for a real company.
