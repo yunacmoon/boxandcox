@@ -185,7 +185,7 @@ function renderProjects(projects) {
             aria-controls="project-panel-${index}"
           >
             <span class="project-toggle-head">
-              <span class="project-title">${escapeHtml(project.title)}</span>
+              <span class="project-title" role="heading" aria-level="3">${escapeHtml(project.title)}</span>
               <span class="project-meta">${escapeHtml(project.client)} · ${escapeHtml(project.year)}</span>
             </span>
             <span class="project-toggle-thumb" aria-hidden="true">
@@ -432,16 +432,27 @@ function initNav() {
   const navToggle = document.getElementById("navToggle");
   const siteNav = document.getElementById("siteNav");
 
+  function closeNav() {
+    siteNav.classList.remove("is-open");
+    navToggle.setAttribute("aria-expanded", "false");
+    navToggle.setAttribute("aria-label", "메뉴 열기");
+  }
+
   navToggle.addEventListener("click", () => {
     const isOpen = siteNav.classList.toggle("is-open");
     navToggle.setAttribute("aria-expanded", String(isOpen));
+    navToggle.setAttribute("aria-label", isOpen ? "메뉴 닫기" : "메뉴 열기");
   });
 
   siteNav.querySelectorAll("a").forEach((link) => {
-    link.addEventListener("click", () => {
-      siteNav.classList.remove("is-open");
-      navToggle.setAttribute("aria-expanded", "false");
-    });
+    link.addEventListener("click", closeNav);
+  });
+
+  document.addEventListener("keydown", (event) => {
+    if (event.key === "Escape" && siteNav.classList.contains("is-open")) {
+      closeNav();
+      navToggle.focus();
+    }
   });
 }
 

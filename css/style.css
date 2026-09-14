@@ -10,7 +10,11 @@
   --color-accent: #b9bcc4;
   --color-accent-soft: #e3e4e8;
   --color-cta-bg: #f75c03;
-  --color-cta-text: #ffffff;
+  /* Dark ink, not white: white-on-#f75c03 measures 3.24:1, below the 4.5:1
+     AA minimum for this button's text size. Dark ink on the same orange
+     measures 6.18:1 -- keeps the vivid brand orange, fixes the button
+     the whole site is trying to get people to click. */
+  --color-cta-text: #08080a;
   --font-sans: "Inter", "Nanum Gothic", -apple-system, BlinkMacSystemFont, sans-serif;
   --font-serif: "Playfair Display", "Nanum Gothic", serif;
 
@@ -223,13 +227,16 @@ ul, ol, dl {
   color: var(--color-ink);
 }
 
+/* 44x44 tap target (WCAG minimum), kept larger than the visual icon by
+   padding rather than by enlarging the hamburger lines themselves. */
 .nav-toggle {
   display: none;
   flex-direction: column;
+  align-items: center;
   justify-content: center;
   gap: 5px;
-  width: 32px;
-  height: 32px;
+  width: 44px;
+  height: 44px;
   background: none;
   border: none;
   cursor: pointer;
@@ -239,7 +246,7 @@ ul, ol, dl {
 .nav-toggle span {
   display: block;
   height: 2px;
-  width: 100%;
+  width: 22px;
   background: var(--color-ink);
 }
 
@@ -1098,6 +1105,12 @@ section {
   text-align: left;
   font-family: inherit;
   color: inherit;
+  transition: background-color 0.2s ease;
+}
+
+.project-toggle:hover,
+.project-toggle:focus-visible {
+  background: color-mix(in srgb, var(--color-ink) 5%, transparent);
 }
 
 .project-toggle-head {
@@ -1109,6 +1122,7 @@ section {
 }
 
 .project-title {
+  margin: 0;
   font-family: var(--font-serif);
   font-weight: 400;
   font-size: clamp(1.5rem, 3.2vw, 2.4rem);
@@ -1256,6 +1270,16 @@ section {
     color: var(--reveal-to, inherit);
     transition: none;
   }
+}
+
+/* .hero-cta never declares --reveal-from/--reveal-to, so the fallback above
+   was actually resolving to color: inherit -- a real value that silently
+   overrode .hero-cta's own `color: var(--color-cta-text)` (lower specificity)
+   the whole time the button carried .reveal-anim, i.e. always. Re-asserted
+   here at matching specificity so the button's own token wins instead. */
+.hero-cta.reveal-anim,
+.hero-cta.reveal-anim.is-visible {
+  color: var(--color-cta-text);
 }
 
 /* Contact page */
