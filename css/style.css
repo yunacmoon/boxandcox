@@ -1552,6 +1552,36 @@ section {
   color: var(--color-ink);
 }
 
+/* Korean address leads (the one you'd paste into a map app), the English
+   transliteration sits under it in the soft tone. */
+.contact-address-ko,
+.contact-address-en {
+  display: block;
+}
+
+.contact-address-ko {
+  font-weight: 700;
+  line-height: 1.5;
+}
+
+.contact-address-en {
+  margin-top: 4px;
+  font-size: 0.85rem;
+  line-height: 1.5;
+  color: var(--color-text-soft);
+}
+
+.contact-location-facts a {
+  color: var(--color-ink);
+  text-decoration: underline;
+  text-decoration-color: var(--color-border-strong);
+  text-underline-offset: 3px;
+}
+
+.contact-location-facts a:hover {
+  text-decoration-color: var(--color-ink);
+}
+
 @media (max-width: 860px) {
   .contact-location-grid {
     grid-template-columns: 1fr;
