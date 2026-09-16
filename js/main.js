@@ -430,10 +430,13 @@ function initHeroVideoCycle() {
   const video = document.getElementById("heroVideo");
   if (!video) return;
 
+  // Plays in order, looping back to 00. Encoded from assets/03_Videos
+  // (outer folder) at 1080p max, H.264 CRF 26, no audio track.
   const sources = [
-    "assets/hero-video-2.mp4",
-    "assets/hero-video-1.mp4",
-    "assets/hero-video-3.mp4",
+    "assets/hero-video-00.mp4",
+    "assets/hero-video-01.mp4",
+    "assets/hero-video-02.mp4",
+    "assets/hero-video-03.mp4",
   ];
   let index = 0;
 
