@@ -8,7 +8,10 @@ window.SITE_DATA = {
     headingEn: "Let's create together",
     headingKo: "전략적인 공간창출, 지금 함께 시작하세요.",
     ctaLabel: "프로젝트 문의하기",
-    ctaHref: "contact.html",
+    // Opens the visitor's mail app with the subject pre-filled.
+    ctaHref:
+      "mailto:jei.chagh@ascenderbranding.com?subject=" +
+      encodeURIComponent("[Box&Cox] 프로젝트 문의"),
   },
 
   prologue: {
