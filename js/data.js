@@ -153,6 +153,22 @@ window.SITE_DATA = {
    */
   projects: [
     {
+      title: "제네시스하우스",
+      reference: "GENESIS HOUSE",
+      photo: "assets/projects/genesis-house.jpg",
+      photos: [
+        "assets/projects/genesis-house-2.jpg",
+        "assets/projects/genesis-house-3.jpg",
+        "assets/projects/genesis-house-4.jpg",
+      ],
+      client: "제네시스",
+      year: "",
+      location: "",
+      scope: "Brand Collateral, Packaging, Print",
+      description:
+        "제네시스하우스의 브랜드 경험을 오브제로 확장한 작업. 쇼핑백과 티 패키지, 큐레이션 카드와 도서에 이르기까지 절제된 컬러와 소재로 공간의 톤을 손에 잡히는 사물로 이어갔다.",
+    },
+    {
       title: "현대석유화학 대산 컴플렉스",
       reference: "BOX&COX_CRD_004.jpg",
       photo: "assets/projects/seetec.jpg",
@@ -205,22 +221,6 @@ window.SITE_DATA = {
       scope: "Sign System Design",
       description:
         "송도 국제업무지구의 랜드마크 타워를 위한 사인시스템. 타워의 사선 실루엣을 사인 패밀리의 형태 언어로 옮겨 주차·출구·방향 안내에 이르는 사인 체계를 설계하였다.",
-    },
-    {
-      title: "제네시스하우스",
-      reference: "GENESIS HOUSE",
-      photo: "assets/projects/genesis-house.jpg",
-      photos: [
-        "assets/projects/genesis-house-2.jpg",
-        "assets/projects/genesis-house-3.jpg",
-        "assets/projects/genesis-house-4.jpg",
-      ],
-      client: "제네시스",
-      year: "",
-      location: "",
-      scope: "Brand Collateral, Packaging, Print",
-      description:
-        "제네시스하우스의 브랜드 경험을 오브제로 확장한 작업. 쇼핑백과 티 패키지, 큐레이션 카드와 도서에 이르기까지 절제된 컬러와 소재로 공간의 톤을 손에 잡히는 사물로 이어갔다.",
     },
     {
       title: "나인브릿지 해슬리",
