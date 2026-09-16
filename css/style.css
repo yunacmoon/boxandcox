@@ -4,9 +4,12 @@
   --color-surface-2: #212124;
   --color-ink: #ffffff;
   --color-text: #ffffff;
-  --color-text-soft: #9b9ba1;
+  /* Secondary text. #9b9ba1 technically passed AA on this background but
+     read as murky at body sizes; #c9c9d1 measures ~12:1 and stays clearly
+     "soft" next to pure-white headings. */
+  --color-text-soft: #c9c9d1;
   --color-border: rgba(255, 255, 255, 0.08);
-  --color-border-strong: rgba(255, 255, 255, 0.16);
+  --color-border-strong: rgba(255, 255, 255, 0.22);
   --color-accent: #b9bcc4;
   --color-accent-soft: #e3e4e8;
   --color-cta-bg: #f75c03;

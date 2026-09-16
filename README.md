@@ -17,7 +17,6 @@ assets/
   logo.png              헤더 · 히어로 로고 워드마크
   hero-video-{00..04}.mp4  히어로 배경 영상, 00→04 순으로 이어 재생 (00은 앞 5.3초만, 03은 앞 2.6초 트림) (원본: ../assets/03_Videos, ffmpeg 1080p CRF26)
   hero-poster.jpg       영상 로드 전 첫 화면 (hero-video-00에서 추출)
-  placeholders/         실제 프로젝트 사진을 받기 전까지 쓰는 임시 이미지
   01_Content/           원문 콘텐츠 텍스트 (참고용)
   02_Graphic devices/   로고 원본 (BC_Logo.svg, .ai) — 사이트에서 직접 참조하지 않음
 scripts/git-hooks/      pre-commit 훅 (300KB 초과 애셋 커밋 차단)
