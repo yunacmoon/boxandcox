@@ -431,12 +431,14 @@ function initHeroVideoCycle() {
   if (!video) return;
 
   // Plays in order, looping back to 00. Encoded from assets/03_Videos
-  // (outer folder) at 1080p max, H.264 CRF 26, no audio track.
+  // (outer folder) at 1080p max, H.264 CRF 26, no audio track; clip 03
+  // is trimmed to start at 2.6s (skips the laptop mockup intro).
   const sources = [
     "assets/hero-video-00.mp4",
     "assets/hero-video-01.mp4",
     "assets/hero-video-02.mp4",
     "assets/hero-video-03.mp4",
+    "assets/hero-video-04.mp4",
   ];
   let index = 0;
 

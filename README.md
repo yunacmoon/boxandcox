@@ -15,7 +15,7 @@ js/data.js              섹션 콘텐츠 데이터 (추후 React 포팅 시 prop
 js/main.js              data.js를 DOM에 렌더링, 히어로 영상/로고 슬라이드, 프로젝트 카드, 마키, 스크롤 reveal
 assets/
   logo.png              헤더 · 히어로 로고 워드마크
-  hero-video-{00..03}.mp4  히어로 배경 영상, 00→03 순으로 이어 재생 (원본: ../assets/03_Videos, ffmpeg 1080p CRF26)
+  hero-video-{00..04}.mp4  히어로 배경 영상, 00→04 순으로 이어 재생 (03은 앞 2.6초 트림) (원본: ../assets/03_Videos, ffmpeg 1080p CRF26)
   hero-poster.jpg       영상 로드 전 첫 화면 (hero-video-00에서 추출)
   placeholders/         실제 프로젝트 사진을 받기 전까지 쓰는 임시 이미지
   01_Content/           원문 콘텐츠 텍스트 (참고용)
