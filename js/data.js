@@ -21,26 +21,19 @@ window.SITE_DATA = {
       ctaLabel: "프로젝트 보기",
       ctaHref: "#projects",
     },
-    blocks: [
-      {
-        tagline: "Creation of Space Value!",
-        body:
-          "많은 기업들이 공간을 통해 브랜드를 전달하고자 하지만, 전략 없이 만들어진 환경은 오히려 메시지를 흐리게 합니다. " +
-          "복스앤콕스는 지난 30여년 동안 기업이미지 구축을 위한 아이덴티티 개발과 디자인 마케팅 사업을 통해 기업의 가치와 효율성을 극대화하는 다양한 디자인 서비스를 제공해 왔습니다. " +
-          "이러한 사업의 노하우를 기반으로 성장한 복스앤콕스는 1999년 이후 스페이스 커뮤니케이션으로 그 영역을 전문화하여 환경디자인 전반에 걸쳐 체계적인 디자인 프로세스를 개발 하였으며, " +
-          "클라이언트의 요구에 부응하여 커뮤니케이션을 목적으로 하는 전략적인 공간창출을 위해 최선을 다하고 있습니다.",
-      },
-      {
-        tagline: "Leader of Space Communication!",
-        body:
-          "클라이언트에 대한 깊은 이해를 바탕으로 복스앤콕스는 환경디자인 관련업계의 중추적 역할을 하면서 다양한 프로젝트의 수행을 통해 디자인 경쟁력을 다져왔으며, " +
-          "자체전문인력과 국내외 전문협력업체들과의 유기적 네트워크를 구축하여 ISS(Integrated Space design Solution)서비스를 기본으로 클라이언트의 성공을 극대화하기 위한 사업을 전개하고 있습니다.",
-      },
+    tagline: "공간에 브랜드를 담습니다.",
+    body:
+      "1992년 시작한 복스앤콕스는 공간과 브랜딩을 함께 다루는 스페이스 커뮤니케이션 스튜디오입니다. " +
+      "아이덴티티 개발과 디자인 마케팅에서 출발해 1999년부터 전시·환경·사인시스템 등 환경디자인 전반으로 영역을 넓혔고, " +
+      "브랜드의 메시지가 공간에서 온전히 읽히도록 전략과 디자인을 하나로 엮습니다.",
+    // Project hero photos that crossfade in the prologue's rounded frame.
+    slides: [
+      { src: "assets/projects/haesley.jpg", alt: "나인브릿지 해슬리 클럽하우스" },
+      { src: "assets/projects/smtown.jpg", alt: "SMTOWN 코엑스아티움 파사드" },
+      { src: "assets/projects/seetec.jpg", alt: "현대석유화학 대산 컴플렉스 슈퍼그래픽" },
+      { src: "assets/projects/wtc-seoul.jpg", alt: "월드트레이드센터 서울 사인" },
+      { src: "assets/projects/rolling-hills.jpg", alt: "롤링힐스 호텔 사인" },
     ],
-    stat: {
-      number: "30+",
-      labelKo: "년간 이어온 스페이스 커뮤니케이션",
-    },
   },
 
   clients: [

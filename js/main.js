@@ -24,25 +24,72 @@ function renderCta(cta) {
 }
 
 function renderPrologue(data) {
-  const container = document.getElementById("prologueBlocks");
-  container.innerHTML = data.blocks
+  document.getElementById("prologueTagline").textContent = data.tagline;
+  document.getElementById("prologueBody").textContent = data.body;
+  initPrologueSlider(data.slides || []);
+}
+
+// Crossfading slideshow of project hero photos. Slides are stacked and
+// faded with CSS; this just rotates the active one, pauses on hover, and
+// lets the dots jump to a slide.
+function initPrologueSlider(slides) {
+  const slider = document.getElementById("prologueSlider");
+  const track = document.getElementById("prologueSlides");
+  const dots = document.getElementById("prologueDots");
+  if (!slider || !slides.length) return;
+
+  track.innerHTML = slides
     .map(
-      (block) => `
-        <div class="prologue-block reveal">
-          <h3 class="tagline">${escapeHtml(block.tagline)}</h3>
-          <p>${escapeHtml(block.body)}</p>
-        </div>
-      `
+      (slide, i) =>
+        `<img src="${escapeHtml(slide.src)}" alt="${escapeHtml(slide.alt || "")}" ${i === 0 ? 'class="is-active"' : 'loading="lazy"'} draggable="false" />`
+    )
+    .join("");
+  dots.innerHTML = slides
+    .map(
+      (slide, i) =>
+        `<button type="button" role="tab" aria-label="${i + 1} / ${slides.length}" aria-selected="${i === 0}"${i === 0 ? ' class="is-active"' : ""}></button>`
     )
     .join("");
 
-  if (data.stat) {
-    const stat = document.getElementById("prologueStat");
-    stat.innerHTML = `
-      <span class="prologue-stat-number">${escapeHtml(data.stat.number)}</span>
-      <span class="prologue-stat-label">${escapeHtml(data.stat.labelKo)}</span>
-    `;
-  }
+  const imgs = Array.from(track.children);
+  const buttons = Array.from(dots.children);
+  let current = 0;
+  let timer = null;
+
+  const show = (i) => {
+    imgs[current].classList.remove("is-active");
+    buttons[current].classList.remove("is-active");
+    buttons[current].setAttribute("aria-selected", "false");
+    current = (i + slides.length) % slides.length;
+    imgs[current].classList.add("is-active");
+    buttons[current].classList.add("is-active");
+    buttons[current].setAttribute("aria-selected", "true");
+  };
+
+  const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  const start = () => {
+    if (prefersReducedMotion || slides.length < 2 || timer) return;
+    timer = setInterval(() => show(current + 1), 4500);
+  };
+  const stop = () => {
+    clearInterval(timer);
+    timer = null;
+  };
+
+  buttons.forEach((button, i) => {
+    button.addEventListener("click", () => {
+      show(i);
+      stop();
+      start();
+    });
+  });
+  slider.addEventListener("mouseenter", stop);
+  slider.addEventListener("mouseleave", start);
+  document.addEventListener("visibilitychange", () => {
+    if (document.hidden) stop();
+    else start();
+  });
+  start();
 }
 
 function renderClients(clients) {
