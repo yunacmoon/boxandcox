@@ -21,6 +21,13 @@ function renderCta(cta) {
   const link = document.getElementById("ctaCta");
   link.textContent = cta.ctaLabel;
   link.href = cta.ctaHref;
+  // A mailto: handled by a webmail (e.g. Gmail in Chrome) would otherwise
+  // replace this page with the compose window; open it in a new tab so the
+  // site stays where the visitor left it. Native mail apps ignore target.
+  if (cta.ctaHref.startsWith("mailto:")) {
+    link.target = "_blank";
+    link.rel = "noopener";
+  }
 }
 
 function renderPrologue(data) {
