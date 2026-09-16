@@ -432,7 +432,8 @@ function initHeroVideoCycle() {
 
   // Plays in order, looping back to 00. Encoded from assets/03_Videos
   // (outer folder) at 1080p max, H.264 CRF 26, no audio track; clip 03
-  // is trimmed to start at 2.6s (skips the laptop mockup intro).
+  // is trimmed to start at 2.6s (skips the laptop mockup intro) and clip
+  // 00 is cut to its first 5.3s (the stand pan, before the shot change).
   const sources = [
     "assets/hero-video-00.mp4",
     "assets/hero-video-01.mp4",
