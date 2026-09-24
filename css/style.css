@@ -1275,7 +1275,99 @@ section {
   }
 }
 
+/* The deck now shows only the first few projects and dissolves at its
+   bottom edge into the title-only list below. Suppressed while a card is
+   open -- over an open card the fade would just grey out what the reader
+   just opened. */
+.project-list::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 160px;
+  z-index: 20;
+  pointer-events: none;
+  background: linear-gradient(180deg, transparent, var(--color-bg) 78%);
+  transition: opacity 0.4s ease;
+}
+
+.project-list.is-open::after {
+  opacity: 0;
+}
+
+/* Title-only rows: everything past the featured few. Collapsed they are
+   just a line of type; the photo slider lives inside the panel. */
+.project-rows {
+  border-top: 1px solid var(--color-border);
+}
+
+.project-row {
+  border-bottom: 1px solid var(--color-border);
+}
+
+.project-row .project-toggle {
+  padding: var(--space-3) 0;
+  gap: var(--space-3);
+  align-items: baseline;
+}
+
+.project-row .project-toggle-head {
+  flex-direction: row;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--space-3);
+}
+
+.project-row .project-title {
+  font-size: clamp(1.05rem, 2.2vw, 1.4rem);
+  transition: color 0.2s ease, transform 0.3s var(--ease-out, ease);
+}
+
+.project-row .project-meta {
+  flex-shrink: 0;
+  font-size: 0.8rem;
+}
+
+.project-row .project-toggle:hover .project-title,
+.project-row .project-toggle:focus-visible .project-title {
+  color: var(--color-ink);
+}
+
+.project-row .project-toggle-icon {
+  width: 16px;
+  height: 16px;
+}
+
+.project-row .project-toggle-icon::before {
+  top: 7px;
+  width: 16px;
+}
+
+.project-row .project-toggle-icon::after {
+  left: 7px;
+  height: 16px;
+}
+
+.project-row .project-panel-inner {
+  padding-left: 0;
+  padding-right: 0;
+}
+
+.project-row .project-card-image {
+  margin: 0 0 var(--space-3);
+}
+
+@media (max-width: 640px) {
+  .project-row .project-toggle-head {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 4px;
+  }
+}
+
 .project-list {
+  position: relative;
   display: flex;
   flex-direction: column;
 }
@@ -1350,7 +1442,7 @@ section {
    counter appear. The band-to-frame growth is what "reveals" the photo. */
 /* The expanded height itself is set inline by main.js (width * ratio) so
    the band-to-frame growth can animate; CSS only flips the cursor. */
-.project-card.is-expanded .project-slider {
+.is-expanded .project-slider {
   cursor: default;
 }
 
@@ -1364,8 +1456,8 @@ section {
   transition: opacity 0.25s ease, background-color 0.2s ease, transform 0.2s ease;
 }
 
-.project-card.is-expanded .project-slider-btn,
-.project-card.is-expanded .project-slider-count {
+.is-expanded .project-slider-btn,
+.is-expanded .project-slider-count {
   opacity: 1;
   pointer-events: auto;
 }
@@ -1404,7 +1496,7 @@ section {
   border-color: var(--color-ink);
 }
 
-.project-card.is-expanded .project-slider-btn:disabled {
+.is-expanded .project-slider-btn:disabled {
   opacity: 0.3;
   cursor: default;
 }
@@ -1559,11 +1651,11 @@ section {
   transition: opacity 0.4s ease, transform 0.45s ease, padding 0.55s cubic-bezier(0.22, 1, 0.36, 1);
 }
 
-.project-card.is-expanded .project-panel {
+.is-expanded .project-panel {
   grid-template-rows: 1fr;
 }
 
-.project-card.is-expanded .project-panel-inner {
+.is-expanded .project-panel-inner {
   padding-bottom: var(--space-4);
   opacity: 1;
   transform: none;
@@ -1828,7 +1920,7 @@ section {
     padding: 0 var(--space-3);
   }
 
-  .project-card.is-expanded .project-panel-inner {
+  .is-expanded .project-panel-inner {
     padding-bottom: var(--space-3);
   }
 

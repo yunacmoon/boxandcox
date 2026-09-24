@@ -394,114 +394,149 @@ function buildWorksStream(projects) {
   rails.innerHTML = markup.join("");
 }
 
+// Only the first few projects get the full photo-card treatment; the rest
+// would be a wall of images, so they become title-only rows that open into
+// the same panel. The deck fades out at its bottom edge into that list.
+const FEATURED_PROJECTS = 3;
+
+function projectMarkup(project, index, variant) {
+  const slider = `<div class="project-card-image">${projectGallery(project)}</div>`;
+  return `
+    <article class="${variant === "row" ? "project-row" : "project-card"} reveal"${
+      variant === "row" ? "" : ` style="z-index: ${index + 1}"`
+    }>
+      <button
+        class="project-toggle"
+        type="button"
+        aria-expanded="false"
+        aria-controls="project-panel-${index}"
+      >
+        <span class="project-toggle-head">
+          <span class="project-title" role="heading" aria-level="3">${escapeHtml(project.title)}</span>
+          <span class="project-meta">${escapeHtml(projectMeta(project))}</span>
+        </span>
+        <span class="project-toggle-icon" aria-hidden="true"></span>
+      </button>
+      ${variant === "row" ? "" : slider}
+      <div class="project-panel" id="project-panel-${index}" aria-hidden="true" inert>
+        <div class="project-panel-inner">
+          ${variant === "row" ? slider : ""}
+          <dl class="project-facts">
+            ${projectFacts(project)}
+          </dl>
+          ${project.description ? `<p class="project-desc">${escapeHtml(project.description)}</p>` : ""}
+        </div>
+      </div>
+    </article>
+  `;
+}
+
+function wireProject(card, onToggle) {
+  const button = card.querySelector(".project-toggle");
+  const panel = document.getElementById(button.getAttribute("aria-controls"));
+  const slider = card.querySelector(".project-slider");
+  const track = slider.querySelector(".project-slider-track");
+  const prev = slider.querySelector(".project-slider-prev");
+  const next = slider.querySelector(".project-slider-next");
+  const count = slider.querySelector(".project-slider-count");
+  const total = Number(slider.dataset.count);
+
+  const goTo = (i) => {
+    const clamped = Math.max(0, Math.min(total - 1, i));
+    slider.dataset.index = String(clamped);
+    track.style.transform = `translateX(-${clamped * 100}%)`;
+    if (prev) prev.disabled = clamped === 0;
+    if (next) next.disabled = clamped === total - 1;
+    if (count) {
+      count.textContent = `${String(clamped + 1).padStart(2, "0")} / ${String(total).padStart(2, "0")}`;
+    }
+  };
+
+  // Expanded height is width * ratio (ratio comes from CSS so the mobile
+  // breakpoint can change it); an explicit px value on both ends is what
+  // lets the height transition run.
+  const fitSlider = () => {
+    if (!card.classList.contains("is-expanded")) return;
+    const ratio =
+      parseFloat(getComputedStyle(slider).getPropertyValue("--slider-ratio")) || 0.5625;
+    slider.style.height = `${Math.round(slider.clientWidth * ratio)}px`;
+  };
+  window.addEventListener("resize", fitSlider);
+
+  const setOpen = (open) => {
+    button.setAttribute("aria-expanded", String(open));
+    panel.setAttribute("aria-hidden", String(!open));
+    if (open) panel.removeAttribute("inert");
+    else panel.setAttribute("inert", "");
+    // In the deck, every card after this one is stacked on top of it (see
+    // the fanned z-index in projectMarkup); dropping its own overlap with
+    // the very next card un-stacks the tail of the list below it.
+    card.classList.toggle("is-expanded", open);
+    if (open) {
+      // In a row the slider lives inside the panel, so it has no width
+      // until the panel is laid out.
+      requestAnimationFrame(fitSlider);
+    } else {
+      slider.style.height = ""; // back to the collapsed band in CSS
+      goTo(0); // collapse back to the cover photo
+    }
+    if (onToggle) onToggle(open);
+  };
+
+  button.addEventListener("click", () => {
+    setOpen(button.getAttribute("aria-expanded") !== "true");
+  });
+
+  // Clicking the peeking cover strip opens the card; once open, the image
+  // itself is inert and the arrows do the navigating.
+  track.addEventListener("click", () => {
+    if (!card.classList.contains("is-expanded")) setOpen(true);
+  });
+
+  if (prev) {
+    prev.addEventListener("click", (e) => {
+      e.stopPropagation();
+      goTo(Number(slider.dataset.index) - 1);
+    });
+    next.addEventListener("click", (e) => {
+      e.stopPropagation();
+      goTo(Number(slider.dataset.index) + 1);
+    });
+    slider.addEventListener("keydown", (e) => {
+      if (e.key === "ArrowLeft") goTo(Number(slider.dataset.index) - 1);
+      if (e.key === "ArrowRight") goTo(Number(slider.dataset.index) + 1);
+    });
+  }
+}
+
 function renderProjects(projects) {
   const list = document.getElementById("projectList");
-  list.innerHTML = projects
-    .map(
-      (project, index) => `
-        <article class="project-card reveal" style="z-index: ${index + 1}">
-          <button
-            class="project-toggle"
-            type="button"
-            aria-expanded="false"
-            aria-controls="project-panel-${index}"
-          >
-            <span class="project-toggle-head">
-              <span class="project-title" role="heading" aria-level="3">${escapeHtml(project.title)}</span>
-              <span class="project-meta">${escapeHtml(projectMeta(project))}</span>
-            </span>
-            <span class="project-toggle-icon" aria-hidden="true"></span>
-          </button>
-          <div class="project-card-image">
-            ${projectGallery(project)}
-          </div>
-          <div class="project-panel" id="project-panel-${index}" aria-hidden="true" inert>
-            <div class="project-panel-inner">
-              <dl class="project-facts">
-                ${projectFacts(project)}
-              </dl>
-              ${project.description ? `<p class="project-desc">${escapeHtml(project.description)}</p>` : ""}
-            </div>
-          </div>
-        </article>
-      `
-    )
+  const rows = document.getElementById("projectRows");
+
+  const featured = projects.slice(0, FEATURED_PROJECTS);
+  const rest = projects.slice(FEATURED_PROJECTS);
+
+  list.innerHTML = featured
+    .map((project, i) => projectMarkup(project, i, "card"))
     .join("");
+  if (rows) {
+    rows.innerHTML = rest
+      .map((project, i) => projectMarkup(project, FEATURED_PROJECTS + i, "row"))
+      .join("");
+  }
 
-  list.querySelectorAll(".project-card").forEach((card) => {
-    const button = card.querySelector(".project-toggle");
-    const panel = document.getElementById(button.getAttribute("aria-controls"));
-    const slider = card.querySelector(".project-slider");
-    const track = slider.querySelector(".project-slider-track");
-    const prev = slider.querySelector(".project-slider-prev");
-    const next = slider.querySelector(".project-slider-next");
-    const count = slider.querySelector(".project-slider-count");
-    const total = Number(slider.dataset.count);
-
-    const goTo = (i) => {
-      const clamped = Math.max(0, Math.min(total - 1, i));
-      slider.dataset.index = String(clamped);
-      track.style.transform = `translateX(-${clamped * 100}%)`;
-      if (prev) prev.disabled = clamped === 0;
-      if (next) next.disabled = clamped === total - 1;
-      if (count) {
-        count.textContent = `${String(clamped + 1).padStart(2, "0")} / ${String(total).padStart(2, "0")}`;
-      }
-    };
-
-    // Expanded height is width * ratio (ratio comes from CSS so the
-    // mobile breakpoint can change it); an explicit px value on both ends
-    // is what lets the height transition run.
-    const fitSlider = () => {
-      if (!card.classList.contains("is-expanded")) return;
-      const ratio = parseFloat(getComputedStyle(slider).getPropertyValue("--slider-ratio")) || 0.5625;
-      slider.style.height = `${Math.round(slider.clientWidth * ratio)}px`;
-    };
-    window.addEventListener("resize", fitSlider);
-
-    const setOpen = (open) => {
-      button.setAttribute("aria-expanded", String(open));
-      panel.setAttribute("aria-hidden", String(!open));
-      if (open) panel.removeAttribute("inert");
-      else panel.setAttribute("inert", "");
-      // Every card after this one sits stacked on top of it (see the
-      // fanned z-index in the template above); dropping its own overlap
-      // with the very next card is what un-stacks the whole tail of the
-      // list below it and brings this card fully into view.
-      card.classList.toggle("is-expanded", open);
-      if (open) {
-        fitSlider();
-      } else {
-        slider.style.height = ""; // back to the collapsed band in CSS
-        goTo(0); // collapse back to the cover photo
-      }
-    };
-
-    button.addEventListener("click", () => {
-      setOpen(button.getAttribute("aria-expanded") !== "true");
-    });
-
-    // Clicking the peeking cover strip opens the card; once open, the
-    // image itself is inert and the arrows do the navigating.
-    track.addEventListener("click", () => {
-      if (!card.classList.contains("is-expanded")) setOpen(true);
-    });
-
-    if (prev) {
-      prev.addEventListener("click", (e) => {
-        e.stopPropagation();
-        goTo(Number(slider.dataset.index) - 1);
-      });
-      next.addEventListener("click", (e) => {
-        e.stopPropagation();
-        goTo(Number(slider.dataset.index) + 1);
-      });
-      slider.addEventListener("keydown", (e) => {
-        if (e.key === "ArrowLeft") goTo(Number(slider.dataset.index) - 1);
-        if (e.key === "ArrowRight") goTo(Number(slider.dataset.index) + 1);
-      });
-    }
-  });
+  // The fade only makes sense while the deck is a closed stack -- over an
+  // open card it would just grey out what the reader opened.
+  let openCards = 0;
+  list.querySelectorAll(".project-card").forEach((card) =>
+    wireProject(card, (open) => {
+      openCards += open ? 1 : -1;
+      list.classList.toggle("is-open", openCards > 0);
+    })
+  );
+  if (rows) {
+    rows.querySelectorAll(".project-row").forEach((card) => wireProject(card));
+  }
 }
 
 function initRevealAnimations() {
