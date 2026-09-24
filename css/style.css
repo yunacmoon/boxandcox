@@ -19,7 +19,9 @@
      the whole site is trying to get people to click. */
   --color-cta-text: #08080a;
   --font-sans: "Inter", "Nanum Gothic", -apple-system, BlinkMacSystemFont, sans-serif;
-  --font-serif: "Playfair Display", "Nanum Gothic", serif;
+  /* Display face for headings. Clash Display has no italic, so contrast
+     in the hero word slides comes from weight instead. */
+  --font-display: "Clash Display", "Nanum Gothic", sans-serif;
 
   --container-width: 1120px;
   --space-1: 8px;
@@ -128,12 +130,25 @@ ul, ol, dl {
   margin-bottom: var(--space-5);
 }
 
-/* Every section pairs a big serif English word with a Korean line beneath
-   it — the serif carries the display moment, Nanum Gothic carries meaning. */
+/* Clash Display sets words very close together; with the negative
+   tracking these headings use, word gaps need a little back. */
+.section-heading-en,
+.card-heading-en,
+.hero-heading,
+.hero-slide-word,
+.prologue-tagline,
+.punch-text-en,
+.project-title,
+.contact-location-heading-en {
+  word-spacing: 0.12em;
+}
+
+/* Every section pairs a big English word with a Korean line beneath it —
+   Clash Display carries the display moment, Nanum Gothic carries meaning. */
 .section-heading-en {
-  font-family: var(--font-serif);
-  font-weight: 400; /* Playfair Display's lightest static cut; it has no 200 */
-  letter-spacing: 0.01em;
+  font-family: var(--font-display);
+  font-weight: 500;
+  letter-spacing: -0.015em;
   font-size: clamp(2.1rem, 4.4vw, 3.2rem);
   line-height: 1.15;
   --reveal-from: var(--color-text-soft);
@@ -150,9 +165,9 @@ ul, ol, dl {
 }
 
 .card-heading-en {
-  font-family: var(--font-serif);
-  font-weight: 400;
-  letter-spacing: 0.01em;
+  font-family: var(--font-display);
+  font-weight: 500;
+  letter-spacing: -0.01em;
   font-size: 1.6rem;
   --reveal-from: var(--color-text-soft);
   --reveal-to: var(--color-ink);
@@ -217,10 +232,11 @@ ul, ol, dl {
   gap: var(--space-4);
 }
 
+/* Small UI text stays in the body sans -- Clash Display is drawn for
+   display sizes and gets clumsy down here. */
 .site-nav a {
-  font-family: var(--font-serif);
-  font-size: 0.95rem;
-  font-weight: 400;
+  font-size: 0.92rem;
+  font-weight: 500;
   color: var(--color-text-soft);
   transition: color 0.2s ease;
 }
@@ -547,17 +563,16 @@ section {
   border-radius: 999px;
   background: rgba(255, 255, 255, 0.06);
   border: 1px solid var(--color-border-strong);
-  font-family: var(--font-serif);
-  font-size: 0.8rem;
-  font-weight: 400;
-  letter-spacing: 0.12em;
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.14em;
   color: var(--color-text-soft);
 }
 
 .hero-heading {
-  font-family: var(--font-serif);
-  font-weight: 400;
-  letter-spacing: 0;
+  font-family: var(--font-display);
+  font-weight: 500;
+  letter-spacing: -0.015em;
   font-size: clamp(1.6rem, 4vw, 2.6rem);
   line-height: 1.15;
   --reveal-from: var(--color-text-soft);
@@ -650,7 +665,7 @@ section {
      the phrase's natural width) would just report the container's width
      instead of the actual text width, breaking the fit-to-width sizing. */
   white-space: nowrap;
-  font-family: var(--font-serif);
+  font-family: var(--font-display);
   color: var(--color-ink);
   opacity: 0.92;
   font-size: clamp(2.2rem, 8vw, 6rem);
@@ -658,14 +673,16 @@ section {
 }
 
 .hero-word-regular {
-  font-weight: 400;
+  font-weight: 600;
   font-style: normal;
 }
 
+/* Class name kept from the Playfair era; Clash Display ships no italic,
+   so the second half of the phrase is set light instead. */
 .hero-word-italic {
-  font-weight: 400;
-  font-style: italic;
+  font-weight: 300;
   margin-left: 0.3em;
+  opacity: 0.75;
 }
 
 /* A faint shadow band that sweeps across the logo every ~2.8s. Masked to
@@ -796,8 +813,9 @@ section {
 }
 
 .prologue-tagline {
-  font-family: var(--font-serif);
-  font-weight: 400;
+  font-family: var(--font-display);
+  font-weight: 500;
+  letter-spacing: -0.01em;
   font-size: clamp(1.6rem, 3.2vw, 2.4rem);
   line-height: 1.25;
   margin-bottom: var(--space-3);
@@ -889,8 +907,9 @@ section {
   bottom: 0;
   padding: var(--space-3) var(--space-3) var(--space-2);
   background: linear-gradient(to top, rgba(0, 0, 0, 0.8), transparent);
-  font-family: var(--font-serif);
-  font-size: 0.95rem;
+  font-family: var(--font-display);
+  font-weight: 500;
+  font-size: 1.05rem;
   color: var(--color-ink);
 }
 
@@ -970,8 +989,9 @@ section {
 
 .punch-text-en {
   margin: 0;
-  font-family: var(--font-serif);
-  font-weight: 400;
+  font-family: var(--font-display);
+  font-weight: 500;
+  letter-spacing: -0.025em;
   line-height: 1.05;
   font-size: clamp(2.4rem, 8vw, 6.5rem);
   color: var(--color-ink);
@@ -1279,7 +1299,6 @@ section {
 .project-slider-next { right: var(--space-3); }
 
 .project-slider-arrow {
-  font-family: var(--font-serif);
   font-size: 1.15rem;
   line-height: 1;
 }
@@ -1381,8 +1400,9 @@ section {
 
 .project-title {
   margin: 0;
-  font-family: var(--font-serif);
-  font-weight: 400;
+  font-family: var(--font-display);
+  font-weight: 500;
+  letter-spacing: -0.015em;
   font-size: clamp(1.5rem, 3.2vw, 2.4rem);
   line-height: 1.15;
   color: var(--color-ink);
@@ -1562,8 +1582,9 @@ section {
 }
 
 .contact-location-heading-en {
-  font-family: var(--font-serif);
-  font-weight: 400;
+  font-family: var(--font-display);
+  font-weight: 500;
+  letter-spacing: -0.01em;
   font-size: 1.6rem;
   color: var(--color-ink);
 }

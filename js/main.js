@@ -556,7 +556,7 @@ function initHeroWordSlider() {
     )}</span></span>`;
     const wordEl = el.querySelector(".hero-slide-word");
     fitWordSlide(wordEl);
-    // Playfair Display loads async (font-display: swap); the width measured
+    // The display face loads async (font-display: swap); the width measured
     // against a fallback font before it's ready can be off, so refit once
     // the real webfont is actually active.
     if (document.fonts && document.fonts.ready) {

@@ -11,6 +11,7 @@
 index.html              메인 페이지 (Hero / Prologue / Projects / Punch / Work Scope / Work Process / Clients / CTA)
 contact.html            연락처 페이지 (본사 · 팩토리 · 디자인 랩)
 css/style.css           스타일 (다크 에디토리얼, 반응형)
+                        서체: 헤딩 Clash Display(Fontshare CDN), 본문 Inter + Nanum Gothic(Google Fonts)
 js/data.js              섹션 콘텐츠 데이터 (추후 React 포팅 시 props로 재사용 가능)
 js/main.js              data.js를 DOM에 렌더링, 히어로 영상/로고 슬라이드, 프로젝트 카드, 마키, 스크롤 reveal
 assets/
