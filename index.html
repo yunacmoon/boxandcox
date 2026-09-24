@@ -10,7 +10,7 @@
   <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Host+Grotesk:wght@300..800&display=swap" rel="stylesheet" />
   <link href="https://cdn.jsdelivr.net/gh/wanteddev/wanted-sans@v1.0.3/packages/wanted-sans/fonts/webfonts/variable/split/WantedSansVariable.css" rel="stylesheet" />
-  <link rel="stylesheet" href="css/style.css?v=20260925d" />
+  <link rel="stylesheet" href="css/style.css?v=20260925e" />
 </head>
 <body>
   <header class="site-header">
@@ -80,6 +80,16 @@
 
     <!-- 1c. Projects (moved up from the bottom) -->
     <section id="projects" class="projects">
+      <!-- The one light section on the page. Blobs drift behind everything
+           in here; the section overrides the colour tokens so the type and
+           cards flip to dark ink automatically. -->
+      <div class="section-aurora" aria-hidden="true">
+        <span class="aurora-blob aurora-blob-1"></span>
+        <span class="aurora-blob aurora-blob-2"></span>
+        <span class="aurora-blob aurora-blob-3"></span>
+        <span class="aurora-blob aurora-blob-4"></span>
+        <span class="aurora-grain"></span>
+      </div>
       <!-- Full-bleed corridor: two rails of project photos riding out of the
            vanishing point, with the section head sitting over them. -->
       <div class="works-stream" id="worksStream">
@@ -180,7 +190,7 @@
     </div>
   </footer>
 
-  <script src="js/data.js?v=20260925d"></script>
-  <script src="js/main.js?v=20260925d"></script>
+  <script src="js/data.js?v=20260925e"></script>
+  <script src="js/main.js?v=20260925e"></script>
 </body>
 </html>

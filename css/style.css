@@ -390,10 +390,124 @@ section {
     var(--color-bg);
 }
 
+/* The one light section on the page -- every other band is near-black, so
+   this is where the page breathes. Rather than restyling each element,
+   the section re-declares the colour tokens and everything inside
+   (headings, meta, card surfaces, borders, the corridor's own veil and
+   the deck fade) flips to dark-on-light on its own. */
 .projects {
-  background:
-    radial-gradient(circle at 82% 12%, color-mix(in srgb, var(--color-accent-soft) 4%, transparent), transparent 40%),
-    var(--color-bg);
+  position: relative;
+  isolation: isolate;
+  --color-ink: #0d1226;
+  --color-text: #0d1226;
+  --color-text-soft: #4c5472; /* ~7.6:1 on the palest part of the gradient */
+  --color-bg: #eef1fa;
+  --color-bg-alt: rgba(255, 255, 255, 0.72);
+  --color-surface-2: #e3e8f6;
+  --color-border: rgba(13, 18, 38, 0.12);
+  --color-border-strong: rgba(13, 18, 38, 0.26);
+  --color-accent: #4657a8;
+  color: var(--color-text);
+  background-color: #eef1fa;
+}
+
+/* Four soft blobs over a pale base.
+   Sticky rather than absolute: this section is several screens tall, so an
+   absolute layer puts most of the motion off-screen and the gradient looks
+   static. Pinned to the viewport the drift always happens where it can be
+   seen. The negative margin equal to its own height keeps it out of the
+   flow, so it costs no layout space. */
+.section-aurora {
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  margin-bottom: -100vh;
+  z-index: -1;
+  overflow: hidden;
+  container-type: size;
+  background: linear-gradient(155deg, #fdfdff 0%, #f1f3fb 42%, #e6eaf8 100%);
+}
+
+.aurora-blob {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(10cqmin);
+  will-change: transform;
+}
+
+/* Ultramarine, kept very pale -- at this blur the alpha is what reads,
+   not the hue. */
+.aurora-blob-1 {
+  width: 78cqmin;
+  height: 78cqmin;
+  left: -14cqmin;
+  top: -18cqmin;
+  background: radial-gradient(circle, rgba(112, 137, 235, 0.85), rgba(112, 137, 235, 0) 70%);
+  animation: aurora-1 13s ease-in-out infinite alternate;
+}
+
+.aurora-blob-2 {
+  width: 64cqmin;
+  height: 64cqmin;
+  right: -10cqmin;
+  top: 6cqmin;
+  background: radial-gradient(circle, rgba(255, 255, 255, 0.95), rgba(255, 255, 255, 0) 70%);
+  animation: aurora-2 16s ease-in-out infinite alternate;
+}
+
+.aurora-blob-3 {
+  width: 86cqmin;
+  height: 86cqmin;
+  left: 22cqmin;
+  bottom: -30cqmin;
+  background: radial-gradient(circle, rgba(138, 152, 200, 0.72), rgba(138, 152, 200, 0) 70%);
+  animation: aurora-3 11s ease-in-out infinite alternate;
+}
+
+.aurora-blob-4 {
+  width: 52cqmin;
+  height: 52cqmin;
+  right: 18cqmin;
+  bottom: -8cqmin;
+  background: radial-gradient(circle, rgba(150, 172, 246, 0.9), rgba(150, 172, 246, 0) 70%);
+  animation: aurora-4 18s ease-in-out infinite alternate;
+}
+
+@keyframes aurora-1 {
+  from { transform: translate3d(0, 0, 0) scale(1); }
+  to { transform: translate3d(46cqmin, 26cqmin, 0) scale(1.22); }
+}
+
+@keyframes aurora-2 {
+  from { transform: translate3d(0, 0, 0) scale(1.1); }
+  to { transform: translate3d(-40cqmin, 34cqmin, 0) scale(0.86); }
+}
+
+@keyframes aurora-3 {
+  from { transform: translate3d(0, 0, 0) scale(0.92); }
+  to { transform: translate3d(-34cqmin, -30cqmin, 0) scale(1.3); }
+}
+
+@keyframes aurora-4 {
+  from { transform: translate3d(0, 0, 0) scale(1.15); }
+  to { transform: translate3d(28cqmin, -38cqmin, 0) scale(0.9); }
+}
+
+/* Grain breaks up the banding a wide, heavily blurred gradient shows on
+   an 8-bit display. */
+.aurora-grain {
+  position: absolute;
+  inset: 0;
+  opacity: 0.3;
+  mix-blend-mode: overlay;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-size: 140px 140px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .aurora-blob {
+    animation: none;
+  }
 }
 
 /* Hero and the closing CTA band bookend the page with the same generative
@@ -1296,6 +1410,15 @@ section {
   opacity: 0;
 }
 
+/* The deck stacks cards over each other, so on a light ground a plain
+   translucent surface lets the photo of the card behind read straight
+   through the title. Frosting it keeps the aurora tinting the card while
+   turning whatever is behind into a wash. */
+.projects .project-card {
+  backdrop-filter: blur(26px) saturate(1.3);
+  -webkit-backdrop-filter: blur(26px) saturate(1.3);
+}
+
 /* Title-only rows: everything past the featured few. Collapsed they are
    just a line of type; the photo slider lives inside the panel. */
 .project-rows {
@@ -1388,7 +1511,7 @@ section {
   border-radius: 16px;
   overflow: hidden;
   margin-top: -195px;
-  box-shadow: 0 -20px 30px -8px rgba(0, 0, 0, 0.8);
+  box-shadow: 0 -20px 34px -10px rgba(13, 18, 38, 0.28);
   transition: margin-top 0.5s ease;
 }
 
@@ -1472,7 +1595,7 @@ section {
   background: rgba(8, 8, 10, 0.55);
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
-  color: var(--color-ink);
+  color: #ffffff;
   font-family: var(--font-sans);
   font-size: 0.78rem;
   font-weight: 600;
@@ -1491,9 +1614,9 @@ section {
 
 .project-slider-btn:hover:not(:disabled),
 .project-slider-btn:focus-visible {
-  background: var(--color-ink);
-  color: var(--color-bg);
-  border-color: var(--color-ink);
+  background: #ffffff;
+  color: #08080a;
+  border-color: #ffffff;
 }
 
 .is-expanded .project-slider-btn:disabled {
@@ -1512,7 +1635,7 @@ section {
   font-family: monospace;
   font-size: 0.75rem;
   letter-spacing: 0.08em;
-  color: var(--color-ink);
+  color: #ffffff;
 }
 
 @media (max-width: 640px) {
