@@ -10,7 +10,7 @@
   <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Host+Grotesk:wght@300..800&display=swap" rel="stylesheet" />
   <link href="https://cdn.jsdelivr.net/gh/wanteddev/wanted-sans@v1.0.3/packages/wanted-sans/fonts/webfonts/variable/split/WantedSansVariable.css" rel="stylesheet" />
-  <link rel="stylesheet" href="css/style.css?v=20260925b" />
+  <link rel="stylesheet" href="css/style.css?v=20260925c" />
 </head>
 <body>
   <header class="site-header">
@@ -80,12 +80,24 @@
 
     <!-- 1c. Projects (moved up from the bottom) -->
     <section id="projects" class="projects">
-      <div class="container">
-        <div class="section-head">
-          <p class="eyebrow reveal">PROJECTS</p>
-          <h2 class="section-heading-en reveal">Selected works</h2>
-          <p class="section-heading-ko reveal">주요 프로젝트 레퍼런스</p>
+      <!-- Full-bleed corridor: two rails of project photos riding out of the
+           vanishing point, with the section head sitting over them. -->
+      <div class="works-stream" id="worksStream">
+        <div class="works-stream-stage" aria-hidden="true">
+          <div class="works-stream-rails" id="worksStreamRails"></div>
         </div>
+        <div class="works-stream-content">
+          <div class="works-stream-head">
+            <p class="eyebrow reveal">PROJECTS</p>
+            <h2 class="section-heading-en reveal">Selected works</h2>
+          </div>
+          <p class="works-stream-note reveal">
+            주요 프로젝트 레퍼런스<br />
+            30여년간 쌓아온 공간, 지금부터 하나씩 펼쳐집니다.
+          </p>
+        </div>
+      </div>
+      <div class="container">
         <div id="projectList" class="project-list"></div>
       </div>
     </section>
@@ -167,7 +179,7 @@
     </div>
   </footer>
 
-  <script src="js/data.js?v=20260925b"></script>
-  <script src="js/main.js?v=20260925b"></script>
+  <script src="js/data.js?v=20260925c"></script>
+  <script src="js/main.js?v=20260925c"></script>
 </body>
 </html>

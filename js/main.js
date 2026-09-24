@@ -295,6 +295,105 @@ function projectGallery(project) {
 // the slider is a cropped cover strip peeking out of the deck; expanded,
 // the same slider grows to its full frame and the arrows let you step
 // through the rest of that project's photos in place -- no thumbnails.
+/* ── Selected works corridor ──────────────────────────────────────
+ * Two rails of cards riding out of the vanishing point. Three things
+ * shape the path, and each fixes a specific artefact:
+ *
+ * 1. Depth is authored as *apparent size*, geometrically -- each card
+ *    is a constant ratio bigger than the one behind it, all the way
+ *    out. Spacing a straight z-range evenly instead makes the near
+ *    cards tear apart from each other as the projection blows up.
+ * 2. The rails open hard in the first stretch and then hold (fan > 1).
+ *    That opening cancels the -- still slow -- growth back there, so
+ *    the ribbon leaves the centre as a flat band, bends once, and only
+ *    then runs out on the diagonal. Parallel rails project to a
+ *    straight cone with no bend at all.
+ * 3. Neither end of the loop is ever on screen. A card dies with its
+ *    inner edge well past the frame, and it is born *across* the axis
+ *    (railBirth is negative), so the newest card starts on the far
+ *    side and sweeps back through the centre. That plugs the throat:
+ *    the axis stays covered at every instant, and a newborn lands
+ *    behind cards that already cover it, so it needs no fade in.
+ *
+ * All lengths are cqw -- see .works-stream in style.css.
+ * ─────────────────────────────────────────────────────────────── */
+const WORKS_PATH = {
+  perspective: 30, // strength of the projection; lower is wider-angle
+  cardWidth: 18,
+  cardHeight: 25,
+  cardRadius: 0.4,
+  birthHeight: 2.6, // on-screen card height at the waist, where a card is born
+  exitHeight: 46, // on-screen card height as it leaves the frame
+  railBirth: -11, // negative: born across the axis (note 3)
+  railExit: 44,
+  fan: 3.3, // >1 opens early then holds (note 2)
+  turnBirth: 6,
+  turnExit: 28,
+  stops: 24, // keyframe stops tracing the curve
+};
+
+const WORKS_CARDS = 11; // per rail; more cards is a denser ribbon, not a faster one
+const WORKS_SPEED = 20; // seconds for one card to travel the corridor
+const WORKS_AXIS = 55; // % of height; must match perspective-origin in the CSS
+
+// Sample the path once so the CSS keyframes trace the real curve.
+function worksKeyframes(dir, name, p) {
+  const steps = [];
+  for (let i = 0; i <= p.stops; i++) {
+    const u = i / p.stops;
+    // Geometric in apparent size, so consecutive cards keep a constant
+    // size ratio and the ribbon stays solid at both ends (note 1).
+    const scale =
+      (p.birthHeight / p.cardHeight) * Math.pow(p.exitHeight / p.birthHeight, u);
+    const z = p.perspective * (1 - 1 / scale);
+    const rail =
+      p.railExit - (p.railExit - p.railBirth) * Math.pow(1 - u, p.fan);
+    const turn = p.turnBirth + (p.turnExit - p.turnBirth) * u;
+    steps.push(
+      `${(u * 100).toFixed(2)}%{transform:translate3d(${(dir * rail).toFixed(2)}cqw,0,${z.toFixed(2)}cqw) rotateY(${(-dir * turn).toFixed(2)}deg)}`
+    );
+  }
+  return `@keyframes ${name}{${steps.join("")}}`;
+}
+
+function buildWorksStream(projects) {
+  const rails = document.getElementById("worksStreamRails");
+  if (!rails) return;
+
+  // Small, pre-cropped copies of the project covers -- the corridor never
+  // shows a card larger than a few hundred pixels.
+  const images = projects
+    .map((project) => project.streamPhoto)
+    .filter(Boolean);
+  if (!images.length) return;
+
+  const p = WORKS_PATH;
+  const style = document.createElement("style");
+  style.textContent =
+    worksKeyframes(1, "works-rail-r", p) + worksKeyframes(-1, "works-rail-l", p);
+  document.head.appendChild(style);
+
+  const markup = [];
+  ["works-rail-r", "works-rail-l"].forEach((name, railIndex) => {
+    for (let i = 0; i < WORKS_CARDS; i++) {
+      // Offsetting the left rail's starting image keeps the corridor from
+      // reading as a mirror at the waist, where both sides are adjacent.
+      const src = images[(i + railIndex * 3) % images.length];
+      markup.push(`
+        <div class="works-card" style="
+          left:50%; top:${WORKS_AXIS}%;
+          width:${p.cardWidth}cqw; height:${p.cardHeight}cqw;
+          margin-left:${-p.cardWidth / 2}cqw; margin-top:${-p.cardHeight / 2}cqw;
+          border-radius:${p.cardRadius}cqw;
+          animation:${name} ${WORKS_SPEED}s linear infinite;
+          animation-delay:${(-(i * WORKS_SPEED) / WORKS_CARDS).toFixed(3)}s;
+        "><img src="${escapeHtml(src)}" alt="" decoding="async" draggable="false" /></div>
+      `);
+    }
+  });
+  rails.innerHTML = markup.join("");
+}
+
 function renderProjects(projects) {
   const list = document.getElementById("projectList");
   list.innerHTML = projects
@@ -692,6 +791,7 @@ document.addEventListener("DOMContentLoaded", () => {
   renderPunch(data.punch);
   renderWorkScope(data.workScope);
   renderWorkProcess(data.workProcess);
+  buildWorksStream(data.projects);
   renderProjects(data.projects);
   renderCta(data.cta);
 

@@ -156,6 +156,7 @@ window.SITE_DATA = {
       title: "제네시스하우스",
       reference: "GENESIS HOUSE",
       photo: "assets/projects/genesis-house.jpg",
+      streamPhoto: "assets/stream/genesis-house.jpg",
       photos: [
         "assets/projects/genesis-house-2.jpg",
         "assets/projects/genesis-house-3.jpg",
@@ -172,6 +173,7 @@ window.SITE_DATA = {
       title: "현대석유화학 대산 컴플렉스",
       reference: "BOX&COX_CRD_004.jpg",
       photo: "assets/projects/seetec.jpg",
+      streamPhoto: "assets/stream/seetec.jpg",
       photos: [
         "assets/projects/seetec-2.jpg",
         "assets/projects/seetec-3.jpg",
@@ -191,6 +193,7 @@ window.SITE_DATA = {
       title: "수원월드컵경기장",
       reference: "BOX&COX_CRD_002.jpg",
       photo: "assets/projects/suwon.jpg",
+      streamPhoto: "assets/stream/suwon.jpg",
       photos: [
         "assets/projects/suwon-2.jpg",
         "assets/projects/suwon-3.jpg",
@@ -210,6 +213,7 @@ window.SITE_DATA = {
       title: "NEATT 동북아트레이드타워",
       reference: "NEATT",
       photo: "assets/projects/neatt.jpg",
+      streamPhoto: "assets/stream/neatt.jpg",
       photos: [
         "assets/projects/neatt-2.jpg",
         "assets/projects/neatt-3.jpg",
@@ -226,6 +230,7 @@ window.SITE_DATA = {
       title: "나인브릿지 해슬리",
       reference: "HAESLEY NINE BRIDGES",
       photo: "assets/projects/haesley.jpg",
+      streamPhoto: "assets/stream/haesley.jpg",
       photos: [
         "assets/projects/haesley-2.jpg",
         "assets/projects/haesley-3.jpg",
@@ -242,6 +247,7 @@ window.SITE_DATA = {
       title: "SMTOWN 코엑스아티움",
       reference: "SMTOWN",
       photo: "assets/projects/smtown.jpg",
+      streamPhoto: "assets/stream/smtown.jpg",
       photos: [],
       client: "SM엔터테인먼트",
       year: "",
@@ -254,6 +260,7 @@ window.SITE_DATA = {
       title: "K-live 홀로그램 전용관",
       reference: "KLIVE",
       photo: "assets/projects/klive.jpg",
+      streamPhoto: "assets/stream/klive.jpg",
       photos: [
         "assets/projects/klive-2.jpg",
         "assets/projects/klive-3.jpg",
@@ -270,6 +277,7 @@ window.SITE_DATA = {
       title: "SK텔레콤 T world",
       reference: "SKT",
       photo: "assets/projects/skt.jpg",
+      streamPhoto: "assets/stream/skt.jpg",
       photos: [
         "assets/projects/skt-2.jpg",
         "assets/projects/skt-3.jpg",
@@ -286,6 +294,7 @@ window.SITE_DATA = {
       title: "월드트레이드센터 서울",
       reference: "WTC SEOUL",
       photo: "assets/projects/wtc-seoul.jpg",
+      streamPhoto: "assets/stream/wtc-seoul.jpg",
       photos: [
         "assets/projects/wtc-seoul-2.jpg",
         "assets/projects/wtc-seoul-3.jpg",
@@ -302,6 +311,7 @@ window.SITE_DATA = {
       title: "롤링힐스 호텔",
       reference: "ROLLING HILLS",
       photo: "assets/projects/rolling-hills.jpg",
+      streamPhoto: "assets/stream/rolling-hills.jpg",
       photos: [
         "assets/projects/rolling-hills-2.jpg",
         "assets/projects/rolling-hills-3.jpg",
@@ -318,6 +328,7 @@ window.SITE_DATA = {
       title: "이마트24",
       reference: "EMART24",
       photo: "assets/projects/emart24.jpg",
+      streamPhoto: "assets/stream/emart24.jpg",
       photos: [
         "assets/projects/emart24-2.jpg",
         "assets/projects/emart24-3.jpg",
@@ -334,6 +345,7 @@ window.SITE_DATA = {
       title: "정부대전청사",
       reference: "GOVERNMENT COMPLEX DAEJEON",
       photo: "assets/projects/gov-daejeon.jpg",
+      streamPhoto: "assets/stream/gov-daejeon.jpg",
       photos: [
         "assets/projects/gov-daejeon-2.jpg",
         "assets/projects/gov-daejeon-3.jpg",
@@ -350,6 +362,7 @@ window.SITE_DATA = {
       title: "타워팰리스",
       reference: "TOWER PALACE",
       photo: "assets/projects/tower-palace.jpg",
+      streamPhoto: "assets/stream/tower-palace.jpg",
       photos: [
         "assets/projects/tower-palace-2.jpg",
         "assets/projects/tower-palace-3.jpg",
@@ -366,6 +379,7 @@ window.SITE_DATA = {
       title: "제이드팰리스 골프클럽",
       reference: "JADE PALACE",
       photo: "assets/projects/jade-palace.jpg",
+      streamPhoto: "assets/stream/jade-palace.jpg",
       photos: ["assets/projects/jade-palace-2.jpg"],
       client: "제이드팰리스 골프클럽",
       year: "",
@@ -378,6 +392,7 @@ window.SITE_DATA = {
       title: "현대 홈타운",
       reference: "HYUNDAI HOMETOWN",
       photo: "assets/projects/hyundai-hometown.jpg",
+      streamPhoto: "assets/stream/hyundai-hometown.jpg",
       photos: [
         "assets/projects/hyundai-hometown-2.jpg",
         "assets/projects/hyundai-hometown-3.jpg",
@@ -393,6 +408,7 @@ window.SITE_DATA = {
       title: "프랑크푸르트공항 삼성 상징조형물",
       reference: "FRANKFURT AIRPORT",
       photo: "assets/projects/frankfurt-airport.jpg",
+      streamPhoto: "assets/stream/frankfurt-airport.jpg",
       photos: ["assets/projects/frankfurt-airport-2.jpg"],
       client: "삼성전자",
       year: "",
