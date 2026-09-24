@@ -763,10 +763,46 @@ section {
      instead of the actual text width, breaking the fit-to-width sizing. */
   white-space: nowrap;
   font-family: var(--font-display);
-  color: var(--color-ink);
-  opacity: 0.92;
   font-size: clamp(2.2rem, 8vw, 6rem);
   line-height: 1;
+  opacity: 0.94;
+
+  /* Shimmer: the glyphs are a window onto a moving white/ultramarine
+     gradient. The ramp is periodic over half the image, and the image is
+     twice the box wide -- so travelling background-position from 0% to
+     100% (exactly one box width) lands on an identical phase and the loop
+     has no seam. */
+  background-image: linear-gradient(
+    105deg,
+    #ffffff 0%,
+    #a9bcf4 12.5%,
+    #ffffff 25%,
+    #7d97ec 37.5%,
+    #ffffff 50%,
+    #a9bcf4 62.5%,
+    #ffffff 75%,
+    #7d97ec 87.5%,
+    #ffffff 100%
+  );
+  background-size: 200% 100%;
+  background-position: 0% 0;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  -webkit-text-fill-color: transparent;
+  animation: hero-word-shimmer 5.5s linear infinite;
+}
+
+@keyframes hero-word-shimmer {
+  to {
+    background-position: 100% 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero-slide-word {
+    animation: none;
+  }
 }
 
 .hero-word-regular {
@@ -779,7 +815,6 @@ section {
 .hero-word-italic {
   font-weight: 300;
   margin-left: 0.3em;
-  opacity: 0.75;
 }
 
 /* A faint shadow band that sweeps across the logo every ~2.8s. Masked to
