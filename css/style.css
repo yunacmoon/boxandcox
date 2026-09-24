@@ -12,12 +12,11 @@
   --color-border-strong: rgba(255, 255, 255, 0.22);
   --color-accent: #b9bcc4;
   --color-accent-soft: #e3e4e8;
-  --color-cta-bg: #f75c03;
-  /* Dark ink, not white: white-on-#f75c03 measures 3.24:1, below the 4.5:1
-     AA minimum for this button's text size. Dark ink on the same orange
-     measures 6.18:1 -- keeps the vivid brand orange, fixes the button
-     the whole site is trying to get people to click. */
-  --color-cta-text: #08080a;
+  /* Ultramarine. White on it measures 6.9:1, comfortably past the 4.5:1
+     AA minimum, so the button keeps white text. */
+  --color-cta-bg: #3245de;
+  --color-cta-hover: #4258ea;
+  --color-cta-text: #ffffff;
   --font-sans: "Inter", "Wanted Sans Variable", -apple-system, BlinkMacSystemFont, sans-serif;
   /* Display face for headings; Korean falls through to Wanted Sans, which
      carries the same weight as Host Grotesk on a mixed line. */
@@ -390,39 +389,35 @@ section {
     var(--color-bg);
 }
 
-/* The one light section on the page -- every other band is near-black, so
-   this is where the page breathes. Rather than restyling each element,
-   the section re-declares the colour tokens and everything inside
-   (headings, meta, card surfaces, borders, the corridor's own veil and
-   the deck fade) flips to dark-on-light on its own. */
 .projects {
   position: relative;
   isolation: isolate;
+  background:
+    radial-gradient(circle at 82% 12%, color-mix(in srgb, var(--color-accent-soft) 4%, transparent), transparent 40%),
+    var(--color-bg);
+}
+
+/* The corridor band is the one light thing on the page -- every other band
+   is near-black, so this is where it breathes. Rather than restyling each
+   element, the band re-declares the colour tokens and everything inside
+   (the heading, the note, the veil behind them) flips to dark-on-light on
+   its own. The accordion below keeps the page's dark palette. */
+.works-stream {
   --color-ink: #0d1226;
   --color-text: #0d1226;
-  --color-text-soft: #4c5472; /* ~7.6:1 on the palest part of the gradient */
+  --color-text-soft: #454d6b; /* ~8.6:1 on the palest part of the gradient */
   --color-bg: #eef1fa;
-  --color-bg-alt: rgba(255, 255, 255, 0.72);
-  --color-surface-2: #e3e8f6;
-  --color-border: rgba(13, 18, 38, 0.12);
-  --color-border-strong: rgba(13, 18, 38, 0.26);
-  --color-accent: #4657a8;
+  --color-accent: #3b4a94;
   color: var(--color-text);
   background-color: #eef1fa;
 }
 
-/* Four soft blobs over a pale base.
-   Sticky rather than absolute: this section is several screens tall, so an
-   absolute layer puts most of the motion off-screen and the gradient looks
-   static. Pinned to the viewport the drift always happens where it can be
-   seen. The negative margin equal to its own height keeps it out of the
-   flow, so it costs no layout space. */
+/* Four soft blobs over a pale base, filling the corridor band. Absolute
+   is enough here: the band is about one screen tall, so all of the drift
+   happens where it can be seen. */
 .section-aurora {
-  position: sticky;
-  top: 0;
-  height: 100vh;
-  margin-bottom: -100vh;
-  z-index: -1;
+  position: absolute;
+  inset: 0;
   overflow: hidden;
   container-type: size;
   background: linear-gradient(155deg, #fdfdff 0%, #f1f3fb 42%, #e6eaf8 100%);
@@ -703,6 +698,7 @@ section {
 
 .hero-cta:hover {
   transform: translateY(-2px);
+  background: var(--color-cta-hover);
 }
 
 /* A full-width slider bookending the hero's bottom edge, over the video --
@@ -930,154 +926,6 @@ section {
 @media (prefers-reduced-motion: reduce) {
   .prologue-slider-track img {
     transition: none;
-  }
-}
-
-/* Clients band — real, named clients from the project history, shown as
-   rounded portrait tiles (placeholder photos -- no client logo assets
-   exist) drifting past in a slow, seamless horizontal marquee. */
-.clients-band {
-  padding: var(--space-5) 0;
-  border-top: 1px solid var(--color-border);
-  border-bottom: 1px solid var(--color-border);
-}
-
-.client-marquee {
-  margin-top: var(--space-4);
-  overflow: hidden;
-  /* Fade the strip's own edges so tiles don't hard-cut at the viewport
-     edge as they scroll through. */
-  -webkit-mask-image: linear-gradient(
-    90deg,
-    transparent,
-    #000 8%,
-    #000 92%,
-    transparent
-  );
-  mask-image: linear-gradient(
-    90deg,
-    transparent,
-    #000 8%,
-    #000 92%,
-    transparent
-  );
-}
-
-/* Two identical tile sets placed back to back; animating the track exactly
-   -50% (one set's width) loops it seamlessly with no visible reset. */
-.client-track {
-  display: flex;
-  width: max-content;
-  animation: client-marquee-scroll 34s linear infinite;
-}
-
-.client-marquee:hover .client-track {
-  animation-play-state: paused;
-}
-
-.client-tile-set {
-  display: flex;
-  flex-shrink: 0;
-  gap: var(--space-3);
-  padding-right: var(--space-3);
-}
-
-.client-tile {
-  position: relative;
-  flex-shrink: 0;
-  width: clamp(160px, 20vw, 220px);
-  aspect-ratio: 3 / 4;
-  border-radius: 20px;
-  overflow: hidden;
-  border: 1px solid var(--color-border-strong);
-  background: var(--color-surface-2);
-}
-
-.client-tile img {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
-
-.client-tile-name {
-  position: absolute;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  padding: var(--space-3) var(--space-3) var(--space-2);
-  background: linear-gradient(to top, rgba(0, 0, 0, 0.8), transparent);
-  font-family: var(--font-display);
-  font-weight: 500;
-  font-size: 1.05rem;
-  color: var(--color-ink);
-}
-
-/* The "big three" -- with only a few clients there's nothing to scroll,
-   so the strip becomes a static, centered row of large tiles. */
-.client-marquee--static {
-  -webkit-mask-image: none;
-  mask-image: none;
-  max-width: var(--container-width);
-  margin-left: auto;
-  margin-right: auto;
-  padding: 0 var(--space-3);
-}
-
-.client-marquee--static .client-track {
-  width: 100%;
-  animation: none;
-}
-
-.client-marquee--static .client-tile-set {
-  width: 100%;
-  padding-right: 0;
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: var(--space-3);
-}
-
-.client-marquee--static .client-tile {
-  width: auto;
-  aspect-ratio: 4 / 5;
-}
-
-.client-marquee--static .client-tile img {
-  transition: transform 0.9s ease;
-}
-
-.client-marquee--static .client-tile:hover img {
-  transform: scale(1.04);
-}
-
-.client-marquee--static .client-tile-name {
-  font-size: clamp(1.1rem, 2vw, 1.5rem);
-  padding: var(--space-4) var(--space-3) var(--space-3);
-}
-
-@media (max-width: 640px) {
-  .client-marquee--static .client-tile-set {
-    grid-template-columns: 1fr;
-  }
-
-  .client-marquee--static .client-tile {
-    aspect-ratio: 16 / 10;
-  }
-}
-
-@keyframes client-marquee-scroll {
-  from {
-    transform: translateX(0);
-  }
-  to {
-    transform: translateX(-50%);
-  }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .client-track {
-    animation: none;
   }
 }
 
@@ -1410,15 +1258,6 @@ section {
   opacity: 0;
 }
 
-/* The deck stacks cards over each other, so on a light ground a plain
-   translucent surface lets the photo of the card behind read straight
-   through the title. Frosting it keeps the aurora tinting the card while
-   turning whatever is behind into a wash. */
-.projects .project-card {
-  backdrop-filter: blur(26px) saturate(1.3);
-  -webkit-backdrop-filter: blur(26px) saturate(1.3);
-}
-
 /* Title-only rows: everything past the featured few. Collapsed they are
    just a line of type; the photo slider lives inside the panel. */
 .project-rows {
@@ -1511,7 +1350,7 @@ section {
   border-radius: 16px;
   overflow: hidden;
   margin-top: -195px;
-  box-shadow: 0 -20px 34px -10px rgba(13, 18, 38, 0.28);
+  box-shadow: 0 -20px 30px -8px rgba(0, 0, 0, 0.8);
   transition: margin-top 0.5s ease;
 }
 

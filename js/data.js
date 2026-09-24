@@ -39,12 +39,6 @@ window.SITE_DATA = {
     ],
   },
 
-  clients: [
-    { name: "제네시스", photo: "assets/projects/client-genesis.jpg" },
-    { name: "현대석유화학단지", photo: "assets/projects/client-seetec.jpg" },
-    { name: "롤링힐스", photo: "assets/projects/client-rolling-hills.jpg" },
-  ],
-
   punch: {
     en: "Leader of space communication",
     ko: "환경디자인 업계의 중추적 역할을 수행합니다.",

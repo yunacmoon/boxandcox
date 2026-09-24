@@ -99,35 +99,6 @@ function initPrologueSlider(slides) {
   start();
 }
 
-function renderClients(clients) {
-  const track = document.getElementById("clientTrack");
-  const tiles = clients
-    .map(
-      (client) => `
-        <span class="client-tile">
-          <img src="${escapeHtml(client.photo)}" alt="" loading="lazy" />
-          <span class="client-tile-name">${escapeHtml(client.name)}</span>
-        </span>
-      `
-    )
-    .join("");
-
-  // A short list (the "big three") is shown as a static row; a longer
-  // list falls back to the looping marquee, which needs two identical
-  // sets back to back (see the -50% loop in .client-track's animation).
-  // The second copy is purely visual, so it's hidden from assistive tech.
-  if (clients.length <= 4) {
-    track.closest(".client-marquee").classList.add("client-marquee--static");
-    track.innerHTML = `<div class="client-tile-set">${tiles}</div>`;
-    return;
-  }
-
-  track.innerHTML = `
-    <div class="client-tile-set">${tiles}</div>
-    <div class="client-tile-set" aria-hidden="true">${tiles}</div>
-  `;
-}
-
 function renderPunch(punch) {
   document.getElementById("punchTextEn").textContent = punch.en;
   document.getElementById("punchTextKo").textContent = punch.ko;
@@ -822,7 +793,6 @@ document.addEventListener("DOMContentLoaded", () => {
   initHeroWordSlider();
   renderHero(data.prologue.hero);
   renderPrologue(data.prologue);
-  renderClients(data.clients);
   renderPunch(data.punch);
   renderWorkScope(data.workScope);
   renderWorkProcess(data.workProcess);
