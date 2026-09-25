@@ -691,7 +691,14 @@ section {
   font-size: 1.05rem;
 }
 
+/* Lit-edge CTA: a gradient fill under a bright 1px rim, sitting in its own
+   glow. The rim is a pseudo-element rather than a border because a border
+   can only take one flat colour -- to catch the light along one side and
+   fall away on the other it has to be a gradient, and the only way to show
+   a gradient as a ring is to paint the whole shape and mask the middle
+   out (the two-layer mask below, content-box minus padding-box). */
 .hero-cta {
+  position: relative;
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -700,14 +707,72 @@ section {
   border-radius: 999px;
   font-weight: 600;
   font-size: 0.95rem;
-  background: var(--color-cta-bg);
+  background-color: var(--color-cta-bg);
+  background-image: linear-gradient(
+    140deg,
+    #5568f2 0%,
+    var(--color-cta-bg) 55%,
+    #2333c6 100%
+  );
   color: var(--color-cta-text);
-  transition: transform 0.15s ease;
+  box-shadow:
+    0 10px 26px -12px rgba(50, 69, 222, 0.9),
+    0 0 20px -8px rgba(103, 128, 255, 0.55);
+  transition:
+    transform 0.15s ease,
+    box-shadow 0.28s ease,
+    background-color 0.28s ease;
 }
 
-.hero-cta:hover {
+.hero-cta::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  padding: 1px;
+  background: linear-gradient(
+    140deg,
+    rgba(255, 255, 255, 0.9) 0%,
+    rgba(255, 255, 255, 0.22) 34%,
+    rgba(255, 255, 255, 0.08) 58%,
+    rgba(168, 186, 255, 0.75) 100%
+  );
+  -webkit-mask:
+    linear-gradient(#000 0 0) content-box,
+    linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask:
+    linear-gradient(#000 0 0) content-box,
+    linear-gradient(#000 0 0);
+  mask-composite: exclude;
+  pointer-events: none;
+  opacity: 0.85;
+  transition: opacity 0.28s ease;
+}
+
+.hero-cta:hover,
+.hero-cta:focus-visible {
   transform: translateY(-2px);
-  background: var(--color-cta-hover);
+  background-color: var(--color-cta-hover);
+  box-shadow:
+    0 16px 34px -12px rgba(50, 69, 222, 1),
+    0 0 34px -4px rgba(120, 146, 255, 0.85);
+}
+
+.hero-cta:hover::before,
+.hero-cta:focus-visible::before {
+  opacity: 1;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero-cta {
+    transition: box-shadow 0.28s ease, background-color 0.28s ease;
+  }
+
+  .hero-cta:hover,
+  .hero-cta:focus-visible {
+    transform: none;
+  }
 }
 
 /* A full-width slider bookending the hero's bottom edge, over the video --
