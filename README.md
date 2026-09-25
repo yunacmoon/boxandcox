@@ -16,7 +16,8 @@ css/style.css           스타일 (다크 에디토리얼, 반응형)
                         아래 아코디언과 나머지 섹션은 다크
                         서체: 헤딩 Host Grotesk(Google Fonts), 본문 Inter, 국문 Wanted Sans(jsDelivr)
 js/data.js              섹션 콘텐츠 데이터 (추후 React 포팅 시 props로 재사용 가능)
-js/main.js              data.js를 DOM에 렌더링, 히어로 영상/로고 슬라이드, 프로젝트 카드, 마키, 스크롤 reveal
+js/main.js              data.js를 DOM에 렌더링, 히어로 영상/로고 슬라이드, 프로젝트 카드,
+                        Selected works 코리도어, Work Process 포인트 구체(캔버스), 스크롤 reveal
 assets/
   logo.png              헤더 · 히어로 로고 워드마크
   hero-video-{00..04}.mp4  히어로 배경 영상, 00→04 순으로 이어 재생 (00은 앞 5.3초만, 03은 앞 2.6초 트림) (원본: ../assets/03_Videos, ffmpeg 1080p CRF26)

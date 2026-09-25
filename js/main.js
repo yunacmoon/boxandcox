@@ -510,6 +510,176 @@ function renderProjects(projects) {
   }
 }
 
+/* ── Process orbit ────────────────────────────────────────────────
+ * A sphere of points turning slowly behind the process steps.
+ *
+ * Three choices do the work:
+ *
+ * 1. Points are placed on a Fibonacci spiral, not at random. Random
+ *    points on a sphere clump into patches and leave bald spots that
+ *    rotate past as obvious blotches; the golden-angle spiral covers the
+ *    surface evenly, which is what makes it read as one solid object.
+ * 2. Radius is jittered per point, so the points sit in a thin shell
+ *    rather than exactly on a surface. A perfect surface reads as a wire
+ *    balloon; a shell reads as volume.
+ * 3. Size, brightness and colour all key off the same depth term, so a
+ *    point fades and shrinks toward blue as it goes round the back. That
+ *    single cue is what separates the far hemisphere from the near one --
+ *    without it the sphere flattens into a disc.
+ * ─────────────────────────────────────────────────────────────── */
+const ORBIT_POINTS = 1500;
+const ORBIT_TILT = -0.28; // radians; a slight lean so the poles are visible
+
+function initProcessOrbit() {
+  const canvas = document.getElementById("processOrbit");
+  if (!canvas || !canvas.getContext) return;
+  const ctx = canvas.getContext("2d");
+  const prefersReducedMotion = window.matchMedia(
+    "(prefers-reduced-motion: reduce)"
+  ).matches;
+
+  // Golden-angle spiral: even coverage with no clumping (note 1).
+  const golden = Math.PI * (3 - Math.sqrt(5));
+  const points = [];
+  for (let i = 0; i < ORBIT_POINTS; i++) {
+    const y = 1 - (i / (ORBIT_POINTS - 1)) * 2;
+    const ring = Math.sqrt(Math.max(0, 1 - y * y));
+    const theta = golden * i;
+    // Thin shell rather than an exact surface (note 2).
+    const r = 0.88 + Math.random() * 0.12;
+    points.push({
+      x: Math.cos(theta) * ring * r,
+      y: y * r,
+      z: Math.sin(theta) * ring * r,
+      // A minority of points stay ultramarine at full brightness, so the
+      // field has some colour in it instead of reading as grey dust.
+      tint: Math.random() < 0.28,
+    });
+  }
+
+  let w = 0;
+  let h = 0;
+  let cx = 0;
+  let cy = 0;
+  let radius = 0;
+  let dpr = 1;
+
+  const resize = () => {
+    dpr = Math.min(window.devicePixelRatio || 1, 2);
+    w = canvas.clientWidth;
+    h = canvas.clientHeight;
+    canvas.width = Math.round(w * dpr);
+    canvas.height = Math.round(h * dpr);
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    // Off to the right on wide screens, where the copy isn't; centred once
+    // the layout stacks and there is no free side.
+    cx = w < 860 ? w * 0.5 : w * 0.68;
+    // Sized against the viewport, not the section: stacked on a phone this
+    // section runs several screens tall, and keying off that would give a
+    // sphere far bigger than anyone ever sees at once.
+    radius = Math.min(w * 0.34, Math.min(h, window.innerHeight) * 0.44);
+  };
+
+  // Follow the part of the section that is actually on screen. Anchoring
+  // to the section's own middle puts the sphere hundreds of pixels below
+  // the fold on tall, stacked layouts.
+  const recentre = () => {
+    const rect = canvas.getBoundingClientRect();
+    const top = Math.max(0, -rect.top);
+    const bottom = Math.min(rect.height, window.innerHeight - rect.top);
+    cy = bottom > top ? (top + bottom) / 2 : rect.height / 2;
+  };
+
+  const DEPTH = 2.7; // camera distance, in sphere radii
+
+  const draw = (angle) => {
+    recentre();
+    ctx.clearRect(0, 0, w, h);
+    const cosA = Math.cos(angle);
+    const sinA = Math.sin(angle);
+    const cosT = Math.cos(ORBIT_TILT);
+    const sinT = Math.sin(ORBIT_TILT);
+
+    for (let i = 0; i < points.length; i++) {
+      const p = points[i];
+      // Spin about Y, then lean about X.
+      const x1 = p.x * cosA - p.z * sinA;
+      const z1 = p.x * sinA + p.z * cosA;
+      const y2 = p.y * cosT - z1 * sinT;
+      const z2 = p.y * sinT + z1 * cosT;
+
+      const k = DEPTH / (DEPTH - z2); // perspective divide
+      const sx = cx + x1 * radius * k;
+      const sy = cy + y2 * radius * k;
+
+      const depth = (z2 + 1) / 2; // 0 at the back, 1 at the front (note 3)
+      // Squared on both, so the far hemisphere drops away fast and the
+      // near one keeps its weight -- a linear ramp leaves the two reading
+      // at much the same strength and the sphere goes flat.
+      const alpha = 0.05 + depth * depth * 0.75;
+      const size = 0.3 + depth * depth * 1.9;
+
+      ctx.beginPath();
+      ctx.arc(sx, sy, size, 0, Math.PI * 2);
+      ctx.fillStyle = p.tint
+        ? `rgba(122, 146, 240, ${alpha})`
+        : `rgba(226, 232, 248, ${alpha * 0.85})`;
+      ctx.fill();
+    }
+  };
+
+  resize();
+  window.addEventListener("resize", resize);
+
+  if (prefersReducedMotion) {
+    draw(0.6);
+    window.addEventListener("scroll", () => draw(0.6), { passive: true });
+    return;
+  }
+
+  let angle = 0;
+  let last = 0;
+  let frame = null;
+
+  const tick = (now) => {
+    // Advance by elapsed time, not per frame, so the spin keeps its pace
+    // through a dropped frame or after the tab has been in the background.
+    const dt = last ? Math.min(now - last, 100) : 16;
+    last = now;
+    angle += dt * 0.000085; // ~one revolution per 75s
+    draw(angle);
+    frame = requestAnimationFrame(tick);
+  };
+
+  const start = () => {
+    if (frame) return;
+    last = 0;
+    frame = requestAnimationFrame(tick);
+  };
+  const stop = () => {
+    if (!frame) return;
+    cancelAnimationFrame(frame);
+    frame = null;
+  };
+
+  // Only run while the section is actually on screen.
+  if ("IntersectionObserver" in window) {
+    new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => (entry.isIntersecting ? start() : stop()));
+      },
+      { rootMargin: "120px" }
+    ).observe(canvas);
+  } else {
+    start();
+  }
+
+  document.addEventListener("visibilitychange", () => {
+    if (document.hidden) stop();
+    else start();
+  });
+}
+
 function initRevealAnimations() {
   const prefersReducedMotion = window.matchMedia(
     "(prefers-reduced-motion: reduce)"
@@ -799,6 +969,8 @@ document.addEventListener("DOMContentLoaded", () => {
   buildWorksStream(data.projects);
   renderProjects(data.projects);
   renderCta(data.cta);
+
+  initProcessOrbit();
 
   // Reveal animations are wired up last, once all dynamic content exists.
   initRevealAnimations();
