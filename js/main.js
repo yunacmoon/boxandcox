@@ -83,11 +83,32 @@ function initPrologueSlider(slides) {
     timer = null;
   };
 
+  // Any manual move restarts the timer, so the slide you just chose gets a
+  // full interval instead of whatever was left of the previous one.
+  const goTo = (i) => {
+    show(i);
+    stop();
+    start();
+  };
+
+  const prev = document.getElementById("prologuePrev");
+  const next = document.getElementById("prologueNext");
+  if (prev && next) {
+    if (slides.length < 2) {
+      prev.parentElement.hidden = true;
+    } else {
+      prev.addEventListener("click", () => goTo(current - 1));
+      next.addEventListener("click", () => goTo(current + 1));
+      slider.addEventListener("keydown", (e) => {
+        if (e.key === "ArrowLeft") goTo(current - 1);
+        if (e.key === "ArrowRight") goTo(current + 1);
+      });
+    }
+  }
+
   buttons.forEach((button, i) => {
     button.addEventListener("click", () => {
-      show(i);
-      stop();
-      start();
+      goTo(i);
     });
   });
   slider.addEventListener("mouseenter", stop);

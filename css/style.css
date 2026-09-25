@@ -221,10 +221,30 @@ ul, ol, dl {
 /* Small UI text stays in the body sans -- the display face is drawn
    for large sizes and gets clumsy down here. */
 .site-nav a {
+  position: relative;
   font-size: 0.92rem;
   font-weight: 500;
   color: var(--color-text-soft);
   transition: color 0.2s ease;
+}
+
+/* A hairline in the gap before each item but the first. Sitting on the
+   link rather than between them keeps it out of the flow, so it cannot
+   change the spacing the nav was set on. */
+.site-nav a + a::before {
+  content: "";
+  position: absolute;
+  left: calc(var(--space-4) / -2);
+  top: 50%;
+  transform: translateY(-50%);
+  width: 1px;
+  height: 14px;
+  background: linear-gradient(
+    180deg,
+    transparent,
+    rgba(120, 146, 255, 0.55),
+    transparent
+  );
 }
 
 .site-nav a:hover,
@@ -996,7 +1016,7 @@ section {
   position: absolute;
   left: 0;
   right: 0;
-  bottom: var(--space-2);
+  bottom: var(--space-3);
   z-index: 2;
   display: flex;
   justify-content: center;
@@ -1012,6 +1032,57 @@ section {
   background: rgba(255, 255, 255, 0.45);
   cursor: pointer;
   transition: width 0.3s ease, background-color 0.3s ease;
+}
+
+/* Manual control beside the dots. The dots say where you are across the
+   set; the arrows are for stepping one at a time without aiming at an 8px
+   target. */
+.prologue-slider-nav {
+  position: absolute;
+  right: var(--space-3);
+  bottom: var(--space-3);
+  z-index: 2;
+  display: flex;
+  gap: 8px;
+}
+
+.prologue-slider-arrow {
+  width: 38px;
+  height: 38px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  border-radius: 50%;
+  background: rgba(8, 8, 10, 0.45);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  color: #ffffff;
+  font-family: var(--font-sans);
+  font-size: 1rem;
+  line-height: 1;
+  cursor: pointer;
+  transition: background-color 0.2s ease, border-color 0.2s ease, color 0.2s ease;
+}
+
+.prologue-slider-arrow:hover,
+.prologue-slider-arrow:focus-visible {
+  background: #ffffff;
+  border-color: #ffffff;
+  color: #08080a;
+}
+
+@media (max-width: 640px) {
+  .prologue-slider-nav {
+    right: var(--space-2);
+    bottom: var(--space-2);
+  }
+
+  .prologue-slider-arrow {
+    width: 34px;
+    height: 34px;
+  }
 }
 
 .prologue-slider-dots button.is-active {
@@ -1148,7 +1219,21 @@ section {
 
 .process-step.is-active {
   flex-grow: 3.5;
-  border-top-color: var(--color-accent);
+  border-top-color: var(--step-dot, var(--color-accent));
+}
+
+/* The seven markers run mint -> aqua -> cyan -> ultramarine, so the
+   sequence itself reads as progress through the process. Ink flips to
+   white only on the last, where dark ink falls to 2.9:1. */
+.process-step:nth-child(1) { --step-dot: #7ee7c7; }
+.process-step:nth-child(2) { --step-dot: #5fddd4; }
+.process-step:nth-child(3) { --step-dot: #43cfde; }
+.process-step:nth-child(4) { --step-dot: #35b8ea; }
+.process-step:nth-child(5) { --step-dot: #3d9af0; }
+.process-step:nth-child(6) { --step-dot: #3d72e8; }
+.process-step:nth-child(7) {
+  --step-dot: #3245de;
+  --step-ink: #ffffff;
 }
 
 .process-number {
@@ -1157,8 +1242,8 @@ section {
   left: 0;
   font-size: 0.75rem;
   font-weight: 700;
-  color: var(--color-bg);
-  background: var(--color-accent);
+  color: var(--step-ink, var(--color-bg));
+  background: var(--step-dot, var(--color-accent));
   width: 28px;
   height: 28px;
   border-radius: 50%;
@@ -1794,7 +1879,17 @@ section {
 /* Footer */
 .site-footer {
   border-top: 1px solid var(--color-border);
-  padding: var(--space-3) 0;
+  padding: var(--space-5) 0 var(--space-4);
+}
+
+.footer-disclaimer {
+  max-width: 62ch;
+  margin-bottom: var(--space-4);
+  padding-bottom: var(--space-3);
+  border-bottom: 1px solid var(--color-border);
+  font-size: 0.78rem;
+  line-height: 1.75;
+  color: var(--color-text-soft);
 }
 
 .footer-inner {
@@ -1998,6 +2093,10 @@ section {
 
   .site-nav.is-open {
     display: flex;
+  }
+
+  .site-nav a + a::before {
+    display: none;
   }
 
   .process-steps {
