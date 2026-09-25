@@ -1020,10 +1020,11 @@ section {
   z-index: 2;
   display: flex;
   justify-content: center;
-  gap: 8px;
+  gap: 16px;
 }
 
 .prologue-slider-dots button {
+  position: relative;
   width: 8px;
   height: 8px;
   padding: 0;
@@ -1079,10 +1080,28 @@ section {
     bottom: var(--space-2);
   }
 
+  /* Up to a comfortable thumb target, not down -- 34px was below what a
+     primary control on touch should be. */
   .prologue-slider-arrow {
-    width: 34px;
-    height: 34px;
+    width: 44px;
+    height: 44px;
   }
+
+  /* Centred dots land straight under the arrow pair on a narrow screen,
+     so they move over to the left instead. */
+  .prologue-slider-dots {
+    right: 120px;
+    justify-content: flex-start;
+    padding-left: var(--space-3);
+  }
+}
+
+/* An 8px dot is far under the 24px WCAG minimum to tap. The dot stays the
+   size it looks; this invisible pad is what the finger actually hits. */
+.prologue-slider-dots button::before {
+  content: "";
+  position: absolute;
+  inset: -15px -8px;
 }
 
 .prologue-slider-dots button.is-active {
@@ -1900,6 +1919,13 @@ section {
   color: var(--color-text-soft);
 }
 
+.footer-links a {
+  display: inline-block;
+  min-width: 24px;
+  padding: 6px 2px;
+  text-align: center;
+}
+
 .footer-links a:hover {
   color: var(--color-ink);
 }
@@ -1957,6 +1983,10 @@ section {
 }
 
 .contact-location-card {
+  /* A grid item defaults to min-width:auto, so it refuses to shrink below
+     its longest unbreakable run -- here the email address -- and pushes
+     the page wider than the viewport. */
+  min-width: 0;
   background: var(--color-bg-alt);
   border: 1px solid var(--color-border);
   border-radius: 20px;
@@ -2028,9 +2058,21 @@ section {
   text-decoration-color: var(--color-ink);
 }
 
+/* Addresses and the email have no break opportunities of their own. */
+.contact-location-facts dd,
+.contact-location-facts a {
+  overflow-wrap: anywhere;
+}
+
 @media (max-width: 860px) {
   .contact-location-grid {
     grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 640px) {
+  .contact-location-card {
+    padding: var(--space-3);
   }
 }
 
@@ -2066,6 +2108,10 @@ section {
 
   .scope-meta {
     grid-template-columns: 1fr;
+  }
+
+  .scope-card {
+    padding: var(--space-3);
   }
 }
 
