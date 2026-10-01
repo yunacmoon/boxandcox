@@ -455,6 +455,21 @@ function wireProject(card, onToggle) {
   };
   window.addEventListener("resize", fitSlider);
 
+  // Slide 2+ are loading="lazy", and the browser decides whether to fetch
+  // them by their geometric distance from the viewport -- but every slide
+  // sits laid out side-by-side in the track (only CSS transform, not
+  // layout, moves one into view), so a slide two or three positions along
+  // can still read as "far away" and never download. Next then has to show
+  // a blank frame while the fetch starts late. Flipping lazy -> eager the
+  // moment the gallery opens is the documented way to force an immediate
+  // fetch regardless of that heuristic, so every slide is already loading
+  // well before Next could reach it.
+  const loadAllSlides = () => {
+    track.querySelectorAll('img[loading="lazy"]').forEach((img) => {
+      img.loading = "eager";
+    });
+  };
+
   const setOpen = (open) => {
     button.setAttribute("aria-expanded", String(open));
     panel.setAttribute("aria-hidden", String(!open));
@@ -465,6 +480,7 @@ function wireProject(card, onToggle) {
     // the very next card un-stacks the tail of the list below it.
     card.classList.toggle("is-expanded", open);
     if (open) {
+      loadAllSlides();
       // In a row the slider lives inside the panel, so it has no width
       // until the panel is laid out.
       requestAnimationFrame(fitSlider);
