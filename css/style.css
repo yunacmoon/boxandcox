@@ -20,6 +20,12 @@
   --font-sans: "Inter", "Wanted Sans Variable", -apple-system, BlinkMacSystemFont, sans-serif;
   /* Display face for headings; Korean falls through to Wanted Sans, which
      carries the same weight as Host Grotesk on a mixed line. */
+  --header-gradient: linear-gradient(
+    100deg,
+    rgba(4, 4, 7, 0.9) 0%,
+    rgba(6, 9, 24, 0.9) 55%,
+    rgba(9, 15, 42, 0.9) 100%
+  );
   --font-display: "Host Grotesk", "Wanted Sans Variable", sans-serif;
 
   /* Futura-style face, used only for the large hero phrase. Futura itself
@@ -197,7 +203,10 @@ ul, ol, dl {
   z-index: 50;
   width: 96%;
   margin: 0 auto;
-  background: color-mix(in srgb, var(--color-bg) 75%, transparent);
+  /* Black into a very deep navy, left to right. Kept just translucent so
+     the hero video still reads faintly through it, and the blur holds the
+     nav text steady over whatever is behind. */
+  background: var(--header-gradient);
   backdrop-filter: blur(12px);
   border-bottom: 1px solid var(--color-border);
   border-radius: 0 0 20px 20px;
@@ -867,6 +876,8 @@ section {
   font-family: var(--font-futura);
   font-size: clamp(2.2rem, 8vw, 6rem);
   line-height: 1;
+  /* -1% tracking. In em, so it scales with the size fitWordSlide picks. */
+  letter-spacing: -0.01em;
   opacity: 0.94;
 
   /* Shimmer: the glyphs are a window onto a moving white/ultramarine
@@ -2137,7 +2148,7 @@ section {
     top: 72px;
     left: 0;
     right: 0;
-    background: var(--color-bg-alt);
+    background: var(--header-gradient);
     border-bottom: 1px solid var(--color-border);
     flex-direction: column;
     padding: var(--space-2) var(--space-3);
