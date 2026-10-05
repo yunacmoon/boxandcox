@@ -1245,10 +1245,31 @@ section {
 }
 
 .scope-card {
-  background: var(--color-bg-alt);
+  /* Photo under a dark veil. Layers, top to bottom: the veil, the photo,
+     the plain surface colour (what shows if the image never loads). The
+     veil is heavy enough that the photo is felt rather than looked at,
+     and it deepens toward the bottom where the tag lists sit, so the
+     text keeps its contrast whatever part of the picture is behind it. */
+  --scope-veil: linear-gradient(
+    180deg,
+    rgba(8, 8, 10, 0.78) 0%,
+    rgba(8, 8, 10, 0.88) 100%
+  );
+  background-color: var(--color-bg-alt);
+  background-image: var(--scope-veil), var(--scope-photo, none);
+  background-size: cover;
+  background-position: center;
   border: 1px solid var(--color-border);
   border-radius: 20px;
   padding: var(--space-5);
+}
+
+.scope-card--exhibition {
+  --scope-photo: url("../assets/scope/exhibition.webp");
+}
+
+.scope-card--environment {
+  --scope-photo: url("../assets/scope/environment.webp");
 }
 
 .scope-card-head {

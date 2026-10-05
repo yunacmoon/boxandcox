@@ -220,7 +220,7 @@ function renderWorkScope(data) {
   list.innerHTML = data.categories
     .map(
       (category) => `
-        <article class="scope-card reveal">
+        <article class="scope-card scope-card--${escapeHtml(category.id)} reveal">
           <div class="scope-card-head">
             <h3 class="card-heading-en">${escapeHtml(category.en)}</h3>
             <p class="card-heading-ko">${escapeHtml(category.ko)}</p>

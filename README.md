@@ -24,6 +24,7 @@ assets/
   hero-poster.jpg       영상 로드 전 첫 화면 (hero-video-00에서 추출)
   projects/             프로젝트 사진 (커버 + 갤러리)
   stream/               Selected works 코리도어용 소형 카드 이미지 (커버를 18:25로 크롭)
+  scope/                Work Scope 카드(Exhibition / Environment) 배경 사진 — 임시(워터마크 있는 스톡 시안)
   01_Content/           원문 콘텐츠 텍스트 (참고용)
   02_Graphic devices/   로고 원본 (BC_Logo.svg, .ai) — 사이트에서 직접 참조하지 않음
 scripts/git-hooks/      pre-commit 훅 (300KB 초과 애셋 커밋 차단)
