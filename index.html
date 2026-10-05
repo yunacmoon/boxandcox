@@ -10,7 +10,7 @@
   <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Jost:wght@300..700&display=swap" rel="stylesheet" />
   <link href="https://cdn.jsdelivr.net/gh/wanteddev/wanted-sans@v1.0.3/packages/wanted-sans/fonts/webfonts/variable/split/WantedSansVariable.css" rel="stylesheet" />
-  <link rel="stylesheet" href="css/style.css?v=20261005d" />
+  <link rel="stylesheet" href="css/style.css?v=20261005e" />
 </head>
 <body>
   <header class="site-header">
@@ -126,6 +126,21 @@
 
     <!-- 1d. Punch statement -->
     <section class="punch-band">
+      <!-- Its own light block, between the dark accordion above and the
+           dark Work Scope below. Same pale ultramarine/white/grey field as
+           the corridor band, so the two read as one family. -->
+      <div class="section-aurora" aria-hidden="true">
+        <div class="aurora-field aurora-field-back"></div>
+        <div class="aurora-field aurora-field-mid"></div>
+        <div class="aurora-field aurora-field-front"></div>
+        <svg class="aurora-grain" aria-hidden="true">
+          <filter id="punchGrain">
+            <feTurbulence type="fractalNoise" baseFrequency="0.8" numOctaves="2" stitchTiles="stitch" />
+            <feColorMatrix type="saturate" values="0" />
+          </filter>
+          <rect width="100%" height="100%" filter="url(#punchGrain)" />
+        </svg>
+      </div>
       <p class="punch-text-en reveal" id="punchTextEn"></p>
       <p class="punch-text-ko reveal" id="punchTextKo"></p>
     </section>
@@ -199,7 +214,7 @@
     </div>
   </footer>
 
-  <script src="js/data.js?v=20261005d"></script>
-  <script src="js/main.js?v=20261005d"></script>
+  <script src="js/data.js?v=20261005e"></script>
+  <script src="js/main.js?v=20261005e"></script>
 </body>
 </html>
