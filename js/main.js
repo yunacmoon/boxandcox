@@ -1159,6 +1159,13 @@ function initNav() {
 // of jumping straight to the next document, so it reads as a page
 // transition rather than a scroll.
 function initPageTransitions() {
+  // Going Back restores this page from the browser's back/forward cache
+  // exactly as it was left -- including the faded-out state set just before
+  // navigating away -- which would show a blank page.
+  window.addEventListener("pageshow", (event) => {
+    if (event.persisted) document.body.classList.remove("is-leaving");
+  });
+
   const prefersReducedMotion = window.matchMedia(
     "(prefers-reduced-motion: reduce)"
   ).matches;
