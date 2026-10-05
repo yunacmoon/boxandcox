@@ -120,9 +120,93 @@ function initPrologueSlider(slides) {
   start();
 }
 
+/* ── Punch statement ──────────────────────────────────────────────
+ * "Leader of space communication" as a poster: set as large as the block
+ * allows, then revealed one character at a time from behind a mask.
+ *
+ * - Each line is clipped by its own mask, and every character sits below
+ *   it until the block scrolls into view, then rises into place. The
+ *   stagger runs across the whole headline (not per line), so it reads as
+ *   one sweep rather than three separate entrances.
+ * - One font size serves every line. It is measured, not guessed: all
+ *   lines are laid out at 100px, and the size is whatever makes the widest
+ *   line just fit -- so it fills the block at any width, and again when
+ *   the fonts finish loading, since Jost's metrics differ from the
+ *   fallback's.
+ * - Narrow screens switch to a three-line break (authored in data.js), so
+ *   the type stays big instead of shrinking to fit one long line.
+ * ─────────────────────────────────────────────────────────────── */
 function renderPunch(punch) {
-  document.getElementById("punchTextEn").textContent = punch.en;
-  document.getElementById("punchTextKo").textContent = punch.ko;
+  const band = document.querySelector(".punch-band");
+  const headline = document.getElementById("punchTextEn");
+  const sub = document.getElementById("punchTextKo");
+  sub.textContent = punch.ko;
+  if (!band || !headline) return;
+
+  headline.setAttribute("aria-label", punch.en);
+  const narrowQuery = window.matchMedia("(max-width: 640px)");
+  const prefersReducedMotion = window.matchMedia(
+    "(prefers-reduced-motion: reduce)"
+  ).matches;
+
+  let charIndex;
+  const build = () => {
+    const lines = narrowQuery.matches ? punch.lines.narrow : punch.lines.wide;
+    charIndex = 0;
+    headline.innerHTML = lines
+      .map((line) => {
+        const words = line.t
+          .split(" ")
+          .map((word) => {
+            const chars = Array.from(word)
+              .map(
+                (ch) =>
+                  `<span class="punch-char" style="--i:${charIndex++}">${escapeHtml(ch)}</span>`
+              )
+              .join("");
+            return `<span class="punch-word">${chars}</span>`;
+          })
+          .join(" ");
+        return `<span class="punch-line"><span class="punch-line-inner" style="font-weight:${line.w}">${words}</span></span>`;
+      })
+      .join("");
+    fit();
+  };
+
+  const fit = () => {
+    headline.style.setProperty("--punch-size", "100px");
+    let widest = 1;
+    headline.querySelectorAll(".punch-line-inner").forEach((el) => {
+      widest = Math.max(widest, el.getBoundingClientRect().width);
+    });
+    // Fit to the headline's own box, not the band's: the band has side
+    // padding, so sizing against its full width overshoots the text area
+    // and the mask clips the last letter of the widest line.
+    const target = headline.clientWidth * 0.985;
+    const size = Math.max(32, Math.min(300, (target / widest) * 100));
+    headline.style.setProperty("--punch-size", `${size.toFixed(2)}px`);
+  };
+
+  build();
+  narrowQuery.addEventListener("change", build);
+  window.addEventListener("resize", fit);
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(fit);
+
+  const reveal = () => band.classList.add("is-inview");
+  if (prefersReducedMotion || !("IntersectionObserver" in window)) {
+    reveal();
+    return;
+  }
+  const observer = new IntersectionObserver(
+    (entries) => {
+      if (entries.some((entry) => entry.isIntersecting)) {
+        reveal();
+        observer.disconnect();
+      }
+    },
+    { threshold: 0.35 }
+  );
+  observer.observe(band);
 }
 
 function tagList(items) {

@@ -42,6 +42,21 @@ window.SITE_DATA = {
   punch: {
     en: "Leader of space communication",
     ko: "환경디자인 업계의 중추적 역할을 수행합니다.",
+    // The headline is set as a poster: each line is sized so the longest one
+    // fills the block. Breaks are authored rather than computed so the phrase
+    // never splits somewhere awkward, and the last line is set light against
+    // the heavier ones, the same weight contrast as the hero phrase.
+    lines: {
+      wide: [
+        { t: "Leader of space", w: 600 },
+        { t: "communication", w: 300 },
+      ],
+      narrow: [
+        { t: "Leader of", w: 600 },
+        { t: "space", w: 600 },
+        { t: "communication", w: 300 },
+      ],
+    },
   },
 
   workScope: {
