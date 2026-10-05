@@ -1264,6 +1264,50 @@ section {
   padding: var(--space-5);
 }
 
+/* Float + glow on hover. The lift uses `translate`, not `transform`: the
+   scroll-in reveal already owns `transform` (and a 0.9s transition on it),
+   so a second transform here would either fight it or inherit its slow,
+   lagging timing. `translate` is an independent property with its own
+   transition. */
+.scope-card {
+  transition:
+    translate 0.5s cubic-bezier(0.22, 1, 0.36, 1),
+    box-shadow 0.5s ease,
+    border-color 0.5s ease;
+}
+
+/* .reveal-anim (declared later, same specificity) replaces the whole
+   `transition` list, so the reveal case restates it with ours appended. */
+.scope-card.reveal-anim {
+  transition:
+    opacity 0.9s ease,
+    transform 0.9s ease,
+    color 1.1s ease,
+    translate 0.5s cubic-bezier(0.22, 1, 0.36, 1),
+    box-shadow 0.5s ease,
+    border-color 0.5s ease;
+}
+
+/* Hover-capable pointers only; on touch the state would stick after a tap. */
+@media (hover: hover) {
+  .scope-card:hover {
+    translate: 0 -10px;
+    border-color: rgba(120, 146, 255, 0.5);
+    /* Ultramarine, in three layers: a long soft drop below for height, a
+       hairline ring, and a wide halo for the glow itself. */
+    box-shadow:
+      0 26px 60px -20px rgba(60, 84, 240, 0.55),
+      0 0 0 1px rgba(120, 146, 255, 0.18),
+      0 0 72px -14px rgba(98, 126, 255, 0.5);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .scope-card:hover {
+    translate: none;
+  }
+}
+
 .scope-card--exhibition {
   --scope-photo: url("../assets/scope/exhibition.webp");
 }
