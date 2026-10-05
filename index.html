@@ -10,7 +10,7 @@
   <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Jost:wght@300..700&display=swap" rel="stylesheet" />
   <link href="https://cdn.jsdelivr.net/gh/wanteddev/wanted-sans@v1.0.3/packages/wanted-sans/fonts/webfonts/variable/split/WantedSansVariable.css" rel="stylesheet" />
-  <link rel="stylesheet" href="css/style.css?v=20261006b" />
+  <link rel="stylesheet" href="css/style.css?v=20261006c" />
 </head>
 <body>
   <header class="site-header">
@@ -156,8 +156,11 @@
           </div>
           <p id="workScopeIntro" class="section-intro reveal"></p>
         </div>
-        <div class="media-frame reveal" data-reference="GENESIS HOUSE">
-          <img class="media-photo" src="assets/projects/genesis-house-space.jpg" alt="제네시스하우스 공간 디자인" loading="lazy" />
+        <!-- Starts on Genesis House, then rotates through the other projects
+             (see initScopeShowcase). Works with no script: the first photo
+             is already shown. -->
+        <div class="media-frame media-frame--showcase reveal" data-reference="GENESIS HOUSE">
+          <img class="media-photo is-shown" src="assets/projects/genesis-house-space.jpg" alt="제네시스하우스" loading="lazy" />
           <span class="media-curtain" aria-hidden="true"></span>
           <span class="media-label">제네시스하우스</span>
         </div>
@@ -214,7 +217,7 @@
     </div>
   </footer>
 
-  <script src="js/data.js?v=20261006b"></script>
-  <script src="js/main.js?v=20261006b"></script>
+  <script src="js/data.js?v=20261006c"></script>
+  <script src="js/main.js?v=20261006c"></script>
 </body>
 </html>

@@ -242,6 +242,127 @@ function renderWorkScope(data) {
     .join("");
 }
 
+/* ── Work Scope showcase ──────────────────────────────────────────
+ * The photo at the top of Work Scope starts on Genesis House and then
+ * drifts through the other projects, in random order, with its label
+ * following. Quiet by design: slow crossfades, a long hold.
+ *
+ * - Order is a shuffle bag, not repeated Math.random(): every project is
+ *   shown once before any repeats, and the next bag never opens on the
+ *   photo (or the label) that just closed the last one.
+ * - The next photo is fetched and decoded before the fade starts, so the
+ *   dissolve is never into a half-loaded or blank frame; a photo that
+ *   fails to load is skipped instead of stalling the loop.
+ * - Two stacked images swap roles, so each crossfade is just two opacity
+ *   transitions -- nothing is re-parented or re-laid out.
+ * - Runs only while the frame is on screen and the tab is in the
+ *   foreground, and not at all under reduced motion.
+ * ─────────────────────────────────────────────────────────────── */
+const SHOWCASE_HOLD_MS = 3000; // fully visible
+const SHOWCASE_FADE_MS = 1400; // must match the CSS transition
+
+function initScopeShowcase(projects) {
+  const frame = document.querySelector(".media-frame--showcase");
+  if (!frame) return;
+  const first = frame.querySelector(".media-photo");
+  const label = frame.querySelector(".media-label");
+  if (!first || !label) return;
+  if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+
+  const second = first.cloneNode(false);
+  second.classList.remove("is-shown");
+  second.removeAttribute("loading");
+  second.alt = "";
+  first.after(second);
+
+  const pool = [
+    { src: first.getAttribute("src"), label: label.textContent },
+    ...projects.map((p) => ({ src: p.photo, label: p.title, focus: p.frameFocus })),
+  ];
+
+  let current = pool[0];
+  let bag = [];
+  const refill = () => {
+    bag = pool.filter((item) => item !== current && item.label !== current.label);
+    for (let i = bag.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [bag[i], bag[j]] = [bag[j], bag[i]];
+    }
+  };
+  const take = () => {
+    if (!bag.length) refill();
+    return bag.pop();
+  };
+
+  const load = (src) =>
+    new Promise((resolve) => {
+      const probe = new Image();
+      probe.onload = () => (probe.decode ? probe.decode().catch(() => {}) : Promise.resolve()).then(() => resolve(true));
+      probe.onerror = () => resolve(false);
+      probe.src = src;
+    });
+
+  let front = first;
+  let back = second;
+  let timer = null;
+  let running = false;
+
+  const step = async () => {
+    if (!running) return;
+    let item = take();
+    // A photo that fails to load is skipped, not retried forever.
+    for (let tries = 0; tries < pool.length && !(await load(item.src)); tries++) {
+      item = take();
+    }
+    if (!running) return;
+
+    back.src = item.src;
+    back.alt = item.label;
+    back.style.objectPosition = item.focus || "center";
+    // The label fades out, swaps while invisible, then fades back in --
+    // alongside the photo's own dissolve rather than after it.
+    label.classList.add("is-fading");
+    setTimeout(() => {
+      label.textContent = item.label;
+      label.classList.remove("is-fading");
+    }, SHOWCASE_FADE_MS * 0.4);
+
+    back.classList.add("is-shown");
+    front.classList.remove("is-shown");
+    [front, back] = [back, front];
+    current = item;
+
+    timer = setTimeout(step, SHOWCASE_FADE_MS + SHOWCASE_HOLD_MS);
+  };
+
+  const start = () => {
+    if (running) return;
+    running = true;
+    timer = setTimeout(step, SHOWCASE_HOLD_MS);
+  };
+  const stop = () => {
+    running = false;
+    clearTimeout(timer);
+  };
+
+  let onScreen = false;
+  const sync = () => (onScreen && !document.hidden ? start() : stop());
+
+  if ("IntersectionObserver" in window) {
+    new IntersectionObserver(
+      (entries) => {
+        onScreen = entries.some((entry) => entry.isIntersecting);
+        sync();
+      },
+      { threshold: 0.25 }
+    ).observe(frame);
+  } else {
+    onScreen = true;
+  }
+  document.addEventListener("visibilitychange", sync);
+  sync();
+}
+
 function renderWorkProcess(data) {
   document.getElementById("workProcessIntro").textContent = data.intro;
   document.getElementById("processLabel").textContent = data.label;
@@ -1089,6 +1210,7 @@ document.addEventListener("DOMContentLoaded", () => {
   renderPrologue(data.prologue);
   renderPunch(data.punch);
   renderWorkScope(data.workScope);
+  initScopeShowcase(data.projects);
   renderWorkProcess(data.workProcess);
   buildWorksStream(data.projects);
   renderProjects(data.projects);

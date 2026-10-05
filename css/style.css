@@ -358,6 +358,25 @@ button:focus-visible {
   display: block;
 }
 
+/* Showcase frame: two photos stacked, dissolving into each other. Opacity
+   only, over 1.4s -- keep SHOWCASE_FADE_MS in main.js in step with it. */
+.media-frame--showcase .media-photo {
+  opacity: 0;
+  transition: opacity 1.4s ease;
+}
+
+.media-frame--showcase .media-photo.is-shown {
+  opacity: 1;
+}
+
+.media-frame--showcase .media-label {
+  transition: opacity 0.55s ease;
+}
+
+.media-frame--showcase .media-label.is-fading {
+  opacity: 0;
+}
+
 .media-label {
   position: relative;
   z-index: 2;

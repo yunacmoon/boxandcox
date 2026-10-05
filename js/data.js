@@ -371,6 +371,9 @@ window.SITE_DATA = {
       title: "타워팰리스",
       reference: "TOWER PALACE",
       photo: "assets/projects/tower-palace.jpg",
+      // Where the 16:7 Work Scope frame should anchor this cover; the default
+      // centre crop cuts it badly.
+      frameFocus: "50% 88%",
       streamPhoto: "assets/stream/tower-palace.jpg",
       photos: [
         "assets/projects/tower-palace-2.jpg",
@@ -417,6 +420,9 @@ window.SITE_DATA = {
       title: "프랑크푸르트공항 삼성 상징조형물",
       reference: "FRANKFURT AIRPORT",
       photo: "assets/projects/frankfurt-airport.jpg",
+      // Where the 16:7 Work Scope frame should anchor this cover; the default
+      // centre crop cuts it badly.
+      frameFocus: "50% 12%",
       streamPhoto: "assets/stream/frankfurt-airport.jpg",
       photos: ["assets/projects/frankfurt-airport-2.jpg"],
       client: "삼성전자",
