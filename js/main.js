@@ -822,6 +822,9 @@ function initGrainCanvases() {
 
 function fitWordSlide(el) {
   const container = el.parentElement;
+  // A refit queued on document.fonts.ready can land after the slide it was
+  // queued for has already been replaced; the detached node has no parent.
+  if (!container) return;
   const maxFontSize = container.clientHeight * 0.62;
   const targetWidth = container.clientWidth * 0.97;
 
