@@ -18,23 +18,21 @@
   --color-cta-hover: #4258ea;
   --color-cta-text: #ffffff;
   --font-sans: "Inter", "Wanted Sans Variable", -apple-system, BlinkMacSystemFont, sans-serif;
-  /* Display face for headings; Korean falls through to Wanted Sans, which
-     carries the same weight as Host Grotesk on a mixed line. */
   --header-gradient: linear-gradient(
     100deg,
     rgba(4, 4, 7, 0.9) 0%,
     rgba(6, 9, 24, 0.9) 55%,
     rgba(9, 15, 42, 0.9) 100%
   );
-  --font-display: "Host Grotesk", "Wanted Sans Variable", sans-serif;
 
-  /* Futura-style face, used only for the large hero phrase. Futura itself
-     is a commercial Monotype face and can't be embedded freely; Jost is
-     the open-licence (OFL) geometric built on the same Renner model --
-     circular O, pointed A/V/W apexes, low x-height -- and ships every
-     weight we need. Real Futura is kept as the fallback so that, should
-     the webfont ever fail, Apple devices still land on the right idea. */
-  --font-futura: "Jost", "Futura", "Century Gothic", "Wanted Sans Variable", sans-serif;
+  /* Display face for every heading. Jost is the open-licence (OFL)
+     geometric built on the same Renner model as Futura -- circular O,
+     pointed A/V/W apexes, low x-height. Futura itself is a commercial
+     Monotype face and can't be embedded freely; it stays in the stack as
+     a fallback so that, should the webfont ever fail, Apple devices still
+     land on the right idea. Hangul isn't in Jost, so Korean falls through
+     to Wanted Sans. */
+  --font-display: "Jost", "Futura", "Century Gothic", "Wanted Sans Variable", sans-serif;
 
   --container-width: 1120px;
   --space-1: 8px;
@@ -144,7 +142,7 @@ ul, ol, dl {
 }
 
 /* Every section pairs a big English word with a Korean line beneath it —
-   Host Grotesk carries the display moment, Wanted Sans carries meaning. */
+   Jost carries the display moment, Wanted Sans carries meaning. */
 .section-heading-en {
   font-family: var(--font-display);
   font-weight: 500;
@@ -873,7 +871,7 @@ section {
      the phrase's natural width) would just report the container's width
      instead of the actual text width, breaking the fit-to-width sizing. */
   white-space: nowrap;
-  font-family: var(--font-futura);
+  font-family: var(--font-display);
   font-size: clamp(2.2rem, 8vw, 6rem);
   line-height: 1;
   /* -1% tracking. In em, so it scales with the size fitWordSlide picks. */
@@ -2009,7 +2007,10 @@ section {
   background: var(--color-bg-alt);
   border: 1px solid var(--color-border);
   border-radius: 20px;
-  padding: var(--space-5);
+  /* 64px of side padding left ~213px of text in the three-column layout,
+     a few px short of the email address, which then broke mid-word.
+     Tightening the sides (not the top and bottom) gives it room. */
+  padding: var(--space-5) var(--space-4);
 }
 
 .contact-location-heading-en {

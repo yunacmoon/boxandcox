@@ -14,7 +14,7 @@ css/style.css           스타일 (다크 에디토리얼, 반응형)
                         Selected works 코리도어 밴드만 밝게 — .works-stream이 색 토큰을
                         재선언하고 .section-aurora가 3겹 그라디언트 필드(옅은 울트라마린/화이트/그레이)를 깐다.
                         아래 아코디언과 나머지 섹션은 다크
-                        서체: 헤딩 Host Grotesk(Google Fonts), 본문 Inter, 국문 Wanted Sans(jsDelivr)
+                        서체: 헤딩 Jost(Google Fonts), 본문 Inter, 국문 Wanted Sans(jsDelivr)
 js/data.js              섹션 콘텐츠 데이터 (추후 React 포팅 시 props로 재사용 가능)
 js/main.js              data.js를 DOM에 렌더링, 히어로 영상/로고 슬라이드, 프로젝트 카드,
                         Selected works 코리도어, Work Process 포인트 구체(캔버스), 스크롤 reveal
