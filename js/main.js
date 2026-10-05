@@ -1200,6 +1200,7 @@ document.addEventListener("DOMContentLoaded", () => {
   // rest of this pipeline renders the homepage's own sections and would
   // error against elements that only exist on index.html.
   if (!data) {
+    initProcessOrbit(); // contact.html carries the same sphere as Work Process
     initRevealAnimations();
     return;
   }

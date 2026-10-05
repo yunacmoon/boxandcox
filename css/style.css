@@ -2131,6 +2131,15 @@ section {
 }
 
 /* Contact page */
+/* The stage for the sphere behind the page. Its own stacking context keeps
+   the canvas (z-index -1) above the page background but under the content;
+   overflow clipped so the sphere never widens the page. */
+.contact-main {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+}
+
 .contact-hero {
   padding: var(--space-6) 0 var(--space-4);
 }
@@ -2150,7 +2159,11 @@ section {
      its longest unbreakable run -- here the email address -- and pushes
      the page wider than the viewport. */
   min-width: 0;
-  background: var(--color-bg-alt);
+  /* Translucent and blurred: an opaque card would hide the sphere almost
+     entirely, since the three cards cover most of the page. */
+  background: color-mix(in srgb, var(--color-bg-alt) 70%, transparent);
+  -webkit-backdrop-filter: blur(14px);
+  backdrop-filter: blur(14px);
   border: 1px solid var(--color-border);
   border-radius: 20px;
   /* 64px of side padding left ~213px of text in the three-column layout,
@@ -2171,6 +2184,27 @@ section {
   color: var(--color-text-soft);
   margin-top: 2px;
   margin-bottom: var(--space-3);
+}
+
+/* The map tile sits between a card's title and its address. The embed is
+   Google's light map, so it is darkened with an invert + hue-rotate (the
+   hue-rotate undoes the colour flip invert causes, keeping water blue and
+   parks green) to belong on this page; it stays fully interactive. */
+.contact-map {
+  aspect-ratio: 3 / 2;
+  margin-bottom: var(--space-3);
+  border: 1px solid var(--color-border);
+  border-radius: 12px;
+  overflow: hidden;
+  background: var(--color-surface-2);
+}
+
+.contact-map iframe {
+  display: block;
+  width: 100%;
+  height: 100%;
+  border: 0;
+  filter: invert(92%) hue-rotate(180deg) saturate(0.75) brightness(0.92) contrast(0.95);
 }
 
 .contact-location-facts {

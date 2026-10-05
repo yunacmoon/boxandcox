@@ -10,7 +10,7 @@
   <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Jost:wght@300..700&display=swap" rel="stylesheet" />
   <link href="https://cdn.jsdelivr.net/gh/wanteddev/wanted-sans@v1.0.3/packages/wanted-sans/fonts/webfonts/variable/split/WantedSansVariable.css" rel="stylesheet" />
-  <link rel="stylesheet" href="css/style.css?v=20261006e" />
+  <link rel="stylesheet" href="css/style.css?v=20261007b" />
 </head>
 <body>
   <header class="site-header">
@@ -30,7 +30,8 @@
     </div>
   </header>
 
-  <main>
+  <main class="contact-main">
+    <canvas class="orbit-canvas" id="processOrbit" aria-hidden="true"></canvas>
     <section class="contact-hero">
       <div class="container">
         <p class="eyebrow reveal">CONTACT</p>
@@ -45,6 +46,15 @@
           <article class="contact-location-card reveal">
             <h2 class="contact-location-heading-en">Headquarters</h2>
             <p class="contact-location-heading-ko">본사</p>
+            <div class="contact-map">
+              <iframe
+                title="본사 위치 지도"
+                src="https://www.google.com/maps?q=%EC%84%9C%EC%9A%B8%20%EA%B0%95%EB%82%A8%EA%B5%AC%20%ED%95%99%EB%8F%99%EB%A1%9C56%EA%B8%B8%2049&amp;hl=ko&amp;z=16&amp;output=embed"
+                loading="lazy"
+                referrerpolicy="no-referrer-when-downgrade"
+                allowfullscreen
+              ></iframe>
+            </div>
             <dl class="contact-location-facts">
               <div>
                 <dt>Address</dt>
@@ -63,6 +73,15 @@
           <article class="contact-location-card reveal">
             <h2 class="contact-location-heading-en">Branding Lab</h2>
             <p class="contact-location-heading-ko">브랜딩 랩</p>
+            <div class="contact-map">
+              <iframe
+                title="브랜딩 랩 위치 지도"
+                src="https://www.google.com/maps?q=%EA%B2%BD%EA%B8%B0%EB%8F%84%20%EC%9A%A9%EC%9D%B8%EC%8B%9C%20%EA%B8%B0%ED%9D%A5%EA%B5%AC%20%EA%B8%B0%ED%9D%A5%EB%A1%9C%2058-1&amp;hl=ko&amp;z=16&amp;output=embed"
+                loading="lazy"
+                referrerpolicy="no-referrer-when-downgrade"
+                allowfullscreen
+              ></iframe>
+            </div>
             <dl class="contact-location-facts">
               <div>
                 <dt>Address</dt>
@@ -81,6 +100,15 @@
           <article class="contact-location-card reveal">
             <h2 class="contact-location-heading-en">Factory</h2>
             <p class="contact-location-heading-ko">팩토리</p>
+            <div class="contact-map">
+              <iframe
+                title="팩토리 위치 지도"
+                src="https://www.google.com/maps?q=%EA%B2%BD%EA%B8%B0%EB%8F%84%20%EA%B4%91%EC%A3%BC%EC%8B%9C%20%EC%B4%88%EC%9B%94%EC%9D%8D%20%EC%9A%A9%EC%88%98%EA%B8%B8127%EB%B2%88%EA%B8%B8%2016-5&amp;hl=ko&amp;z=16&amp;output=embed"
+                loading="lazy"
+                referrerpolicy="no-referrer-when-downgrade"
+                allowfullscreen
+              ></iframe>
+            </div>
             <dl class="contact-location-facts">
               <div>
                 <dt>Address</dt>
@@ -112,6 +140,6 @@
     </div>
   </footer>
 
-  <script src="js/main.js?v=20261006e"></script>
+  <script src="js/main.js?v=20261007b"></script>
 </body>
 </html>
