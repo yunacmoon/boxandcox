@@ -358,20 +358,6 @@ button:focus-visible {
   display: block;
 }
 
-/* A low, wide band rather than the default 16:7 frame -- about 22% shorter
-   (469px -> 368px at the 1072px content width). Every cover was checked at
-   this ratio; the two that a centre crop cuts badly carry a frameFocus in
-   data.js. */
-.media-frame--showcase {
-  aspect-ratio: 16 / 5.5;
-}
-
-@media (max-width: 640px) {
-  .media-frame--showcase {
-    aspect-ratio: 16 / 6;
-  }
-}
-
 /* Showcase frame: two photos stacked, dissolving into each other. Opacity
    only, over 1.4s -- keep SHOWCASE_FADE_MS in main.js in step with it. */
 .media-frame--showcase .media-photo {
