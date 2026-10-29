@@ -346,12 +346,10 @@ section {
     var(--color-bg);
 }
 
-/* The corridor band is the one light thing on the page -- every other band
+/* The punch band is the one light thing on the page -- every other band
    is near-black, so this is where it breathes. Rather than restyling each
    element, the band re-declares the colour tokens and everything inside
-   (the heading, the note, the veil behind them) flips to dark-on-light on
-   its own. The accordion below keeps the page's dark palette. */
-.works-stream,
+   flips to dark-on-light on its own. */
 .punch-band {
   --color-ink: #0d1226;
   --color-text: #0d1226;
@@ -364,7 +362,7 @@ section {
   background-color: #eef1fa;
 }
 
-/* Spatial field behind the corridor, built the way the 21st.dev "Pipo"
+/* Spatial field behind the punch band, built the way the 21st.dev "Pipo"
    recipe does it and then stacked for depth.
 
    Two things carry the volume, and each fixes something a plain radial
@@ -1067,8 +1065,7 @@ section {
 
 /* Punch statement — a single line set edge-to-edge across the full browser
    width, breaking out of .container the same way the hero logo mark does. */
-/* A block of its own: light ground (tokens come from the shared rule with
-   .works-stream above), full-bleed, and tall enough to stand apart from
+/* A block of its own: light ground (tokens come from the rule above), full-bleed, and tall enough to stand apart from
    the Work Scope section that follows. The field sits behind the text at
    z-index -1 inside this block's own stacking context. */
 .punch-band {
@@ -1429,115 +1426,6 @@ section {
 .work-process--hero .process-body p {
   font-size: 1.05rem;
   height: 4.6em;
-}
-
-/* Projects — cards overlap slightly like a fanned accordion, each one
-   settling over the tail of the one before it as it rises into view. */
-/* ── Selected works corridor ──────────────────────────────────────
-   Two rails of project cards ride from far behind the screen toward
-   the viewer. Perspective alone does what looks like two animations:
-   as a card's z grows it gets bigger *and* its screen x sweeps out
-   from the vanishing point, because the projection scales position
-   and size by the same factor. The path itself (depth spacing, how
-   hard the rails fan open, the turn) is traced by generated keyframes
-   in main.js -- see buildWorksStream().
-
-   Every length is cqw, a percentage of this element's own width, so
-   the corridor keeps its proportions at any size. */
-.works-stream {
-  position: relative;
-  overflow: hidden;
-  container-type: inline-size;
-  height: clamp(500px, 62vw, 760px);
-  margin-bottom: var(--space-6);
-}
-
-.works-stream-stage {
-  position: absolute;
-  inset: 0;
-  pointer-events: none;
-  /* perspective-origin's y must match the axis main.js positions the
-     cards on, or the corridor converges somewhere other than where the
-     cards actually are. */
-  perspective: 30cqw;
-  perspective-origin: 50% 55%;
-}
-
-.works-stream-rails {
-  position: absolute;
-  inset: 0;
-  transform-style: preserve-3d;
-}
-
-.works-card {
-  position: absolute;
-  overflow: hidden;
-  backface-visibility: hidden;
-}
-
-.works-card img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  /* The cards are wallpaper behind the heading, not the subject. */
-  filter: saturate(0.95) brightness(0.95);
-}
-
-/* Darkens the band the text sits in without touching the cards near
-   the frame edges, which are the ones carrying the sense of speed. */
-.works-stream-content {
-  position: relative;
-  z-index: 1;
-  height: 100%;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: space-between;
-  text-align: center;
-  padding: var(--space-6) var(--space-3);
-  background:
-    radial-gradient(
-      ellipse 48% 42% at 50% 55%,
-      color-mix(in srgb, var(--color-bg) 78%, transparent),
-      transparent 72%
-    ),
-    linear-gradient(
-      180deg,
-      var(--color-bg) 0%,
-      transparent 22%,
-      transparent 78%,
-      var(--color-bg) 100%
-    );
-}
-
-.works-stream-head .eyebrow {
-  margin-bottom: var(--space-2);
-}
-
-.works-stream-note {
-  max-width: 34ch;
-  font-size: 0.95rem;
-  line-height: 1.7;
-  text-wrap: balance;
-}
-
-@media (max-width: 640px) {
-  .works-stream {
-    height: clamp(420px, 104vw, 540px);
-  }
-
-  .works-stream-content {
-    padding: var(--space-4) var(--space-3);
-  }
-}
-
-/* Paused rather than disabled: every card is already dropped mid-flight
-   by its negative delay, so it freezes as a finished still instead of
-   collapsing onto the axis. */
-@media (prefers-reduced-motion: reduce) {
-  .works-card {
-    animation-play-state: paused !important;
-  }
 }
 
 /* The deck now shows only the first few projects and dissolves at its

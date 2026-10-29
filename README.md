@@ -11,19 +11,18 @@
 index.html              메인 페이지 (Hero / Prologue / Projects / Punch / Work Scope / Work Process / CTA)
 contact.html            연락처 페이지 (본사 · 팩토리 · 디자인 랩)
 css/style.css           스타일 (다크 에디토리얼, 반응형)
-                        Selected works 코리도어 밴드만 밝게 — .works-stream이 색 토큰을
+                        Punch 밴드만 밝게 — .punch-band가 색 토큰을
                         재선언하고 .section-aurora가 3겹 그라디언트 필드(옅은 울트라마린/화이트/그레이)를 깐다.
-                        아래 아코디언과 나머지 섹션은 다크
+                        나머지 섹션은 다크
                         서체: 헤딩 Jost(Google Fonts), 본문 Inter, 국문 Wanted Sans(jsDelivr)
 js/data.js              섹션 콘텐츠 데이터 (추후 React 포팅 시 props로 재사용 가능)
 js/main.js              data.js를 DOM에 렌더링, 히어로 영상/로고 슬라이드, 프로젝트 카드,
-                        Selected works 코리도어, Work Process 포인트 구체(캔버스), 스크롤 reveal
+                        Work Process 포인트 구체(캔버스), 스크롤 reveal
 assets/
   logo.png              헤더 · 히어로 로고 워드마크
   hero-video-{00..04}.mp4  히어로 배경 영상, 00→04 순으로 이어 재생 (00은 앞 5.3초만, 03은 앞 2.6초 트림) (원본: ../assets/03_Videos, ffmpeg 1080p CRF26)
   hero-poster.jpg       영상 로드 전 첫 화면 (hero-video-00에서 추출)
   projects/             프로젝트 사진 (커버 + 갤러리)
-  stream/               Selected works 코리도어용 소형 카드 이미지 (커버를 18:25로 크롭)
   scope/                Work Scope 카드(Exhibition / Environment) 배경 사진 — 임시(워터마크 있는 스톡 시안)
   01_Content/           원문 콘텐츠 텍스트 (참고용)
   02_Graphic devices/   로고 원본 (BC_Logo.svg, .ai) — 사이트에서 직접 참조하지 않음
