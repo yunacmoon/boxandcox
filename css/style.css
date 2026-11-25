@@ -346,6 +346,12 @@ section {
     var(--color-bg);
 }
 
+/* The reference accordion gets a wider column than the rest of the page so
+   the photos inside the card frame don't read as small. */
+.projects .container {
+  max-width: 1400px;
+}
+
 /* The punch band is the one light thing on the page -- every other band
    is near-black, so this is where it breathes. Rather than restyling each
    element, the band re-declares the colour tokens and everything inside
